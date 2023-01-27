@@ -4,11 +4,12 @@ import 'package:proyectoistateca/Screens/add_libro_Screen.dart';
 import 'package:proyectoistateca/Services/database_services.dart';
 import 'package:proyectoistateca/models/tipos.dart';
 import 'package:proyectoistateca/models/tipos_data.dart';
+import 'package:proyectoistateca/widgets/widget_menu_lateral.dart';
 
 import '../tipo_tile.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  static String id = 'home_screen';
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -38,6 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           )
         : Scaffold(
+            drawer: CustomDrawer(),
             appBar: AppBar(
               title: Text(
                 'Todo tipos (${Provider.of<TiposData>(context).tipos.length})',
