@@ -23,6 +23,12 @@ class _LlibrosScreenState extends State<LlibrosScreen> {
     setState(() {});
   }
 
+  getLibrosnombre(String titulo) async {
+    libros = await Database_services_libro.getLibronombre(titulo);
+    Provider.of<TiposData>(context, listen: false).libros = libros!;
+    setState(() {});
+  }
+
   @override
   void initState() {
     super.initState();
@@ -48,15 +54,38 @@ class _LlibrosScreenState extends State<LlibrosScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: Consumer<TiposData>(
                 builder: (context, tiposData, child) {
-                  return ListView.builder(
-                      itemCount: tiposData.libros.length,
-                      itemBuilder: (context, index) {
-                        Libro libro = tiposData.libros[index];
-                        return LibrosTile(
-                          libro: libro,
-                          tiposData: tiposData,
-                        );
-                      });
+                  return Column(
+                    children: [
+                      TextField(
+                        decoration: const InputDecoration(
+                          hintText: "Searches",
+                          prefixIcon: Icon(Icons.search),
+                          border: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(25.0)),
+                          ),
+                        ),
+                        onChanged: (value) {
+                          if (value != "") {
+                            getLibrosnombre(value);
+                          } else {
+                            getLibros();
+                          }
+                        },
+                      ),
+                      Expanded(
+                        child: ListView.builder(
+                            itemCount: tiposData.libros.length,
+                            itemBuilder: (context, index) {
+                              Libro libro = tiposData.libros[index];
+                              return LibrosTile(
+                                libro: libro,
+                                tiposData: tiposData,
+                              );
+                            }),
+                      ),
+                    ],
+                  );
                 },
               ),
             ),

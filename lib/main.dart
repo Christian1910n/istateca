@@ -4,6 +4,7 @@ import 'package:proyectoistateca/Screens/home_screen.dart';
 import 'package:proyectoistateca/Screens/lista_libros_screen.dart';
 import 'package:proyectoistateca/Screens/login_page.dart';
 import 'package:proyectoistateca/Screens/menu_lateral.dart';
+import 'package:proyectoistateca/Screens/solicitar_libro_screen.dart';
 import 'package:proyectoistateca/models/tipos_data.dart';
 
 void main() {

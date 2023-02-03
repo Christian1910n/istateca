@@ -14,18 +14,27 @@ class LibrosTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
-        title: Text(libro.titulo),
-        trailing: IconButton(
-          icon: const Icon(Icons.arrow_forward),
-          onPressed: () {
-            showModalBottomSheet(
-                context: context,
-                builder: (context) {
-                  return DetalleLibroScreen(libro: libro);
-                });
-          },
+        leading: CircleAvatar(
+          radius: 10,
+          backgroundColor: libro.disponibilidad ? Colors.red : Colors.green,
+          child: const Text(""),
         ),
-        iconColor: Colors.green,
+        title: Text(libro.titulo),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            IconButton(
+              icon: const Icon(Icons.arrow_forward),
+              onPressed: () {
+                showModalBottomSheet(
+                    context: context,
+                    builder: (context) {
+                      return DetalleLibroScreen(libro: libro);
+                    });
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

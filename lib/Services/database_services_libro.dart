@@ -7,12 +7,25 @@ import 'package:proyectoistateca/models/libros.dart';
 class Database_services_libro {
   static Future<List<Libro>> getLibro() async {
     var url = Uri.parse(baseUrl + '/listarlibros');
-    print(url);
     http.Response response = await http.get(
       url,
       headers: headers,
     );
-    print(response.body);
+    List responseList = jsonDecode(response.body);
+    List<Libro> libros = [];
+    for (Map tipoMap in responseList) {
+      Libro tipo = Libro.fromMap(tipoMap);
+      libros.add(tipo);
+    }
+    return libros;
+  }
+
+  static Future<List<Libro>> getLibronombre(String titulo) async {
+    var url = Uri.parse(baseUrl + '/listarlibrosxnombre/$titulo');
+    http.Response response = await http.get(
+      url,
+      headers: headers,
+    );
     List responseList = jsonDecode(response.body);
     List<Libro> libros = [];
     for (Map tipoMap in responseList) {
@@ -28,7 +41,6 @@ class Database_services_libro {
       url,
       headers: headers,
     );
-    print(response.body);
     return response;
   }
 }
