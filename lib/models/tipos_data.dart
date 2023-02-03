@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:proyectoistateca/Services/database_services.dart';
+import 'package:proyectoistateca/Services/database_services_libro.dart';
+import 'package:proyectoistateca/models/libros.dart';
 import 'package:proyectoistateca/models/tipos.dart';
 
 class TiposData extends ChangeNotifier {
@@ -19,6 +21,13 @@ class TiposData extends ChangeNotifier {
   void deleteTipo(Tipo tipo) {
     tipos.remove(tipo);
     DatabaseServices.deleteTipo(tipo.id_tipo);
+    notifyListeners();
+  }
+
+  List<Libro> libros = [];
+
+  void updateLibro(Libro libro) {
+    Database_services_libro.updateLibro(libro.id_libro);
     notifyListeners();
   }
 }
