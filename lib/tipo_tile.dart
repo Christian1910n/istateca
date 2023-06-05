@@ -15,12 +15,6 @@ class TipoTile extends StatelessWidget {
     return Card(
       child: ListTile(
         title: Text(tipo.nombre),
-        trailing: IconButton(
-          icon: const Icon(Icons.clear),
-          onPressed: () {
-            tipoData.deleteTipo(tipo);
-          },
-        ),
       ),
     );
   }

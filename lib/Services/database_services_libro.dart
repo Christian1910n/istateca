@@ -13,10 +13,11 @@ class Database_services_libro {
     );
     List responseList = jsonDecode(response.body);
     List<Libro> libros = [];
-    for (Map tipoMap in responseList) {
-      Libro tipo = Libro.fromMap(tipoMap);
-      libros.add(tipo);
+
+    for (var item in responseList) {
+      libros.add(Libro.fromJson(item));
     }
+
     return libros;
   }
 
@@ -28,9 +29,8 @@ class Database_services_libro {
     );
     List responseList = jsonDecode(response.body);
     List<Libro> libros = [];
-    for (Map tipoMap in responseList) {
-      Libro tipo = Libro.fromMap(tipoMap);
-      libros.add(tipo);
+    for (var item in responseList) {
+      libros.add(Libro.fromJson(item));
     }
     return libros;
   }

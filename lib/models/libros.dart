@@ -1,10 +1,12 @@
+import 'dart:convert';
+
 import 'package:proyectoistateca/models/tipos.dart';
 
 class Libro {
   final int id_libro;
   final String codigo_dewey;
   final String titulo;
-  //final Tipo tipo;
+  // final Tipo tipo;
   final String adquisicion;
   final int anio_publicacion;
   final String editor;
@@ -57,31 +59,32 @@ class Libro {
     //required this.documento_donacion
   });
 
-  factory Libro.fromMap(Map tipoMap) {
+  factory Libro.fromJson(Map<String, dynamic> json) {
     return Libro(
-        id_libro: tipoMap['id_libro'],
-        codigo_dewey: tipoMap['codigo_dewey'],
-        titulo: tipoMap['titulo'],
-        //tipo: tipoMap['tipo'],
-        adquisicion: tipoMap['adquisicion'],
-        anio_publicacion: tipoMap['anio_publicacion'],
-        editor: tipoMap['editor'],
-        ciudad: tipoMap['ciudad'],
-        num_paginas: tipoMap['num_paginas'],
-        area: tipoMap['area'],
-        cod_ISBN: tipoMap['cod_ISBN'],
-        idioma: tipoMap['idioma'],
-        descripcion: tipoMap['descripcion'],
-        dimensiones: tipoMap['dimensiones'],
-        estado_libro: tipoMap['estado_libro'],
-        activo: tipoMap['activo'],
-        url_digital: tipoMap['url_digital'],
-        fecha_creacion: tipoMap['fecha_creacion'],
-        disponibilidad: tipoMap['disponibilidad'],
-        indice_uno: tipoMap['indice_uno'],
-        indice_dos: tipoMap['indice_dos'],
-        indice_tres: tipoMap['indice_tres'],
-        nombre_donante: tipoMap['nombre_donante']);
+      id_libro: json['id_libro'] as int,
+      codigo_dewey: json['codigo_dewey'] as String,
+      titulo: json['titulo'] as String,
+      //tipo: Tipo.fromJson(json['tipo']),
+      adquisicion: json['adquisicion'] as String,
+      anio_publicacion: json['anio_publicacion'] as int,
+      editor: json['editor'] as String,
+      ciudad: json['ciudad'] as String,
+      num_paginas: json['num_paginas'] as String,
+      area: json['area'] as String,
+      cod_ISBN: json['cod_ISBN'] as String,
+      idioma: utf8.decode(json['idioma'].toString().codeUnits),
+      descripcion: utf8.decode(json['descripcion'].toString().codeUnits),
+      dimensiones: json['dimensiones'] as String,
+      estado_libro: json['estado_libro'] as String,
+      activo: json['activo'] as bool,
+      url_digital: json['url_digital'] as String,
+      fecha_creacion: json['fecha_creacion'] as String,
+      disponibilidad: json['disponibilidad'] as bool,
+      indice_uno: json['indice_uno'] as String,
+      indice_dos: json['indice_dos'] as String,
+      indice_tres: json['indice_tres'] as String,
+      nombre_donante: json['nombre_donante'] as String,
+    );
   }
 
   void toggle() {

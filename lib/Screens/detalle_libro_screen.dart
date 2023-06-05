@@ -22,127 +22,34 @@ class _DetalleLibroScreenState extends State<DetalleLibroScreen> {
             child: Text(
               widget.libro.titulo,
               style: const TextStyle(
-                  fontSize: 30, color: Colors.red, fontFamily: "cursive"),
+                fontSize: 30,
+                color: Colors.red,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
-          Row(
-            children: [
-              const Text(
-                "Descripcion: ",
-                style: TextStyle(fontSize: 18, color: Colors.blue),
-              ),
-              Expanded(
-                child: Text(
-                  widget.libro.descripcion,
-                  style: const TextStyle(fontSize: 15, color: Colors.green),
-                ),
-              ),
-            ],
-          ),
           const SizedBox(height: 20),
-          Row(
-            children: [
-              const Text(
-                "Año de Publicación: ",
-                style: TextStyle(fontSize: 18, color: Colors.blue),
-              ),
-              const SizedBox(width: 40),
-              Center(
-                child: Text(
-                  widget.libro.anio_publicacion.toString(),
-                  style: const TextStyle(fontSize: 15, color: Colors.green),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          Row(
-            children: [
-              const Text(
-                "Ciudad: ",
-                style: TextStyle(fontSize: 18, color: Colors.blue),
-              ),
-              const SizedBox(width: 137),
-              Text(
-                widget.libro.ciudad,
-                style: const TextStyle(fontSize: 15, color: Colors.green),
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          Row(
-            children: [
-              const Text(
-                "Editor ",
-                style: TextStyle(fontSize: 18, color: Colors.blue),
-              ),
-              const SizedBox(width: 152),
-              Text(
-                widget.libro.editor,
-                style: const TextStyle(fontSize: 15, color: Colors.green),
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          Row(
-            children: [
-              const Text(
-                "Idioma: ",
-                style: TextStyle(fontSize: 18, color: Colors.blue),
-              ),
-              const SizedBox(width: 138),
-              Text(
-                widget.libro.idioma,
-                style: const TextStyle(fontSize: 15, color: Colors.green),
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          Row(
-            children: [
-              const Text(
-                "Estado del Libro: ",
-                style: TextStyle(fontSize: 18, color: Colors.blue),
-              ),
-              const SizedBox(width: 63),
-              Text(
-                widget.libro.estado_libro,
-                style: const TextStyle(fontSize: 15, color: Colors.green),
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          Row(
-            children: [
-              const Text(
-                "Número de páginas: ",
-                style: TextStyle(fontSize: 18, color: Colors.blue),
-              ),
-              const SizedBox(width: 33),
-              Text(
-                widget.libro.num_paginas.toString(),
-                style: const TextStyle(fontSize: 15, color: Colors.green),
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          Row(
-            children: [
-              const Text(
-                "Codigo Dewey: ",
-                style: TextStyle(fontSize: 18, color: Colors.blue),
-              ),
-              const SizedBox(width: 80),
-              Text(
-                widget.libro.codigo_dewey,
-                style: const TextStyle(fontSize: 15, color: Colors.green),
-              ),
-            ],
-          ),
+          _buildRow("Descripción:", widget.libro.descripcion, Colors.blue,
+              Colors.green),
+          _buildRow(
+              "Año de Publicación:",
+              widget.libro.anio_publicacion.toString(),
+              Colors.blue,
+              Colors.green),
+          _buildRow("Ciudad:", widget.libro.ciudad, Colors.blue, Colors.green),
+          _buildRow("Editor:", widget.libro.editor, Colors.blue, Colors.green),
+          _buildRow("Idioma:", widget.libro.idioma, Colors.blue, Colors.green),
+          _buildRow("Estado del Libro:", widget.libro.estado_libro, Colors.blue,
+              Colors.green),
+          _buildRow("Número de páginas:", widget.libro.num_paginas.toString(),
+              Colors.blue, Colors.green),
+          _buildRow("Código Dewey:", widget.libro.codigo_dewey, Colors.blue,
+              Colors.green),
           const SizedBox(height: 20),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.green[400],
+              primary:
+                  widget.libro.disponibilidad ? Colors.grey : Colors.green[400],
             ),
             onPressed: widget.libro.disponibilidad
                 ? null
@@ -156,11 +63,31 @@ class _DetalleLibroScreenState extends State<DetalleLibroScreen> {
                   },
             child: const Text(
               "Solicitar Libro",
-              style: TextStyle(fontSize: 15),
+              style: TextStyle(fontSize: 18),
             ),
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildRow(
+      String title, String value, Color titleColor, Color valueColor) {
+    return Row(
+      children: [
+        Text(
+          title,
+          style: TextStyle(
+              fontSize: 18, color: titleColor, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: Text(
+            value,
+            style: TextStyle(fontSize: 15, color: valueColor),
+          ),
+        ),
+      ],
     );
   }
 }
