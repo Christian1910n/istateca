@@ -23,35 +23,37 @@ class _DetalleLibroScreenState extends State<DetalleLibroScreen> {
               widget.libro.titulo,
               style: const TextStyle(
                 fontSize: 30,
-                color: Colors.red,
+                color: Color.fromRGBO(
+                    24, 98, 173, 1.0), // Color rojo personalizado
                 fontWeight: FontWeight.bold,
               ),
             ),
           ),
           const SizedBox(height: 20),
           _buildRow("Descripción:", widget.libro.descripcion, Colors.blue,
-              Colors.green),
+              Colors.black),
           _buildRow(
               "Año de Publicación:",
               widget.libro.anio_publicacion.toString(),
               Colors.blue,
-              Colors.green),
-          _buildRow("Ciudad:", widget.libro.ciudad, Colors.blue, Colors.green),
-          _buildRow("Editor:", widget.libro.editor, Colors.blue, Colors.green),
-          _buildRow("Idioma:", widget.libro.idioma, Colors.blue, Colors.green),
+              Colors.black),
+          _buildRow("Ciudad:", widget.libro.ciudad, Colors.blue, Colors.black),
+          _buildRow("Editor:", widget.libro.editor, Colors.blue, Colors.black),
+          _buildRow("Idioma:", widget.libro.idioma, Colors.blue, Colors.black),
           _buildRow("Estado del Libro:", widget.libro.estado_libro, Colors.blue,
-              Colors.green),
+              Colors.black),
           _buildRow("Número de páginas:", widget.libro.num_paginas.toString(),
-              Colors.blue, Colors.green),
+              Colors.blue, Colors.black),
           _buildRow("Código Dewey:", widget.libro.codigo_dewey, Colors.blue,
-              Colors.green),
+              Colors.black),
           const SizedBox(height: 20),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              primary:
-                  widget.libro.disponibilidad ? Colors.grey : Colors.green[400],
+              primary: widget.libro.disponibilidad == false
+                  ? Colors.grey
+                  : Colors.green[400],
             ),
-            onPressed: widget.libro.disponibilidad
+            onPressed: widget.libro.disponibilidad == false
                 ? null
                 : () {
                     Navigator.push(

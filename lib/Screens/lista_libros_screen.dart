@@ -46,9 +46,13 @@ class _LlibrosScreenState extends State<LlibrosScreen> {
         : Scaffold(
             drawer: CustomDrawer(),
             appBar: AppBar(
-              title: Text(
-                'Libros (${Provider.of<TiposData>(context).libros.length})',
+              title: const Text(
+                'Lista de Libros',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
               ),
+              backgroundColor: Color.fromRGBO(24, 98, 173, 1.0),
             ),
             body: Container(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -58,15 +62,16 @@ class _LlibrosScreenState extends State<LlibrosScreen> {
                     children: [
                       TextField(
                         decoration: const InputDecoration(
-                          hintText: "Searches",
+                          hintText: "Buscar libro",
                           prefixIcon: Icon(Icons.search),
                           border: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(25.0)),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(25.0),
+                            ),
                           ),
                         ),
                         onChanged: (value) {
-                          if (value != "") {
+                          if (value.isNotEmpty) {
                             getLibrosnombre(value);
                           } else {
                             getLibros();
@@ -75,14 +80,15 @@ class _LlibrosScreenState extends State<LlibrosScreen> {
                       ),
                       Expanded(
                         child: ListView.builder(
-                            itemCount: tiposData.libros.length,
-                            itemBuilder: (context, index) {
-                              Libro libro = tiposData.libros[index];
-                              return LibrosTile(
-                                libro: libro,
-                                tiposData: tiposData,
-                              );
-                            }),
+                          itemCount: tiposData.libros.length,
+                          itemBuilder: (context, index) {
+                            Libro libro = tiposData.libros[index];
+                            return LibrosTile(
+                              libro: libro,
+                              tiposData: tiposData,
+                            );
+                          },
+                        ),
                       ),
                     ],
                   );

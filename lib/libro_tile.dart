@@ -22,28 +22,37 @@ class LibrosTile extends StatelessWidget {
             },
           );
         },
-        child: ListTile(
-          leading: CircleAvatar(
-            radius: 10,
-            backgroundColor: libro.disponibilidad ? Colors.red : Colors.green,
-            child: const Text(""),
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Color.fromRGBO(24, 98, 173, 1.0),
+              width: 2.0,
+            ),
+            borderRadius: BorderRadius.circular(10), // Radio de borde
           ),
-          title: Text(libro.titulo),
-          trailing: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              IconButton(
-                icon: const Icon(Icons.arrow_forward),
-                onPressed: () {
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (context) {
-                      return DetalleLibroScreen(libro: libro);
-                    },
-                  );
-                },
-              ),
-            ],
+          child: ListTile(
+            leading: CircleAvatar(
+              radius: 10,
+              backgroundColor: libro.disponibilidad ? Colors.green : Colors.red,
+              child: const Text(""),
+            ),
+            title: Text(libro.titulo),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.arrow_forward),
+                  onPressed: () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (context) {
+                        return DetalleLibroScreen(libro: libro);
+                      },
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),

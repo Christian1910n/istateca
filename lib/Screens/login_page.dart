@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:proyectoistateca/Screens/home_screen.dart';
-import 'package:proyectoistateca/Screens/menu_lateral.dart';
+import 'package:proyectoistateca/Screens/lista_libros_screen.dart';
 
 class LoginPage extends StatefulWidget {
   static String id = 'login_page';
@@ -21,7 +21,7 @@ class _LoginPageState extends State<LoginPage> {
       ),
       onPressed: () {
         setState(() {
-          Navigator.pushNamed(context, MenuLateralScreen.id);
+          Navigator.pushNamed(context, LlibrosScreen.id);
         });
       },
     ));

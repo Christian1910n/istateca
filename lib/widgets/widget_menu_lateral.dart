@@ -15,12 +15,12 @@ class _CustomDrawerState extends State<CustomDrawer> {
   }
 
   Widget _buildDrawer(BuildContext context) {
-    return ListView(
-      padding: EdgeInsets.zero,
-      children: [
-        DrawerHeader(
-            decoration: const BoxDecoration(
-              color: Color.fromARGB(255, 120, 194, 255),
+    return Drawer(
+      child: Column(
+        children: [
+          DrawerHeader(
+            decoration: BoxDecoration(
+              color: Color.fromARGB(255, 28, 105, 183),
             ),
             child: Column(
               children: [
@@ -35,42 +35,121 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   padding: EdgeInsets.only(top: 20.0),
                   child: Text(
                     "usuario@tecazuay.edu.ec",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'cursive',
-                        fontSize: 30.0),
+                    style: TextStyle(color: Colors.white, fontSize: 19.0),
                   ),
                 ),
               ],
-            )),
-        ListTile(
-          leading: Icon(Icons.book),
-          title: Text('Lista de Libros'),
-          onTap: () {
-            setState(() {
-              Navigator.pushNamed(context, HomeScreen.id);
-            });
-          },
-        ),
-        ListTile(
-          leading: Icon(Icons.book),
-          title: Text('Lista de Libros'),
-          onTap: () {
-            setState(() {
-              Navigator.pushNamed(context, LlibrosScreen.id);
-            });
-          },
-        ),
-        ListTile(
-          leading: Icon(Icons.book),
-          title: Text('Lista de Libros'),
-          onTap: () {
-            setState(() {
-              Navigator.pushNamed(context, HomeScreen.id);
-            });
-          },
-        ),
-      ],
+            ),
+          ),
+          Expanded(
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.black,
+                      width: 3.0,
+                    ),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: ListTile(
+                    leading: const Icon(Icons.book,
+                        color: Color.fromARGB(255, 28, 105, 183)),
+                    title: const Text(
+                      'Lista 1',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16.0,
+                      ),
+                    ),
+                    onTap: () {
+                      setState(() {
+                        Navigator.pushNamed(context, HomeScreen.id);
+                      });
+                    },
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.black,
+                      width: 3.0,
+                    ),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: ListTile(
+                    leading: Icon(Icons.book,
+                        color: Color.fromARGB(255, 28, 105, 183)),
+                    title: const Text(
+                      'Lista de Libros',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16.0,
+                      ),
+                    ),
+                    onTap: () {
+                      setState(() {
+                        Navigator.pushNamed(context, LlibrosScreen.id);
+                      });
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Colors.black,
+                width: 3.0,
+              ),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: ListTile(
+              leading: const Icon(Icons.comment, color: Colors.black),
+              title: const Text(
+                'Envíanos tus comentarios',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 16.0,
+                ),
+              ),
+              onTap: () {
+                setState(() {
+                  Navigator.pushNamed(context, HomeScreen.id);
+                });
+              },
+            ),
+          ),
+          const SizedBox(height: 10),
+          Container(
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Colors.red,
+                width: 3.0,
+              ),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: ListTile(
+              leading: Icon(Icons.logout, color: Colors.red),
+              title: const Text(
+                'Cerrar Sesión',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 16.0,
+                ),
+              ),
+              onTap: () {
+                setState(() {
+                  Navigator.pushNamed(context, HomeScreen.id);
+                });
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
