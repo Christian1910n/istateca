@@ -4,6 +4,7 @@ import 'package:proyectoistateca/Screens/home_screen.dart';
 import 'package:proyectoistateca/Screens/lista_libros_screen.dart';
 import 'package:proyectoistateca/Screens/login_page.dart';
 import 'package:proyectoistateca/Screens/solicitar_libro_screen.dart';
+import 'package:proyectoistateca/Screens/solicitudes_screen.dart';
 import 'package:proyectoistateca/models/tipos_data.dart';
 
 void main() {
@@ -22,8 +23,9 @@ class MyApp extends StatelessWidget {
         initialRoute: LoginPage.id,
         routes: {
           HomeScreen.id: (context) => HomeScreen(),
-          LoginPage.id: (context) => LoginPage(),
+          LoginPage.id: (context) => const LoginPage(),
           LlibrosScreen.id: (context) => LlibrosScreen(),
+          SolicitudesLibros.id: (context) => SolicitudesLibros(),
         },
       ),
     );

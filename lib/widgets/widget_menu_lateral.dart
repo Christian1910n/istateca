@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:proyectoistateca/Screens/lista_libros_screen.dart';
+import 'package:proyectoistateca/Screens/solicitudes_screen.dart';
 
 import '../Screens/home_screen.dart';
 
@@ -92,6 +93,32 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     onTap: () {
                       setState(() {
                         Navigator.pushNamed(context, LlibrosScreen.id);
+                      });
+                    },
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.black,
+                      width: 3.0,
+                    ),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: ListTile(
+                    leading: Icon(Icons.book,
+                        color: Color.fromARGB(255, 28, 105, 183)),
+                    title: const Text(
+                      'Lista de Solicitudes de libors',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16.0,
+                      ),
+                    ),
+                    onTap: () {
+                      setState(() {
+                        Navigator.pushNamed(context, SolicitudesLibros.id);
                       });
                     },
                   ),
