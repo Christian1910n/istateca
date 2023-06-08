@@ -22,6 +22,21 @@ class LibrosTile extends StatelessWidget {
             },
           );
         },
+        onLongPress: () {
+          showModalBottomSheet(
+            context: context,
+            builder: (context) {
+              return Container(
+                height: 500, // Ajusta la altura según tus necesidades
+                child: Image.network(
+                  'https://www.eluniverso.com/resizer/a7RzV9cpgq3r0Pxpo__CtrcH2Wk=/arc-anglerfish-arc2-prod-eluniverso/public/NUNM6L7XP26ZH2ZX2UUP7C5JIA.jpg',
+                  fit: BoxFit
+                      .cover, // Ajusta la forma en que la imagen se ajusta al contenedor
+                ),
+              );
+            },
+          );
+        },
         child: Container(
           decoration: BoxDecoration(
             border: Border.all(

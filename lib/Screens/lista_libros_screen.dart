@@ -60,6 +60,16 @@ class _LlibrosScreenState extends State<LlibrosScreen> {
                 builder: (context, tiposData, child) {
                   return Column(
                     children: [
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        child: Text(
+                          'Mantenga presionado para obtener una vista previa del libro',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ),
                       TextField(
                         decoration: const InputDecoration(
                           hintText: "Buscar libro",
