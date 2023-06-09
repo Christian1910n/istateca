@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:proyectoistateca/Screens/lista_libros_screen.dart';
 import 'package:proyectoistateca/Screens/solicitud_libro_screen.dart';
 import 'package:proyectoistateca/Screens/solicitudes_screen.dart';
+import 'package:proyectoistateca/Screens/sugerencias_screen.dart';
 
 import '../Screens/home_screen.dart';
 
@@ -172,7 +173,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
               ),
               onTap: () {
                 setState(() {
-                  Navigator.pushNamed(context, HomeScreen.id);
+                  Navigator.pushNamed(context, SugerenciasScreen.id);
                 });
               },
             ),

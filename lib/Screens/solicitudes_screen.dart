@@ -13,6 +13,7 @@ class SolicitudesLibros extends StatefulWidget {
 
 class _SolicitudesLibrosState extends State<SolicitudesLibros> {
   String qrValor = '';
+  TextEditingController buscarsoli = TextEditingController();
   void scanQr() async {
     try {
       final PermissionStatus status = await Permission.camera.request();
@@ -20,6 +21,7 @@ class _SolicitudesLibrosState extends State<SolicitudesLibros> {
         String? cameraScanResult = await scanner.scan();
         setState(() {
           qrValor = cameraScanResult!;
+          buscarsoli.text = cameraScanResult;
         });
       } else {
         print("no hay permiso f");
@@ -29,6 +31,10 @@ class _SolicitudesLibrosState extends State<SolicitudesLibros> {
       print('Error al leer el QR Error: $error');
     }
   }
+
+  void getsolicitudesid(String value) {}
+
+  void getsolicitudes() {}
 
   @override
   Widget build(BuildContext context) {
@@ -43,10 +49,39 @@ class _SolicitudesLibrosState extends State<SolicitudesLibros> {
         backgroundColor: Color.fromRGBO(24, 98, 173, 1.0),
       ),
       drawer: CustomDrawer(),
-      body: Center(
-        child: Container(child: Text(qrValor)),
+      body: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        child: Row(
+          children: [
+            Expanded(
+              child: TextField(
+                controller: buscarsoli,
+                decoration: const InputDecoration(
+                  hintText: "Buscar Solicitud",
+                  prefixIcon: Icon(Icons.search),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(25.0),
+                    ),
+                  ),
+                ),
+                onChanged: (value) {
+                  if (value.isNotEmpty) {
+                    getsolicitudesid(value);
+                  } else {
+                    getsolicitudes();
+                  }
+                },
+              ),
+            ),
+            SizedBox(width: 10), // Espacio entre el TextField y el botón
+            IconButton(
+              icon: Icon(Icons.qr_code),
+              onPressed: scanQr,
+            ),
+          ],
+        ),
       ),
-      floatingActionButton: FloatingActionButton(onPressed: scanQr),
     );
   }
 }
