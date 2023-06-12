@@ -6,7 +6,7 @@ import 'package:proyectoistateca/models/libros.dart';
 
 class Database_services_libro {
   static Future<List<Libro>> getLibro() async {
-    var url = Uri.parse(baseUrl + '/listarlibros');
+    var url = Uri.parse(baseUrl + '/libro/listar');
     http.Response response = await http.get(
       url,
       headers: headers,
@@ -22,7 +22,7 @@ class Database_services_libro {
   }
 
   static Future<List<Libro>> getLibronombre(String titulo) async {
-    var url = Uri.parse(baseUrl + '/listarlibrosxnombre/$titulo');
+    var url = Uri.parse(baseUrl + '/libro/listarlibrosxnombre/$titulo');
     http.Response response = await http.get(
       url,
       headers: headers,

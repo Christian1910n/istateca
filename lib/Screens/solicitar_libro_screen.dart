@@ -73,14 +73,14 @@ class _SolicitarLibroScreenState extends State<SolicitarLibroScreen>
                   data: widget.libro.titulo,
                   options: const QrOptions(
                     shapes: QrShapes(
-                      darkPixel: QrPixelShapeRoundCorners(cornerFraction: .5),
-                      frame: QrFrameShapeRoundCorners(cornerFraction: .25),
-                      ball: QrBallShapeRoundCorners(cornerFraction: .25),
+                      darkPixel: QrPixelShapeRoundCorners(cornerFraction: .0),
+                      frame: QrFrameShapeRoundCorners(cornerFraction: .0),
+                      ball: QrBallShapeRoundCorners(cornerFraction: .0),
                     ),
                     colors: QrColors(
                         dark: QrColorLinearGradient(colors: [
-                      Color.fromARGB(255, 17, 0, 255),
-                      Color.fromARGB(255, 255, 0, 0),
+                      Colors.black,
+                      Colors.black,
                     ], orientation: GradientOrientation.leftDiagonal)),
                   ),
                 ),

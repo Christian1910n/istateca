@@ -10,7 +10,7 @@ class DatabaseServices {
       "nombre": nombre,
     };
     var body = json.encode(data);
-    var url = Uri.parse(baseUrl + '/creartipo');
+    var url = Uri.parse(baseUrl + 'tipo/crear');
 
     http.Response response = await http.post(
       url,
@@ -25,7 +25,7 @@ class DatabaseServices {
   }
 
   static Future<List<Tipo>> getTipo() async {
-    var url = Uri.parse(baseUrl + '/listartipo');
+    var url = Uri.parse(baseUrl + '/tipo/listar');
     print(url);
     http.Response response = await http.get(
       url,
