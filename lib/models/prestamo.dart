@@ -1,94 +1,72 @@
 import 'dart:convert';
 
+import 'package:proyectoistateca/models/carrera.dart';
+import 'package:proyectoistateca/models/libros.dart';
+import 'package:proyectoistateca/models/persona.dart';
 import 'package:proyectoistateca/models/tipos.dart';
 
-class Libro {
-  final int id_libro;
-  final String codigo_dewey;
-  final String titulo;
-  // final Tipo tipo;
-  final String adquisicion;
-  final int anio_publicacion;
-  final String editor;
-  final String ciudad;
-  final String num_paginas;
-  final String area;
-  final String cod_ISBN;
-  final String idioma;
-  final String descripcion;
-  final String dimensiones;
-  final String estado_libro;
+class Prestamo {
+  int id_prestamo;
+  String fechaFin;
+  int estadoLibro;
+  int estadoPrestamo;
+  String fechaEntrega;
+  int documentoHabilitante;
+  String fechaDevolucion;
+  String fechaMaxima;
   bool activo;
-  //final String imagen;
-  final String url_digital;
-  //final Bibliotecarios bibliotecarios;
-  final String fecha_creacion;
-  bool disponibilidad;
-  final String indice_uno;
-  final String indice_dos;
-  final String indice_tres;
-  final String nombre_donante;
-  //final byte[] documento_donacion;
+  String escaneoMatriz;
+  int tipoPrestamo;
+  Persona idSolicitante;
+  Persona idEntrega;
+  Persona idRecibido;
+  Carrera carrera;
+  Libro libro;
 
-  Libro({
-    required this.id_libro,
-    required this.codigo_dewey,
-    required this.titulo,
-    //required this.tipo,
-    required this.adquisicion,
-    required this.anio_publicacion,
-    required this.editor,
-    required this.ciudad,
-    required this.num_paginas,
-    required this.area,
-    required this.cod_ISBN,
-    required this.idioma,
-    required this.descripcion,
-    required this.dimensiones,
-    required this.estado_libro,
+  Prestamo({
+    required this.id_prestamo,
+    required this.fechaFin,
+    required this.estadoLibro,
+    required this.estadoPrestamo,
+    required this.fechaEntrega,
+    required this.documentoHabilitante,
+    required this.fechaDevolucion,
+    required this.fechaMaxima,
     required this.activo,
-    //required this.imagen,
-    required this.url_digital,
-    //required this.bibliotecario,
-    required this.fecha_creacion,
-    required this.disponibilidad,
-    required this.indice_uno,
-    required this.indice_dos,
-    required this.indice_tres,
-    required this.nombre_donante,
-    //required this.documento_donacion
+    required this.escaneoMatriz,
+    required this.tipoPrestamo,
+    required this.idSolicitante,
+    required this.idEntrega,
+    required this.idRecibido,
+    required this.carrera,
+    required this.libro,
   });
 
-  factory Libro.fromJson(Map<String, dynamic> json) {
-    return Libro(
-      id_libro: json['id_libro'] as int,
-      codigo_dewey: json['codigo_dewey'] as String,
-      titulo: json['titulo'] as String,
-      //tipo: Tipo.fromJson(json['tipo']),
-      adquisicion: json['adquisicion'] as String,
-      anio_publicacion: json['anio_publicacion'] as int,
-      editor: json['editor'] as String,
-      ciudad: json['ciudad'] as String,
-      num_paginas: json['num_paginas'] as String,
-      area: json['area'] as String,
-      cod_ISBN: json['cod_ISBN'] as String,
-      idioma: utf8.decode(json['idioma'].toString().codeUnits),
-      descripcion: utf8.decode(json['descripcion'].toString().codeUnits),
-      dimensiones: json['dimensiones'] as String,
-      estado_libro: json['estado_libro'] as String,
-      activo: json['activo'] as bool,
-      url_digital: json['url_digital'] as String,
-      fecha_creacion: json['fecha_creacion'] as String,
-      disponibilidad: json['disponibilidad'] as bool,
-      indice_uno: json['indice_uno'] as String,
-      indice_dos: json['indice_dos'] as String,
-      indice_tres: json['indice_tres'] as String,
-      nombre_donante: json['nombre_donante'] as String,
+  factory Prestamo.fromJson(Map<String, dynamic> json) {
+    return Prestamo(
+      id_prestamo: json['id_libro'] as int ?? 0,
+      fechaFin: utf8.decode(json['fechaFin'].toString().codeUnits) ?? '',
+      estadoPrestamo: json['estadoPrestamo'] as int ?? 0,
+      estadoLibro: json['estadoLibro'] as int ?? 0,
+      fechaEntrega:
+          utf8.decode(json['fechaEntrega'].toString().codeUnits) ?? '',
+      documentoHabilitante: json['documentoHabilitante'] as int ?? 0,
+      fechaDevolucion:
+          utf8.decode(json['fechaDevolucion'].toString().codeUnits) ?? '',
+      fechaMaxima: utf8.decode(json['fechaMaxima'].toString().codeUnits) ?? '',
+      activo: json['activo'] ?? false,
+      escaneoMatriz:
+          utf8.decode(json['escaneoMatriz'].toString().codeUnits) ?? '',
+      tipoPrestamo: json['tipoPrestamo'] as int ?? 0,
+      idSolicitante: Persona.fromJson(json['idSolicitante'] ?? {}),
+      idEntrega: Persona.fromJson(json['idEntrega'] ?? {}),
+      idRecibido: Persona.fromJson(json['idRecibido'] ?? {}),
+      carrera: Carrera.fromJson(json['carrera'] ?? {}),
+      libro: Libro.fromJson(json['libro'] ?? {}),
     );
   }
 
   void toggle() {
     activo = !activo;
-    disponibilidad = !disponibilidad;
   }
 }
