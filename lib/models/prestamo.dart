@@ -7,13 +7,13 @@ import 'package:proyectoistateca/models/tipos.dart';
 
 class Prestamo {
   int id_prestamo;
-  String fechaFin;
+  DateTime fechaFin;
   int estadoLibro;
   int estadoPrestamo;
-  String fechaEntrega;
+  DateTime fechaEntrega;
   int documentoHabilitante;
-  String fechaDevolucion;
-  String fechaMaxima;
+  DateTime fechaDevolucion;
+  DateTime fechaMaxima;
   bool activo;
   String escaneoMatriz;
   int tipoPrestamo;
@@ -45,15 +45,17 @@ class Prestamo {
   factory Prestamo.fromJson(Map<String, dynamic> json) {
     return Prestamo(
       id_prestamo: json['id_libro'] as int ?? 0,
-      fechaFin: utf8.decode(json['fechaFin'].toString().codeUnits) ?? '',
+      fechaFin: DateTime.parse(
+          utf8.decode(json['fechaFin'].toString().codeUnits) ?? ''),
       estadoPrestamo: json['estadoPrestamo'] as int ?? 0,
       estadoLibro: json['estadoLibro'] as int ?? 0,
-      fechaEntrega:
-          utf8.decode(json['fechaEntrega'].toString().codeUnits) ?? '',
+      fechaEntrega: DateTime.parse(
+          utf8.decode(json['fechaEntrega'].toString().codeUnits) ?? ''),
       documentoHabilitante: json['documentoHabilitante'] as int ?? 0,
-      fechaDevolucion:
-          utf8.decode(json['fechaDevolucion'].toString().codeUnits) ?? '',
-      fechaMaxima: utf8.decode(json['fechaMaxima'].toString().codeUnits) ?? '',
+      fechaDevolucion: DateTime.parse(
+          utf8.decode(json['fechaDevolucion'].toString().codeUnits) ?? ''),
+      fechaMaxima: DateTime.parse(
+          utf8.decode(json['fechaMaxima'].toString().codeUnits) ?? ''),
       activo: json['activo'] ?? false,
       escaneoMatriz:
           utf8.decode(json['escaneoMatriz'].toString().codeUnits) ?? '',

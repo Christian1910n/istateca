@@ -4,8 +4,8 @@ import 'package:proyectoistateca/models/persona.dart';
 
 class BibliotecarioCargo {
   int id_bibliotecario;
-  String fechaInicio;
-  String fechaFin;
+  DateTime fechaInicio;
+  DateTime fechaFin;
   bool activoBibliotecario;
   Persona persona;
 
@@ -20,8 +20,10 @@ class BibliotecarioCargo {
   factory BibliotecarioCargo.fromJson(Map<String, dynamic> json) {
     return BibliotecarioCargo(
       id_bibliotecario: json['id'] as int? ?? 0,
-      fechaInicio: utf8.decode(json['fechaInicio'].toString().codeUnits) ?? '',
-      fechaFin: utf8.decode(json['fechaFin'].toString().codeUnits) ?? '',
+      fechaInicio: DateTime.parse(
+          utf8.decode(json['fechaInicio'].toString().codeUnits) ?? ''),
+      fechaFin: DateTime.parse(
+          utf8.decode(json['fechaFin'].toString().codeUnits) ?? ''),
       activoBibliotecario: json['activoBibliotecario'] as bool? ?? false,
       persona: Persona.fromJson(json['persona']),
     );

@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-import 'package:proyectoistateca/models/tipos.dart';
+import 'package:proyectoistateca/models/authorities.dart';
 
 class Persona {
-  int id;
+  int id_persona;
   int fenixId;
   String cedula;
   String correo;
@@ -13,9 +13,10 @@ class Persona {
   String celular;
   int calificacion;
   bool activo;
+  Authority authorities;
 
   Persona({
-    required this.id,
+    required this.id_persona,
     required this.fenixId,
     required this.cedula,
     required this.correo,
@@ -25,20 +26,26 @@ class Persona {
     required this.celular,
     required this.calificacion,
     required this.activo,
+    required this.authorities,
   });
 
   factory Persona.fromJson(Map<String, dynamic> json) {
     return Persona(
-      id: json['id'] ?? 0,
-      fenixId: json['fenixId'] ?? 0,
+      id_persona: json['id'] as int? ?? 0,
+      fenixId: json['fenixId'] as int? ?? 0,
       cedula: utf8.decode(json['cedula'].toString().codeUnits) ?? '',
       correo: utf8.decode(json['correo'].toString().codeUnits) ?? '',
       nombres: utf8.decode(json['nombres'].toString().codeUnits) ?? '',
       apellidos: utf8.decode(json['apellidos'].toString().codeUnits) ?? '',
-      tipo: json['tipo'] ?? 0,
+      tipo: json['tipo'] as int? ?? 0,
       celular: utf8.decode(json['celular'].toString().codeUnits) ?? '',
-      calificacion: json['calificacion'] ?? 0,
-      activo: json['activo'] ?? false,
+      calificacion: json['calificacion'] as int? ?? 0,
+      activo: json['activo'] as bool? ?? false,
+      authorities: Authority.fromJson(json['authorities']),
     );
+  }
+
+  void toggle() {
+    activo = !activo;
   }
 }
