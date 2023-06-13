@@ -18,8 +18,8 @@ class DatabaseServices {
       body: body,
     );
     print(response.body);
-    Map responseMap = jsonDecode(response.body);
-    Tipo tipo = Tipo.fromMap(responseMap);
+    Map<String, dynamic> responseMap = jsonDecode(response.body);
+    Tipo tipo = Tipo.fromJson(responseMap);
 
     return tipo;
   }
@@ -34,8 +34,8 @@ class DatabaseServices {
     print(response.body);
     List responseList = jsonDecode(response.body);
     List<Tipo> tipos = [];
-    for (Map tipoMap in responseList) {
-      Tipo tipo = Tipo.fromMap(tipoMap);
+    for (Map<String, dynamic> tipoMap in responseList) {
+      Tipo tipo = Tipo.fromJson(tipoMap);
       tipos.add(tipo);
     }
     return tipos;

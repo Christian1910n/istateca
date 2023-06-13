@@ -1,94 +1,96 @@
 import 'dart:convert';
 
+import 'package:proyectoistateca/models/persona.dart';
 import 'package:proyectoistateca/models/tipos.dart';
 
 class Libro {
-  final int id_libro;
-  final String codigo_dewey;
-  final String titulo;
-  // final Tipo tipo;
-  final String adquisicion;
-  final int anio_publicacion;
-  final String editor;
-  final String ciudad;
-  final String num_paginas;
-  final String area;
-  final String cod_ISBN;
-  final String idioma;
-  final String descripcion;
-  final String dimensiones;
-  final String estado_libro;
+  int id;
+  String codigoDewey;
+  String titulo;
+  String adquisicion;
+  int anioPublicacion;
+  String editor;
+  String ciudad;
+  int numPaginas;
+  String area;
+  String conIsbn;
+  String idioma;
+  String indiceUno;
+  String indiceDos;
+  String indiceTres;
+  String descripcion;
+  String dimenciones;
+  int estadoLibro;
+  String nombreDonante;
   bool activo;
-  //final String imagen;
-  final String url_digital;
-  //final Bibliotecarios bibliotecarios;
-  final String fecha_creacion;
+  String urlImagen;
+  String urlActaDonacion;
+  String urlDigital;
+  DateTime fechaCreacion;
   bool disponibilidad;
-  final String indice_uno;
-  final String indice_dos;
-  final String indice_tres;
-  final String nombre_donante;
-  //final byte[] documento_donacion;
+  Tipo tipo;
+  Persona persona;
 
   Libro({
-    required this.id_libro,
-    required this.codigo_dewey,
+    required this.id,
+    required this.codigoDewey,
     required this.titulo,
-    //required this.tipo,
     required this.adquisicion,
-    required this.anio_publicacion,
+    required this.anioPublicacion,
     required this.editor,
     required this.ciudad,
-    required this.num_paginas,
+    required this.numPaginas,
     required this.area,
-    required this.cod_ISBN,
+    required this.conIsbn,
     required this.idioma,
+    required this.indiceUno,
+    required this.indiceDos,
+    required this.indiceTres,
     required this.descripcion,
-    required this.dimensiones,
-    required this.estado_libro,
+    required this.dimenciones,
+    required this.estadoLibro,
+    required this.nombreDonante,
     required this.activo,
-    //required this.imagen,
-    required this.url_digital,
-    //required this.bibliotecario,
-    required this.fecha_creacion,
+    required this.urlImagen,
+    required this.urlActaDonacion,
+    required this.urlDigital,
+    required this.fechaCreacion,
     required this.disponibilidad,
-    required this.indice_uno,
-    required this.indice_dos,
-    required this.indice_tres,
-    required this.nombre_donante,
-    //required this.documento_donacion
+    required this.tipo,
+    required this.persona,
   });
 
   factory Libro.fromJson(Map<String, dynamic> json) {
     return Libro(
-      id_libro: json['id_libro'] as int,
-      codigo_dewey: json['codigo_dewey'] as String,
-      titulo: json['titulo'] as String,
-      //tipo: Tipo.fromJson(json['tipo']),
-      adquisicion: json['adquisicion'] as String,
-      anio_publicacion: json['anio_publicacion'] as int,
-      editor: json['editor'] as String,
-      ciudad: json['ciudad'] as String,
-      num_paginas: json['num_paginas'] as String,
-      area: json['area'] as String,
-      cod_ISBN: json['cod_ISBN'] as String,
-      idioma: utf8.decode(json['idioma'].toString().codeUnits),
-      descripcion: utf8.decode(json['descripcion'].toString().codeUnits),
-      dimensiones: json['dimensiones'] as String,
-      estado_libro: json['estado_libro'] as String,
-      activo: json['activo'] as bool,
-      url_digital: json['url_digital'] as String,
-      fecha_creacion: json['fecha_creacion'] as String,
-      disponibilidad: json['disponibilidad'] as bool,
-      indice_uno: json['indice_uno'] as String,
-      indice_dos: json['indice_dos'] as String,
-      indice_tres: json['indice_tres'] as String,
-      nombre_donante: json['nombre_donante'] as String,
+      id: json['id'] ?? 0,
+      codigoDewey: utf8.decode(json['codigoDewey'].toString().codeUnits) ?? '',
+      titulo: utf8.decode(json['titulo'].toString().codeUnits) ?? '',
+      adquisicion: utf8.decode(json['adquisicion'].toString().codeUnits) ?? '',
+      anioPublicacion: json['anioPublicacion'] ?? 0,
+      editor: utf8.decode(json['editor'].toString().codeUnits) ?? '',
+      ciudad: utf8.decode(json['ciudad'].toString().codeUnits) ?? '',
+      numPaginas: json['numPaginas'] ?? 0,
+      area: utf8.decode(json['area'].toString().codeUnits) ?? '',
+      conIsbn: utf8.decode(json['conIsbn'].toString().codeUnits) ?? '',
+      idioma: utf8.decode(json['idioma'].toString().codeUnits) ?? '',
+      indiceUno: utf8.decode(json['indiceUno'].toString().codeUnits) ?? '',
+      indiceDos: utf8.decode(json['indiceDos'].toString().codeUnits) ?? '',
+      indiceTres: utf8.decode(json['indiceTres'].toString().codeUnits) ?? '',
+      descripcion: utf8.decode(json['descripcion'].toString().codeUnits) ?? '',
+      dimenciones: utf8.decode(json['dimenciones'].toString().codeUnits) ?? '',
+      estadoLibro: json['estadoLibro'] ?? 0,
+      nombreDonante:
+          utf8.decode(json['nombreDonante'].toString().codeUnits) ?? '',
+      activo: json['activo'] ?? false,
+      urlImagen: utf8.decode(json['urlImagen'].toString().codeUnits) ?? '',
+      urlActaDonacion:
+          utf8.decode(json['urlActaDonacion'].toString().codeUnits) ?? '',
+      urlDigital: utf8.decode(json['urlDigital'].toString().codeUnits) ?? '',
+      fechaCreacion: DateTime.parse(
+          utf8.decode(json['fechaCreacion'].toString().codeUnits) ?? ''),
+      disponibilidad: json['disponibilidad'] ?? false,
+      tipo: Tipo.fromJson(json['tipo'] ?? {}),
+      persona: Persona.fromJson(json['persona'] ?? {}),
     );
-  }
-
-  void toggle() {
-    activo = !activo;
-    disponibilidad = !disponibilidad;
   }
 }

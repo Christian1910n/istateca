@@ -21,7 +21,7 @@ class _LoginPageState extends State<LoginPage> {
       ),
       onPressed: () {
         setState(() {
-          Navigator.pushNamed(context, LlibrosScreen.id);
+          Navigator.pushNamed(context, HomeScreen.id);
         });
       },
     ));

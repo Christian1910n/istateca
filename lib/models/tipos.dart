@@ -1,13 +1,17 @@
+import 'dart:convert';
+
 class Tipo {
-  final int id_tipo;
-  final String nombre;
+  int id;
+  String nombre;
+  bool activo;
 
-  Tipo({
-    required this.id_tipo,
-    required this.nombre,
-  });
+  Tipo({required this.id, required this.nombre, required this.activo});
 
-  factory Tipo.fromMap(Map tipoMap) {
-    return Tipo(id_tipo: tipoMap['id_tipo'], nombre: tipoMap['nombre']);
+  factory Tipo.fromJson(Map<String, dynamic> json) {
+    return Tipo(
+      id: json['id'] ?? 0,
+      nombre: utf8.decode(json['nombre'].toString().codeUnits),
+      activo: json['activo'] ?? false,
+    );
   }
 }

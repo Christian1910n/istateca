@@ -14,20 +14,20 @@ class TiposData extends ChangeNotifier {
   }
 
   void updateTipo(Tipo tipo) {
-    DatabaseServices.updateTipo(tipo.id_tipo);
+    DatabaseServices.updateTipo(tipo.id);
     notifyListeners();
   }
 
   void deleteTipo(Tipo tipo) {
     tipos.remove(tipo);
-    DatabaseServices.deleteTipo(tipo.id_tipo);
+    DatabaseServices.deleteTipo(tipo.id);
     notifyListeners();
   }
 
   List<Libro> libros = [];
 
   void updateLibro(Libro libro) {
-    Database_services_libro.updateLibro(libro.id_libro);
+    Database_services_libro.updateLibro(libro.id);
     notifyListeners();
   }
 }
