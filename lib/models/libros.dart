@@ -93,4 +93,35 @@ class Libro {
       persona: Persona.fromJson(json['persona'] ?? {}),
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'codigoDewey': codigoDewey,
+      'titulo': titulo,
+      'adquisicion': adquisicion,
+      'anioPublicacion': anioPublicacion,
+      'editor': editor,
+      'ciudad': ciudad,
+      'numPaginas': numPaginas,
+      'area': area,
+      'conIsbn': conIsbn,
+      'idioma': idioma,
+      'indiceUno': indiceUno,
+      'indiceDos': indiceDos,
+      'indiceTres': indiceTres,
+      'descripcion': descripcion,
+      'dimenciones': dimenciones,
+      'estadoLibro': estadoLibro,
+      'nombreDonante': nombreDonante,
+      'activo': activo,
+      'urlImagen': urlImagen,
+      'urlActaDonacion': urlActaDonacion,
+      'urlDigital': urlDigital,
+      'fechaCreacion': fechaCreacion.toIso8601String(),
+      'disponibilidad': disponibilidad,
+      'tipo': tipo.toJson(),
+      'persona': persona.toJson(),
+    };
+  }
 }

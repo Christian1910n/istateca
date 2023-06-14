@@ -6,9 +6,11 @@ import 'package:custom_qr_generator/custom_qr_generator.dart';
 
 class SolicitarLibroScreen extends StatefulWidget {
   final Libro libro;
+  final int idsolicitud;
   static String id = 'solicitar_libro_screen';
 
-  const SolicitarLibroScreen({super.key, required this.libro});
+  const SolicitarLibroScreen(
+      {super.key, required this.libro, required this.idsolicitud});
   @override
   State<SolicitarLibroScreen> createState() => _SolicitarLibroScreenState();
 }
@@ -54,9 +56,8 @@ class _SolicitarLibroScreenState extends State<SolicitarLibroScreen>
             FadeTransition(
               opacity: _animation,
               child: Text(
-                'Nro Solicitud: 3\n'
-                'Titulo del libro: ${widget.libro.titulo}\n'
-                'Fecha Solicitud: 6/6/2023',
+                'Nro Solicitud: ${widget.idsolicitud}\n'
+                'Titulo del libro: ${widget.libro.titulo}\n',
                 style: const TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
@@ -70,7 +71,7 @@ class _SolicitarLibroScreenState extends State<SolicitarLibroScreen>
               opacity: _animation,
               child: CustomPaint(
                 painter: QrPainter(
-                  data: widget.libro.titulo,
+                  data: "${widget.idsolicitud}",
                   options: const QrOptions(
                     shapes: QrShapes(
                       darkPixel: QrPixelShapeRoundCorners(cornerFraction: .0),

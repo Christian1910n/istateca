@@ -22,6 +22,15 @@ class Carrera {
     );
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id_carrera,
+      'idFenix': idFenix,
+      'nombre': nombre,
+      'activo': activo,
+    };
+  }
+
   void toggle() {
     activo = !activo;
   }

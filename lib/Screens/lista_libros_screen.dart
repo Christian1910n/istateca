@@ -13,7 +13,8 @@ class LlibrosScreen extends StatefulWidget {
   State<LlibrosScreen> createState() => _LlibrosScreenState();
 }
 
-class _LlibrosScreenState extends State<LlibrosScreen> with SingleTickerProviderStateMixin {
+class _LlibrosScreenState extends State<LlibrosScreen>
+    with SingleTickerProviderStateMixin {
   List<Libro>? libros;
   late TabController _tabController;
   List<Tab> _tabs = [
@@ -70,7 +71,7 @@ class _LlibrosScreenState extends State<LlibrosScreen> with SingleTickerProvider
               children: [
                 Container(
                   padding: const EdgeInsets.all(8),
-                  child: Text(
+                  child: const Text(
                     'Mantenga presionado para obtener una vista previa del libro',
                     style: TextStyle(
                       fontSize: 12,
@@ -100,7 +101,8 @@ class _LlibrosScreenState extends State<LlibrosScreen> with SingleTickerProvider
                   child: ListView.builder(
                     itemCount: Provider.of<TiposData>(context).libros.length,
                     itemBuilder: (context, index) {
-                      Libro libro = Provider.of<TiposData>(context).libros[index];
+                      Libro libro =
+                          Provider.of<TiposData>(context).libros[index];
                       return LibrosTile(
                         libro: libro,
                         tiposData: Provider.of<TiposData>(context),
@@ -108,15 +110,6 @@ class _LlibrosScreenState extends State<LlibrosScreen> with SingleTickerProvider
                     },
                   ),
                 ),
-              ],
-            ),
-            bottomNavigationBar: TabBarView(
-              controller: _tabController,
-              children: [
-                _buildTodosScreen(),
-                _buildPendientesScreen(),
-                _buildAprobadosScreen(),
-                _buildRechazadosScreen(),
               ],
             ),
           );

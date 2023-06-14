@@ -1,6 +1,15 @@
+import 'dart:convert';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:proyectoistateca/Screens/solicitar_libro_screen.dart';
+import 'package:proyectoistateca/Services/globals.dart';
+import 'package:proyectoistateca/models/carrera.dart';
 import 'package:proyectoistateca/models/libros.dart';
+import 'package:http/http.dart' as http;
+import 'package:proyectoistateca/models/persona.dart';
+import 'package:proyectoistateca/models/prestamo.dart';
+import 'package:intl/intl.dart';
 
 class DetalleLibroScreen extends StatefulWidget {
   final Libro libro;
@@ -12,6 +21,82 @@ class DetalleLibroScreen extends StatefulWidget {
 }
 
 class _DetalleLibroScreenState extends State<DetalleLibroScreen> {
+//Datos de ejemplo
+  int idsoli = 0;
+
+  Persona persona = Persona(
+      id_persona: 1,
+      fenixId: 0,
+      cedula: "cedula",
+      correo: "correo",
+      nombres: "nombres",
+      apellidos: "",
+      tipo: 0,
+      celular: "",
+      calificacion: 0,
+      activo: true);
+
+  Carrera carrera =
+      Carrera(id_carrera: 1, idFenix: 0, nombre: "nombre", activo: true);
+
+  Future<void> crearPrestamo() async {
+    String fecha = "2022-12-12";
+    Prestamo prestamo = Prestamo(
+        id_prestamo: 0,
+        fechaFin: fecha,
+        estadoLibro: 2,
+        estadoPrestamo: 1,
+        fechaEntrega: fecha,
+        documentoHabilitante: 0,
+        fechaDevolucion: fecha,
+        fechaMaxima: fecha,
+        activo: true,
+        escaneoMatriz: "",
+        tipoPrestamo: 2,
+        idSolicitante: persona,
+        idEntrega: null,
+        idRecibido: null,
+        carrera: carrera,
+        libro: widget.libro);
+
+    print(prestamo.carrera.id_carrera);
+    try {
+      const url = "$baseUrl/prestamo/crear";
+
+      final headers = {'Content-Type': 'application/json'};
+
+      final prestamoJson = jsonEncode(prestamo);
+      print(prestamoJson);
+
+      final response = await http.post(
+        Uri.parse(url),
+        headers: headers,
+        body: prestamoJson,
+      );
+
+      if (response.statusCode == 201) {
+        print('Prestamo creado ${response.body}');
+        Map<String, dynamic> jsonResponse = json.decode(response.body);
+        Prestamo prestamo = Prestamo.fromJson(jsonResponse);
+        setState(() {
+          idsoli = prestamo.id_prestamo;
+        });
+      } else {
+        print('Error al crear el prestamo: ${response.statusCode}');
+        print('ERROR ${response.body}');
+      }
+    } catch (error) {
+      print("Error crear prestamo $error");
+    } finally {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                SolicitarLibroScreen(libro: widget.libro, idsolicitud: idsoli)),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -23,8 +108,7 @@ class _DetalleLibroScreenState extends State<DetalleLibroScreen> {
               widget.libro.titulo,
               style: const TextStyle(
                 fontSize: 30,
-                color: Color.fromRGBO(
-                    24, 98, 173, 1.0), // Color rojo personalizado
+                color: Color.fromRGBO(24, 98, 173, 1.0),
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -56,12 +140,7 @@ class _DetalleLibroScreenState extends State<DetalleLibroScreen> {
             onPressed: widget.libro.disponibilidad == false
                 ? null
                 : () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              SolicitarLibroScreen(libro: widget.libro)),
-                    );
+                    crearPrestamo();
                   },
             child: const Text(
               "Solicitar Libro",

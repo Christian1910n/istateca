@@ -13,7 +13,6 @@ class Persona {
   String celular;
   int calificacion;
   bool activo;
-  Authority authorities;
 
   Persona({
     required this.id_persona,
@@ -26,7 +25,6 @@ class Persona {
     required this.celular,
     required this.calificacion,
     required this.activo,
-    required this.authorities,
   });
 
   factory Persona.fromJson(Map<String, dynamic> json) {
@@ -41,8 +39,22 @@ class Persona {
       celular: utf8.decode(json['celular'].toString().codeUnits) ?? '',
       calificacion: json['calificacion'] as int? ?? 0,
       activo: json['activo'] as bool? ?? false,
-      authorities: Authority.fromJson(json['authorities']),
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id_persona,
+      'fenixId': fenixId,
+      'cedula': cedula,
+      'correo': correo,
+      'nombres': nombres,
+      'apellidos': apellidos,
+      'tipo': tipo,
+      'celular': celular,
+      'calificacion': calificacion,
+      'activo': activo,
+    };
   }
 
   void toggle() {

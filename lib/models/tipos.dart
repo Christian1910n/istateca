@@ -14,4 +14,12 @@ class Tipo {
       activo: json['activo'] ?? false,
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'nombre': nombre,
+      'activo': activo,
+    };
+  }
 }

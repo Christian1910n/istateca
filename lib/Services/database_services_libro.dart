@@ -27,6 +27,7 @@ class Database_services_libro {
       url,
       headers: headers,
     );
+    print(response.statusCode);
     List responseList = jsonDecode(response.body);
     List<Libro> libros = [];
     for (var item in responseList) {

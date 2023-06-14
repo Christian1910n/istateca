@@ -7,19 +7,19 @@ import 'package:proyectoistateca/models/tipos.dart';
 
 class Prestamo {
   int id_prestamo;
-  DateTime fechaFin;
+  String fechaFin;
   int estadoLibro;
   int estadoPrestamo;
-  DateTime fechaEntrega;
+  String fechaEntrega;
   int documentoHabilitante;
-  DateTime fechaDevolucion;
-  DateTime fechaMaxima;
+  String fechaDevolucion;
+  String fechaMaxima;
   bool activo;
   String escaneoMatriz;
   int tipoPrestamo;
   Persona idSolicitante;
-  Persona idEntrega;
-  Persona idRecibido;
+  Persona? idEntrega;
+  Persona? idRecibido;
   Carrera carrera;
   Libro libro;
 
@@ -36,26 +36,24 @@ class Prestamo {
     required this.escaneoMatriz,
     required this.tipoPrestamo,
     required this.idSolicitante,
-    required this.idEntrega,
-    required this.idRecibido,
+    this.idEntrega,
+    this.idRecibido,
     required this.carrera,
     required this.libro,
   });
 
   factory Prestamo.fromJson(Map<String, dynamic> json) {
     return Prestamo(
-      id_prestamo: json['id_libro'] as int ?? 0,
-      fechaFin: DateTime.parse(
-          utf8.decode(json['fechaFin'].toString().codeUnits) ?? ''),
+      id_prestamo: json['id'] as int ?? 0,
+      fechaFin: utf8.decode(json['fechaFin'].toString().codeUnits) ?? '',
       estadoPrestamo: json['estadoPrestamo'] as int ?? 0,
       estadoLibro: json['estadoLibro'] as int ?? 0,
-      fechaEntrega: DateTime.parse(
-          utf8.decode(json['fechaEntrega'].toString().codeUnits) ?? ''),
+      fechaEntrega:
+          utf8.decode(json['fechaEntrega'].toString().codeUnits) ?? '',
       documentoHabilitante: json['documentoHabilitante'] as int ?? 0,
-      fechaDevolucion: DateTime.parse(
-          utf8.decode(json['fechaDevolucion'].toString().codeUnits) ?? ''),
-      fechaMaxima: DateTime.parse(
-          utf8.decode(json['fechaMaxima'].toString().codeUnits) ?? ''),
+      fechaDevolucion:
+          utf8.decode(json['fechaDevolucion'].toString().codeUnits) ?? '',
+      fechaMaxima: utf8.decode(json['fechaMaxima'].toString().codeUnits) ?? '',
       activo: json['activo'] ?? false,
       escaneoMatriz:
           utf8.decode(json['escaneoMatriz'].toString().codeUnits) ?? '',
@@ -66,6 +64,27 @@ class Prestamo {
       carrera: Carrera.fromJson(json['carrera'] ?? {}),
       libro: Libro.fromJson(json['libro'] ?? {}),
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id_prestamo': id_prestamo,
+      'fechaFin': fechaFin,
+      'estadoPrestamo': estadoPrestamo,
+      'estadoLibro': estadoLibro,
+      'fechaEntrega': fechaEntrega,
+      'documentoHabilitante': documentoHabilitante,
+      'fechaDevolucion': fechaDevolucion,
+      'fechaMaxima': fechaMaxima,
+      'activo': activo,
+      'escaneoMatriz': escaneoMatriz,
+      'tipoPrestamo': tipoPrestamo,
+      'idSolicitante': idSolicitante.toJson(),
+      'idEntrega': idEntrega?.toJson(),
+      'idRecibido': idRecibido?.toJson(),
+      'carrera': carrera.toJson(),
+      'libro': libro.toJson(),
+    };
   }
 
   void toggle() {
