@@ -17,11 +17,11 @@ class Prestamo {
   bool activo;
   String escaneoMatriz;
   int tipoPrestamo;
-  Persona idSolicitante;
+  Persona? idSolicitante;
   Persona? idEntrega;
   Persona? idRecibido;
-  Carrera carrera;
-  Libro libro;
+  Carrera? carrera;
+  Libro? libro;
 
   Prestamo({
     required this.id_prestamo,
@@ -35,11 +35,11 @@ class Prestamo {
     required this.activo,
     required this.escaneoMatriz,
     required this.tipoPrestamo,
-    required this.idSolicitante,
+    this.idSolicitante,
     this.idEntrega,
     this.idRecibido,
-    required this.carrera,
-    required this.libro,
+    this.carrera,
+    this.libro,
   });
 
   factory Prestamo.fromJson(Map<String, dynamic> json) {
@@ -79,11 +79,11 @@ class Prestamo {
       'activo': activo,
       'escaneoMatriz': escaneoMatriz,
       'tipoPrestamo': tipoPrestamo,
-      'idSolicitante': idSolicitante.toJson(),
+      'idSolicitante': idSolicitante?.toJson(),
       'idEntrega': idEntrega?.toJson(),
       'idRecibido': idRecibido?.toJson(),
-      'carrera': carrera.toJson(),
-      'libro': libro.toJson(),
+      'carrera': carrera?.toJson(),
+      'libro': libro?.toJson(),
     };
   }
 

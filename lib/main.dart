@@ -28,7 +28,6 @@ class MyApp extends StatelessWidget {
           LoginPage.id: (context) => const LoginPage(),
           LlibrosScreen.id: (context) => LlibrosScreen(),
           SolicitudesLibros.id: (context) => SolicitudesLibros(),
-          BookRequestView.id: (context) => BookRequestView(),
           SugerenciasScreen.id: (context) => SugerenciasScreen()
         },
       ),

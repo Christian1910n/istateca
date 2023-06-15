@@ -37,7 +37,7 @@ class _DetalleLibroScreenState extends State<DetalleLibroScreen> {
       activo: true);
 
   Carrera carrera =
-      Carrera(id_carrera: 1, idFenix: 0, nombre: "nombre", activo: true);
+      Carrera(id_carrera: 2, idFenix: 0, nombre: "nombre", activo: true);
 
   Future<void> crearPrestamo() async {
     String fecha = "2022-12-12";
@@ -59,7 +59,6 @@ class _DetalleLibroScreenState extends State<DetalleLibroScreen> {
         carrera: carrera,
         libro: widget.libro);
 
-    print(prestamo.carrera.id_carrera);
     try {
       const url = "$baseUrl/prestamo/crear";
 
