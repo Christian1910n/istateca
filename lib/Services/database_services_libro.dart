@@ -22,7 +22,8 @@ class Database_services_libro {
   }
 
   static Future<List<Libro>> getLibronombre(String titulo) async {
-    var url = Uri.parse(baseUrl + '/libro/listarlibrosxnombre/$titulo');
+    var url =
+        Uri.parse(baseUrl + '/libro/buscarxcoincidencia?parametro=$titulo');
     http.Response response = await http.get(
       url,
       headers: headers,

@@ -40,7 +40,7 @@ class _DetalleLibroScreenState extends State<DetalleLibroScreen> {
       Carrera(id_carrera: 2, idFenix: 0, nombre: "nombre", activo: true);
 
   Future<void> crearPrestamo() async {
-    String fecha = "2022-12-12";
+    String fecha = DateTime.now().add(const Duration(days: 1)).toString();
     Prestamo prestamo = Prestamo(
         id_prestamo: 0,
         fechaFin: fecha,
