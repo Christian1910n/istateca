@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:proyectoistateca/Screens/home_screen.dart';
 import 'package:proyectoistateca/Screens/lista_libros_screen.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginPage extends StatefulWidget {
   static String id = 'login_page';
@@ -11,19 +12,30 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final GoogleSignIn _googleSignIn = GoogleSignIn(
+    clientId:
+        '228677746372-9bsir5j41ojaurgn28ok1hrurb25ic7m.apps.googleusercontent.com',
+  );
+
+  Future<void> _handleSignIn() async {
+    try {
+      await _googleSignIn.signIn();
+      // una vez que el usuario haya iniciado sesión, redirige a HomeScreen
+      Navigator.pushNamed(context, HomeScreen.id);
+    } catch (error) {
+      print(error);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        floatingActionButton: FloatingActionButton(
-      backgroundColor: Colors.green,
-      child: const Icon(
-        Icons.add,
+      body: Center(
+        child: ElevatedButton(
+          onPressed: _handleSignIn,
+          child: Text('Iniciar sesión con Google'),
+        ),
       ),
-      onPressed: () {
-        setState(() {
-          Navigator.pushNamed(context, HomeScreen.id);
-        });
-      },
-    ));
+    );
   }
 }
