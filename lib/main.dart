@@ -7,14 +7,31 @@ import 'package:proyectoistateca/Screens/solicitar_libro_screen.dart';
 import 'package:proyectoistateca/Screens/solicitudes_screen.dart';
 import 'package:proyectoistateca/Screens/sugerencias_screen.dart';
 import 'package:proyectoistateca/models/tipos_data.dart';
-import 'package:proyectoistateca/Screens/solicitud_libro_screen.dart';
+import 'package:proyectoistateca/widgets/SplashScreen.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  bool _isShowingSplashScreen = true;
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration(seconds: 3), () {
+      setState(() {
+        _isShowingSplashScreen = false;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +39,7 @@ class MyApp extends StatelessWidget {
       create: (context) => TiposData(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        initialRoute: LoginPage.id,
+        home: _isShowingSplashScreen ? SplashScreen() : const LoginPage(),
         routes: {
           HomeScreen.id: (context) => HomeScreen(),
           LoginPage.id: (context) => const LoginPage(),
