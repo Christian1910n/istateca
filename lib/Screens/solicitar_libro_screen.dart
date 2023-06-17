@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:proyectoistateca/Screens/lista_libros_screen.dart';
 import 'package:proyectoistateca/models/libros.dart';
 import 'package:proyectoistateca/widgets/widget_menu_lateral.dart';
 import 'package:custom_qr_generator/custom_qr_generator.dart';
@@ -44,53 +45,75 @@ class _SolicitarLibroScreenState extends State<SolicitarLibroScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Solicitud del libro'),
-        backgroundColor: Color.fromRGBO(28, 105, 183, 1.0),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            FadeTransition(
-              opacity: _animation,
-              child: Text(
-                'Nro Solicitud: ${widget.idsolicitud}\n'
-                'Titulo del libro: ${widget.libro.titulo}\n',
-                style: const TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-            const SizedBox(height: 20),
-            FadeTransition(
-              opacity: _animation,
-              child: CustomPaint(
-                painter: QrPainter(
-                  data: "${widget.idsolicitud}",
-                  options: const QrOptions(
-                    shapes: QrShapes(
-                      darkPixel: QrPixelShapeRoundCorners(cornerFraction: .0),
-                      frame: QrFrameShapeRoundCorners(cornerFraction: .0),
-                      ball: QrBallShapeRoundCorners(cornerFraction: .0),
+    return WillPopScope(
+        onWillPop: () async {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => LlibrosScreen()),
+          );
+
+          return false;
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            title: const Text('Solicitud del libro'),
+            backgroundColor: Color.fromRGBO(28, 105, 183, 1.0),
+          ),
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                FadeTransition(
+                  opacity: _animation,
+                  child: Text(
+                    'Nro Solicitud: ${widget.idsolicitud}\n'
+                    'Titulo del libro: ${widget.libro.titulo}\n',
+                    style: const TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
                     ),
-                    colors: QrColors(
-                        dark: QrColorLinearGradient(colors: [
-                      Colors.black,
-                      Colors.black,
-                    ], orientation: GradientOrientation.leftDiagonal)),
+                    textAlign: TextAlign.center,
                   ),
                 ),
-                size: const Size(350, 350),
-              ),
+                const SizedBox(height: 20),
+                FadeTransition(
+                  opacity: _animation,
+                  child: CustomPaint(
+                    painter: QrPainter(
+                      data: "${widget.idsolicitud}",
+                      options: const QrOptions(
+                        shapes: QrShapes(
+                          darkPixel:
+                              QrPixelShapeRoundCorners(cornerFraction: .0),
+                          frame: QrFrameShapeRoundCorners(cornerFraction: .0),
+                          ball: QrBallShapeRoundCorners(cornerFraction: .0),
+                        ),
+                        colors: QrColors(
+                            dark: QrColorLinearGradient(colors: [
+                          Colors.black,
+                          Colors.black,
+                        ], orientation: GradientOrientation.leftDiagonal)),
+                      ),
+                    ),
+                    size: const Size(350, 350),
+                  ),
+                ),
+                FadeTransition(
+                  opacity: _animation,
+                  child: const Text(
+                    'Toma una captura del codigo QR para facilitar la solicitud del libro',
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
-    );
+          ),
+        ));
   }
 }

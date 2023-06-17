@@ -38,6 +38,17 @@ class _BookRequestViewState extends State<BookRequestView> {
       prestamo.idRecibido = persona;
     });
 
+    Map data = {
+      "estadoPrestamo": 2,
+      "idEntrega": {"id": 1},
+      "estadoLibro": prestamo.estadoLibro,
+      "documentoHabilitante": prestamo.documentoHabilitante,
+      "tipoPrestamo": prestamo.tipoPrestamo,
+      "fechaMaxima": prestamo.fechaMaxima
+    };
+    var body = json.encode(data);
+    print("Nuevo Json: $body");
+
     try {
       var url = "$baseUrl/prestamo/editar/${widget.prestamo.id_prestamo}";
       print(url);
@@ -50,7 +61,7 @@ class _BookRequestViewState extends State<BookRequestView> {
       final response = await http.put(
         Uri.parse(url),
         headers: headers,
-        body: prestamoJson,
+        body: body,
       );
       if (response.statusCode == 200) {
         print('Prestamo creado ${response.body}');
