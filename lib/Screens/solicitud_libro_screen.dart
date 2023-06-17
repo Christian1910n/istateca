@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:proyectoistateca/Screens/solicitudes_screen.dart';
 import 'package:proyectoistateca/Services/globals.dart';
+import 'package:proyectoistateca/models/persona.dart';
 import 'package:proyectoistateca/models/prestamo.dart';
 import 'package:http/http.dart' as http;
 
@@ -18,10 +19,23 @@ class BookRequestView extends StatefulWidget {
 
 class _BookRequestViewState extends State<BookRequestView> {
   late Prestamo prestamo;
+  Persona persona = Persona(
+      id_persona: 1,
+      fenixId: 0,
+      cedula: "cedula",
+      correo: "correo",
+      nombres: "nombres",
+      apellidos: "",
+      tipo: 0,
+      celular: "",
+      calificacion: 0,
+      activo: true);
   DateTime _selectedDate = DateTime.now();
   Future<void> modificarprestamo() async {
     setState(() {
       prestamo.estadoPrestamo = 2;
+      prestamo.idEntrega = persona;
+      prestamo.idRecibido = persona;
     });
 
     try {

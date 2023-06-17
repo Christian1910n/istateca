@@ -29,10 +29,11 @@ class _CustomDrawerState extends State<CustomDrawer> {
               children: [
                 SizedBox(
                   height: 80.0,
+                  /*
                   child: Image.network(
                     'http://dev2020.tecazuay.edu.ec/wp-content/uploads/2022/11/cropped-LOGO-RECTANGULAR_SIN-FONDO.png',
                     fit: BoxFit.cover,
-                  ),
+                  ),*/
                 ),
                 const Padding(
                   padding: EdgeInsets.only(top: 20.0),
