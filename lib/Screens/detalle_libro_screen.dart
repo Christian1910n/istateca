@@ -146,6 +146,20 @@ class _DetalleLibroScreenState extends State<DetalleLibroScreen> {
               style: TextStyle(fontSize: 18),
             ),
           ),
+          const SizedBox(height: 20),
+          if (rol == 'BIBLIOTECARIO')
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: Colors.green[400],
+              ),
+              onPressed: () {
+                //crearPrestamo();
+              },
+              child: const Text(
+                "Agregar Imagen",
+                style: TextStyle(fontSize: 18),
+              ),
+            ),
         ],
       ),
     );

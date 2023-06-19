@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:proyectoistateca/Screens/home_screen.dart';
 import 'package:proyectoistateca/Screens/lista_libros_screen.dart';
 import 'package:proyectoistateca/Screens/login_page.dart';
-import 'package:proyectoistateca/Screens/solicitar_libro_screen.dart';
 import 'package:proyectoistateca/Screens/solicitudes_screen.dart';
 import 'package:proyectoistateca/Screens/sugerencias_screen.dart';
 import 'package:proyectoistateca/models/tipos_data.dart';
@@ -26,7 +25,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(seconds: 3), () {
+    Future.delayed(const Duration(milliseconds: 4000), () {
       setState(() {
         _isShowingSplashScreen = false;
       });
@@ -39,7 +38,7 @@ class _MyAppState extends State<MyApp> {
       create: (context) => TiposData(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: _isShowingSplashScreen ? SplashScreen() : HomeScreen(),
+        home: _isShowingSplashScreen ? const SplashScreen() : LlibrosScreen(),
         routes: {
           HomeScreen.id: (context) => HomeScreen(),
           LoginPage.id: (context) => const LoginPage(),

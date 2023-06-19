@@ -6,6 +6,8 @@ import 'package:lottie/lottie.dart';
 const String baseUrl = "http://192.168.68.110:8080";
 const Map<String, String> headers = {"Content-Type": "application/json"};
 
+String rol = 'BIBLIOTECARIO';
+
 Container animacioncarga() {
   return Container(
     color: Colors.white,
