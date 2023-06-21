@@ -62,23 +62,9 @@ class _LlibrosScreenState extends State<LlibrosScreen>
                 ),
               ),
               backgroundColor: Color.fromRGBO(24, 98, 173, 1.0),
-              bottom: TabBar(
-                controller: _tabController,
-                tabs: _tabs,
-              ),
             ),
             body: Column(
               children: [
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  child: const Text(
-                    'Mantenga presionado para obtener una vista previa del libro',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey,
-                    ),
-                  ),
-                ),
                 TextField(
                   decoration: const InputDecoration(
                     hintText: "Buscar libro",
@@ -97,6 +83,23 @@ class _LlibrosScreenState extends State<LlibrosScreen>
                     }
                   },
                 ),
+                Container(
+                  color: Colors.blue, // Color de fondo azul para el TabBar
+                  child: TabBar(
+                    controller: _tabController,
+                    tabs: _tabs,
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  child: const Text(
+                    'Mantenga presionado para obtener una vista previa del libro',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey,
+                    ),
+                  ),
+                ),
                 Expanded(
                   child: ListView.builder(
                     itemCount: Provider.of<TiposData>(context).libros.length,
@@ -114,20 +117,20 @@ class _LlibrosScreenState extends State<LlibrosScreen>
             ),
           );
   }
+}
 
-  Widget _buildTodosScreen() {
-    return Container();
-  }
+Widget _buildTodosScreen() {
+  return Container();
+}
 
-  Widget _buildPendientesScreen() {
-    return Container();
-  }
+Widget _buildPendientesScreen() {
+  return Container();
+}
 
-  Widget _buildAprobadosScreen() {
-    return Container();
-  }
+Widget _buildAprobadosScreen() {
+  return Container();
+}
 
-  Widget _buildRechazadosScreen() {
-    return Container();
-  }
+Widget _buildRechazadosScreen() {
+  return Container();
 }
