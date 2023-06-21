@@ -30,8 +30,7 @@ class LibrosTile extends StatelessWidget {
                 height: 500, // Ajusta la altura según tus necesidades
                 child: Image.network(
                   'https://www.eluniverso.com/resizer/a7RzV9cpgq3r0Pxpo__CtrcH2Wk=/arc-anglerfish-arc2-prod-eluniverso/public/NUNM6L7XP26ZH2ZX2UUP7C5JIA.jpg',
-                  fit: BoxFit
-                      .cover, // Ajusta la forma en que la imagen se ajusta al contenedor
+                  fit: BoxFit.cover,
                 ),
               );
             },
@@ -43,7 +42,7 @@ class LibrosTile extends StatelessWidget {
               color: Color.fromRGBO(24, 98, 173, 1.0),
               width: 2.0,
             ),
-            borderRadius: BorderRadius.circular(10), // Radio de borde
+            borderRadius: BorderRadius.circular(10),
           ),
           child: ListTile(
             leading: CircleAvatar(

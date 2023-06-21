@@ -276,6 +276,14 @@ class _SolicitudesLibrosState extends State<SolicitudesLibros>
                               BookRequestView(prestamo: solicitudes[index]),
                         ),
                       );
+                    } else if (solicitudes[index].estadoPrestamo == 2) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              BookRequestView(prestamo: solicitudes[index]),
+                        ),
+                      );
                     }
                   },
                   child: Container(
@@ -297,6 +305,15 @@ class _SolicitudesLibrosState extends State<SolicitudesLibros>
                             icon: const Icon(Icons.arrow_forward),
                             onPressed: () {
                               if (solicitudes[index].estadoPrestamo == 1) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => BookRequestView(
+                                        prestamo: solicitudes[index]),
+                                  ),
+                                );
+                              } else if (solicitudes[index].estadoPrestamo ==
+                                  2) {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
