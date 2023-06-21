@@ -18,22 +18,17 @@ class _LlibrosScreenState extends State<LlibrosScreen>
   List<Libro>? libros;
   late TabController _tabController;
   List<Tab>? _tabs;
-  String _selectedEstado = 'Todos';
 
   getLibros() async {
     libros = await Database_services_libro.getLibro();
     Provider.of<TiposData>(context, listen: false).libros = libros!;
 
-    // Obtener los tipos de libros únicos
     Set<String> uniqueTipos = libros!.map((libro) => libro.tipo.nombre).toSet();
 
-    // Actualizar la lista de pestañas
     _tabs = [
       Tab(text: 'Todos'),
       ...uniqueTipos.map((tipo) => Tab(text: tipo)).toList(),
     ];
-
-    // Actualizar el TabController con el nuevo número de pestañas
     _tabController = TabController(length: _tabs?.length ?? 0, vsync: this);
 
     setState(() {});
@@ -51,7 +46,7 @@ class _LlibrosScreenState extends State<LlibrosScreen>
     _tabController = TabController(
       length: 1,
       vsync: this,
-    ); // Inicialmente, solo hay una pestaña "Todos"
+    );
     _tabs = [
       Tab(text: 'Todos'),
     ];
@@ -85,7 +80,7 @@ class _LlibrosScreenState extends State<LlibrosScreen>
                     prefixIcon: Icon(Icons.search),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(
-                        Radius.circular(25.0),
+                        Radius.circular(0),
                       ),
                     ),
                   ),
@@ -98,21 +93,11 @@ class _LlibrosScreenState extends State<LlibrosScreen>
                   },
                 ),
                 Container(
-                  color: Colors.blue, // Color de fondo azul para el TabBar
+                  color: Colors.blue,
                   child: TabBar(
                     controller: _tabController,
                     tabs: _tabs!,
-                    isScrollable: true, // Habilitar desplazamiento horizontal
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  child: const Text(
-                    'Mantenga presionado para obtener una vista previa del libro',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey,
-                    ),
+                    isScrollable: true,
                   ),
                 ),
                 Expanded(
@@ -133,7 +118,12 @@ class _LlibrosScreenState extends State<LlibrosScreen>
   }
 
   Widget _buildTodosScreen() {
-    return ListView.builder(
+    return GridView.builder(
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        crossAxisSpacing: 8,
+        mainAxisSpacing: 8,
+      ),
       itemCount: Provider.of<TiposData>(context)?.libros.length ?? 0,
       itemBuilder: (context, index) {
         Libro libro = Provider.of<TiposData>(context).libros[index];
@@ -151,7 +141,12 @@ class _LlibrosScreenState extends State<LlibrosScreen>
         .where((libro) => libro.tipo.nombre == tabText)
         .toList();
 
-    return ListView.builder(
+    return GridView.builder(
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2, // Número de columnas en la cuadrícula
+        crossAxisSpacing: 8, // Espaciado horizontal entre las celdas
+        mainAxisSpacing: 8, // Espaciado vertical entre las celdas
+      ),
       itemCount: librosFiltrados.length,
       itemBuilder: (context, index) {
         Libro libro = librosFiltrados[index];
