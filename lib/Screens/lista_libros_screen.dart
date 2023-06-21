@@ -14,20 +14,28 @@ class LlibrosScreen extends StatefulWidget {
 }
 
 class _LlibrosScreenState extends State<LlibrosScreen>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   List<Libro>? libros;
   late TabController _tabController;
-  List<Tab> _tabs = [
-    Tab(text: 'Todos'),
-    Tab(text: 'Aventura'),
-    Tab(text: 'Historia'),
-    Tab(text: 'Fantacia'),
-  ];
+  List<Tab>? _tabs;
   String _selectedEstado = 'Todos';
 
   getLibros() async {
     libros = await Database_services_libro.getLibro();
     Provider.of<TiposData>(context, listen: false).libros = libros!;
+
+    // Obtener los tipos de libros únicos
+    Set<String> uniqueTipos = libros!.map((libro) => libro.tipo.nombre).toSet();
+
+    // Actualizar la lista de pestañas
+    _tabs = [
+      Tab(text: 'Todos'),
+      ...uniqueTipos.map((tipo) => Tab(text: tipo)).toList(),
+    ];
+
+    // Actualizar el TabController con el nuevo número de pestañas
+    _tabController = TabController(length: _tabs?.length ?? 0, vsync: this);
+
     setState(() {});
   }
 
@@ -40,7 +48,13 @@ class _LlibrosScreenState extends State<LlibrosScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: _tabs.length, vsync: this);
+    _tabController = TabController(
+      length: 1,
+      vsync: this,
+    ); // Inicialmente, solo hay una pestaña "Todos"
+    _tabs = [
+      Tab(text: 'Todos'),
+    ];
     getLibros();
   }
 
@@ -87,7 +101,8 @@ class _LlibrosScreenState extends State<LlibrosScreen>
                   color: Colors.blue, // Color de fondo azul para el TabBar
                   child: TabBar(
                     controller: _tabController,
-                    tabs: _tabs,
+                    tabs: _tabs!,
+                    isScrollable: true, // Habilitar desplazamiento horizontal
                   ),
                 ),
                 Container(
@@ -101,36 +116,50 @@ class _LlibrosScreenState extends State<LlibrosScreen>
                   ),
                 ),
                 Expanded(
-                  child: ListView.builder(
-                    itemCount: Provider.of<TiposData>(context).libros.length,
-                    itemBuilder: (context, index) {
-                      Libro libro =
-                          Provider.of<TiposData>(context).libros[index];
-                      return LibrosTile(
-                        libro: libro,
-                        tiposData: Provider.of<TiposData>(context),
-                      );
-                    },
+                  child: TabBarView(
+                    controller: _tabController,
+                    children: [
+                      _buildTodosScreen(),
+                      ..._tabs!
+                          .skip(1)
+                          .map((tab) => _buildTabScreen(tab.text!))
+                          .toList(),
+                    ],
                   ),
                 ),
               ],
             ),
           );
   }
-}
 
-Widget _buildTodosScreen() {
-  return Container();
-}
+  Widget _buildTodosScreen() {
+    return ListView.builder(
+      itemCount: Provider.of<TiposData>(context)?.libros.length ?? 0,
+      itemBuilder: (context, index) {
+        Libro libro = Provider.of<TiposData>(context).libros[index];
+        return LibrosTile(
+          libro: libro,
+          tiposData: Provider.of<TiposData>(context),
+        );
+      },
+    );
+  }
 
-Widget _buildPendientesScreen() {
-  return Container();
-}
+  Widget _buildTabScreen(String tabText) {
+    final List<Libro> librosFiltrados = Provider.of<TiposData>(context)
+        .libros
+        .where((libro) => libro.tipo.nombre == tabText)
+        .toList();
 
-Widget _buildAprobadosScreen() {
-  return Container();
-}
-
-Widget _buildRechazadosScreen() {
-  return Container();
+    return ListView.builder(
+      itemCount: librosFiltrados.length,
+      itemBuilder: (context, index) {
+        Libro libro = librosFiltrados[index];
+        return LibrosTile(
+          libro: libro,
+          tiposData: Provider.of<TiposData>(context),
+        );
+      },
+    );
+  }
 }
