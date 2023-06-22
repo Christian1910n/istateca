@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:proyectoistateca/Screens/detalle_libro_screen.dart';
 import 'package:proyectoistateca/models/libros.dart';
 import 'package:proyectoistateca/models/tipos_data.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:http/http.dart' as http;
 
 class LibrosTile extends StatelessWidget {
