@@ -10,7 +10,7 @@ class DatabaseServices {
       "nombre": nombre,
     };
     var body = json.encode(data);
-    var url = Uri.parse(baseUrl + '&tipo/crear');
+    var url = Uri.parse('$baseUrl&tipo/crear');
 
     http.Response response = await http.post(
       url,

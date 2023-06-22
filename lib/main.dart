@@ -38,7 +38,7 @@ class _MyAppState extends State<MyApp> {
       create: (context) => TiposData(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: _isShowingSplashScreen ? const SplashScreen() : LlibrosScreen(),
+        home: _isShowingSplashScreen ? const SplashScreen() : LoginPage(),
         routes: {
           HomeScreen.id: (context) => HomeScreen(),
           LoginPage.id: (context) => const LoginPage(),

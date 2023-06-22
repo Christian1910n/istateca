@@ -19,28 +19,12 @@ class BookRequestView extends StatefulWidget {
 
 class _BookRequestViewState extends State<BookRequestView> {
   late Prestamo prestamo;
-  Persona persona = Persona(
-      id_persona: 1,
-      fenixId: 0,
-      cedula: "cedula",
-      correo: "correo",
-      nombres: "nombres",
-      apellidos: "",
-      tipo: 0,
-      celular: "",
-      calificacion: 0,
-      activo: true);
+
   DateTime _selectedDate = DateTime.now();
   Future<void> modificarprestamo() async {
-    setState(() {
-      prestamo.estadoPrestamo = 2;
-      prestamo.idEntrega = persona;
-      prestamo.idRecibido = persona;
-    });
-
     Map data = {
       "estadoPrestamo": 2,
-      "idEntrega": {"id": 1},
+      "idEntrega": {"id": personalog.id_persona},
       "estadoLibro": prestamo.estadoLibro,
       "documentoHabilitante": prestamo.documentoHabilitante,
       "tipoPrestamo": prestamo.tipoPrestamo,
@@ -52,8 +36,6 @@ class _BookRequestViewState extends State<BookRequestView> {
     try {
       var url = "$baseUrl/prestamo/editar/${widget.prestamo.id_prestamo}";
       print(url);
-
-      final headers = {'Content-Type': 'application/json'};
 
       final prestamoJson = jsonEncode(prestamo);
       print(prestamoJson);

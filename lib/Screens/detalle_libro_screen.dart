@@ -24,18 +24,6 @@ class _DetalleLibroScreenState extends State<DetalleLibroScreen> {
 //Datos de ejemplo
   int idsoli = 0;
 
-  Persona persona = Persona(
-      id_persona: 1,
-      fenixId: 0,
-      cedula: "cedula",
-      correo: "correo",
-      nombres: "nombres",
-      apellidos: "",
-      tipo: 0,
-      celular: "",
-      calificacion: 0,
-      activo: true);
-
   Carrera carrera =
       Carrera(id_carrera: 2, idFenix: 0, nombre: "nombre", activo: true);
 
@@ -53,7 +41,7 @@ class _DetalleLibroScreenState extends State<DetalleLibroScreen> {
         activo: true,
         escaneoMatriz: "",
         tipoPrestamo: 2,
-        idSolicitante: persona,
+        idSolicitante: personalog,
         idEntrega: null,
         idRecibido: null,
         carrera: carrera,
@@ -61,8 +49,6 @@ class _DetalleLibroScreenState extends State<DetalleLibroScreen> {
 
     try {
       const url = "$baseUrl/prestamo/crear";
-
-      final headers = {'Content-Type': 'application/json'};
 
       final prestamoJson = jsonEncode(prestamo);
       print(prestamoJson);

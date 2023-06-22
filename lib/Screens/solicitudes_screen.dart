@@ -63,7 +63,7 @@ class _SolicitudesLibrosState extends State<SolicitudesLibros>
       try {
         List<Prestamo> solicitudess = [];
         var url = Uri.parse('$baseUrl/prestamo/buscar/$qrValor');
-        final response = await http.get(url);
+        final response = await http.get(url, headers: headers);
 
         if (response.statusCode == 200) {
           Map<String, dynamic> jsonResponse = json.decode(response.body);
@@ -107,13 +107,10 @@ class _SolicitudesLibrosState extends State<SolicitudesLibros>
   }
 
   Future<void> getsolicitudesid(String value) async {
-    setState(() {
-      carga = true;
-    });
     try {
       List<Prestamo> solicitudess = [];
       var url = Uri.parse('$baseUrl/prestamo/buscar/$value');
-      final response = await http.get(url);
+      final response = await http.get(url, headers: headers);
 
       if (response.statusCode == 200) {
         Map<String, dynamic> jsonResponse = json.decode(response.body);
@@ -138,7 +135,7 @@ class _SolicitudesLibrosState extends State<SolicitudesLibros>
     try {
       List<Prestamo> solicitudess = [];
       var url = Uri.parse('$baseUrl/prestamo/listarxestado?parametro=$estado');
-      final response = await http.get(url);
+      final response = await http.get(url, headers: headers);
 
       if (response.statusCode == 200) {
         List<dynamic> jsonResponse = json.decode(response.body);
@@ -155,7 +152,8 @@ class _SolicitudesLibrosState extends State<SolicitudesLibros>
           solicitudes = solicitudess;
         });
       } else {
-        print('Error en la solicitud GET: ${response.statusCode}');
+        print(
+            'Error en la solicitud GET lista solicitudes: ${response.statusCode}');
       }
     } catch (error) {
       print("Error get solicitudes $error");
