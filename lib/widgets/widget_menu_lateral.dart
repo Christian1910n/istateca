@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:proyectoistateca/Screens/lista_libros_screen.dart';
+import 'package:proyectoistateca/Screens/login_page.dart';
 import 'package:proyectoistateca/Screens/solicitud_libro_screen.dart';
 import 'package:proyectoistateca/Screens/solicitudes_screen.dart';
 import 'package:proyectoistateca/Screens/sugerencias_screen.dart';
+import 'package:proyectoistateca/Services/globals.dart';
 
 import '../Screens/home_screen.dart';
 
@@ -12,9 +15,19 @@ class CustomDrawer extends StatefulWidget {
 }
 
 class _CustomDrawerState extends State<CustomDrawer> {
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
+
   @override
   Widget build(BuildContext context) {
     return Drawer(child: _buildDrawer(context));
+  }
+
+  Future<void> signOutGoogle() async {
+    try {
+      await _googleSignIn.signOut();
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   Widget _buildDrawer(BuildContext context) {
@@ -22,24 +35,21 @@ class _CustomDrawerState extends State<CustomDrawer> {
       child: Column(
         children: [
           DrawerHeader(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Color.fromARGB(255, 28, 105, 183),
             ),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(
-                  height: 80.0,
-                  child: Image.asset(
-                    'assets/logoista.png',
-                    fit: BoxFit.cover,
-                  ),
+                CircleAvatar(
+                  radius: 45.0,
+                  backgroundImage: NetworkImage(foto),
                 ),
-                const Padding(
-                  padding: EdgeInsets.only(top: 20.0),
-                  child: Text(
-                    "usuario@tecazuay.edu.ec",
-                    style: TextStyle(color: Colors.white, fontSize: 19.0),
-                  ),
+                const SizedBox(height: 10.0),
+                Text(
+                  correo,
+                  style: const TextStyle(color: Colors.white, fontSize: 13.0),
                 ),
               ],
             ),
@@ -197,8 +207,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 ),
               ),
               onTap: () {
+                signOutGoogle();
                 setState(() {
-                  Navigator.pushNamed(context, HomeScreen.id);
+                  Navigator.pushNamed(context, LoginPage.id);
                 });
               },
             ),

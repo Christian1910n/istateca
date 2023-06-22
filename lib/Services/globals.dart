@@ -8,6 +8,9 @@ const String baseUrl = "http://192.168.68.110:8080";
 const Map<String, String> headers = {"Content-Type": "application/json"};
 
 String rol = 'BIBLIOTECARIO';
+String correo = 'elbichonoinciosesion@tecazuay.edu.ec';
+String foto =
+    "https://phantom-marca-mx.unidadeditorial.es/887fd9b0e45b9bc9accdd30de6708298/resize/828/f/jpg/mx/assets/multimedia/imagenes/2023/06/05/16859985858899.jpg";
 
 Container animacioncarga() {
   return Container(
