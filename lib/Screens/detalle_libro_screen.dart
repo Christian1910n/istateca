@@ -22,12 +22,21 @@ class DetalleLibroScreen extends StatefulWidget {
 
 class _DetalleLibroScreenState extends State<DetalleLibroScreen> {
 //Datos de ejemplo
+  int tipoPrestamo = 0;
+
   int idsoli = 0;
 
   Carrera carrera =
       Carrera(id_carrera: 2, idFenix: 0, nombre: "nombre", activo: true);
 
   Future<void> crearPrestamo() async {
+    if (rol == "ESTUDIANTE") {
+      tipoPrestamo = 1;
+    } else if (rol == "BIBLIOTECARIO") {
+      tipoPrestamo = 2;
+    } else {
+      tipoPrestamo = 3;
+    }
     String fecha = DateTime.now().add(const Duration(days: 1)).toString();
     Prestamo prestamo = Prestamo(
         id_prestamo: 0,
@@ -40,7 +49,7 @@ class _DetalleLibroScreenState extends State<DetalleLibroScreen> {
         fechaMaxima: fecha,
         activo: true,
         escaneoMatriz: "",
-        tipoPrestamo: 2,
+        tipoPrestamo: tipoPrestamo,
         idSolicitante: personalog,
         idEntrega: null,
         idRecibido: null,
@@ -79,6 +88,9 @@ class _DetalleLibroScreenState extends State<DetalleLibroScreen> {
             builder: (context) =>
                 SolicitarLibroScreen(libro: widget.libro, idsolicitud: idsoli)),
       );
+      setState(() {
+        validar = 2;
+      });
     }
   }
 

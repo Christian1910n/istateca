@@ -3,8 +3,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:proyectoistateca/Screens/solicitudes_screen.dart';
 import 'package:proyectoistateca/Services/globals.dart';
+import 'package:proyectoistateca/models/carrera.dart';
 import 'package:proyectoistateca/models/persona.dart';
 import 'package:proyectoistateca/models/prestamo.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:http/http.dart' as http;
 
 class BookRequestView extends StatefulWidget {
@@ -19,6 +21,68 @@ class BookRequestView extends StatefulWidget {
 
 class _BookRequestViewState extends State<BookRequestView> {
   late Prestamo prestamo;
+  List<Carrera> listacarreras = [];
+  final TextEditingController _carreracon = TextEditingController();
+
+  Future<void> getcarrerascedula() async {
+    try {
+      List<Carrera> carreras = [];
+      var url = Uri.parse(
+          '$baseUrl/carrera/carreraest/${widget.prestamo.idSolicitante!.cedula}');
+      final response = await http.get(url, headers: headers);
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> jsonResponse = json.decode(response.body);
+        print(response.body);
+        Carrera carrera = Carrera.fromJson(jsonResponse);
+
+        carreras.add(carrera);
+        setState(() {
+          listacarreras = carreras;
+          _carreracon.text = carrera.nombre;
+          prestamo.carrera = carrera;
+        });
+
+        setState(() {
+          listacarreras = carreras;
+        });
+      } else {
+        print(
+            'Error en la solicitud GET lista carreras: ${response.statusCode}');
+      }
+    } catch (error) {
+      print("Error get carreras $error");
+    }
+  }
+
+  Future<void> getcarreras() async {
+    try {
+      List<Carrera> carreras = [];
+      var url = Uri.parse('$baseUrl/carrera/listar');
+      final response = await http.get(url, headers: headers);
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonResponse = json.decode(response.body);
+        print(response.body);
+        for (dynamic Json in jsonResponse) {
+          Carrera carrera = Carrera.fromJson(Json);
+
+          carreras.add(carrera);
+          setState(() {
+            listacarreras = carreras;
+          });
+        }
+        setState(() {
+          listacarreras = carreras;
+        });
+      } else {
+        print(
+            'Error en la solicitud GET lista carreras: ${response.statusCode}');
+      }
+    } catch (error) {
+      print("Error get carreras $error");
+    }
+  }
 
   DateTime _selectedDate = DateTime.now();
   Future<void> modificarprestamo() async {
@@ -28,7 +92,8 @@ class _BookRequestViewState extends State<BookRequestView> {
       "estadoLibro": prestamo.estadoLibro,
       "documentoHabilitante": prestamo.documentoHabilitante,
       "tipoPrestamo": prestamo.tipoPrestamo,
-      "fechaMaxima": prestamo.fechaMaxima
+      "fechaMaxima": prestamo.fechaMaxima,
+      "carrera": {"id": prestamo.carrera!.id_carrera}
     };
     var body = json.encode(data);
     print("Nuevo Json: $body");
@@ -46,7 +111,7 @@ class _BookRequestViewState extends State<BookRequestView> {
         body: body,
       );
       if (response.statusCode == 200) {
-        print('Prestamo creado ${response.body}');
+        print('Prestamo modificado ${response.body}');
         Map<String, dynamic> jsonResponse = json.decode(response.body);
         Prestamo prestamo = Prestamo.fromJson(jsonResponse);
       } else {
@@ -80,10 +145,17 @@ class _BookRequestViewState extends State<BookRequestView> {
 
   @override
   void initState() {
+    if (widget.prestamo.tipoPrestamo == 1) {
+      getcarrerascedula();
+    } else {
+      getcarreras();
+    }
     setState(() {
       prestamo = widget.prestamo;
     });
+
     print(widget.prestamo.libro!.titulo);
+    print(prestamo.carrera!.nombre);
     super.initState();
   }
 
@@ -99,142 +171,154 @@ class _BookRequestViewState extends State<BookRequestView> {
           return false;
         },
         child: Scaffold(
-          appBar: AppBar(
-            title: const Text(
-              'Formulario de Solicitudes',
-              style: TextStyle(
-                color: Colors.white,
+            appBar: AppBar(
+              title: const Text(
+                'Formulario de Solicitudes',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
               ),
+              backgroundColor: Color.fromRGBO(24, 98, 173, 1.0),
             ),
-            backgroundColor: Color.fromRGBO(24, 98, 173, 1.0),
-          ),
-          body: Container(
-            padding: EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Nombre Solicitante: ${prestamo.idSolicitante!.nombres} ${prestamo.idSolicitante!.apellidos}',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(height: 16.0),
-                Text(
-                  'Título del Libro: ${prestamo.libro!.titulo}',
-                  style: TextStyle(fontSize: 16),
-                ),
-                SizedBox(height: 8.0),
-                Text(
-                  'Fecha de Solicitud: ${prestamo.fechaFin}',
-                  style: TextStyle(fontSize: 16),
-                ),
-                SizedBox(height: 8.0),
-                Text(
-                  'Nombre de la Persona que Entrega: bibliotecario',
-                  style: TextStyle(fontSize: 16),
-                ),
-                SizedBox(height: 16.0),
-                DropdownButtonFormField<int>(
-                  value: prestamo.estadoLibro,
-                  items: [
-                    DropdownMenuItem<int>(
-                      value: 1,
-                      child: Text('Bueno'),
-                    ),
-                    DropdownMenuItem<int>(
-                      value: 2,
-                      child: Text('Regular'),
-                    ),
-                    DropdownMenuItem<int>(
-                      value: 3,
-                      child: Text('Malo'),
-                    ),
-                  ],
-                  onChanged: (value) {
-                    setState(() {
-                      prestamo.estadoLibro = value!;
-                    });
-                  },
-                  decoration: InputDecoration(labelText: 'Estado del Libro'),
-                ),
-                SizedBox(height: 16.0),
-                DropdownButtonFormField<int>(
-                  value: prestamo.documentoHabilitante,
-                  items: [
-                    DropdownMenuItem<int>(
-                      value: 0,
-                      child: Text('Seleccione:'),
-                    ),
-                    DropdownMenuItem<int>(
-                      value: 1,
-                      child: Text('Cédula'),
-                    ),
-                    DropdownMenuItem<int>(
-                      value: 2,
-                      child: Text('Pasaporte'),
-                    ),
-                    DropdownMenuItem<int>(
-                      value: 3,
-                      child: Text('Licencia de Conducir'),
-                    ),
-                  ],
-                  onChanged: (value) {
-                    prestamo.documentoHabilitante = value!;
-                  },
-                  decoration:
-                      InputDecoration(labelText: 'Documento Habilitante'),
-                ),
-                SizedBox(height: 16.0),
-                ListTile(
-                  title: Text('Fecha Maxima de Devolución'),
-                  subtitle: Text(
-                      '${_selectedDate.year}-${_selectedDate.month}-${_selectedDate.day}'),
-                  trailing: Icon(Icons.calendar_today),
-                  onTap: _selectDate,
-                ),
-                SizedBox(height: 16.0),
-                DropdownButtonFormField<int>(
-                  value: prestamo.tipoPrestamo,
-                  items: const [
-                    DropdownMenuItem<int>(
-                      value: 1,
-                      child: Text('Estudiantil'),
-                    ),
-                    DropdownMenuItem<int>(
-                      value: 2,
-                      child: Text('Docencia'),
-                    ),
-                    DropdownMenuItem<int>(
-                      value: 3,
-                      child: Text('Terceros'),
-                    ),
-                  ],
-                  onChanged: (value) {
-                    prestamo.tipoPrestamo = value!;
-                  },
-                  decoration:
-                      const InputDecoration(labelText: 'Tipo de Préstamo'),
-                ),
-                SizedBox(height: 16.0),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            body: SingleChildScrollView(
+              child: Container(
+                padding: EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        modificarprestamo();
-                      },
-                      child: Text('Aprobar'),
+                    Text(
+                      'Nombre Solicitante: ${prestamo.idSolicitante!.nombres} ${prestamo.idSolicitante!.apellidos}',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
-                    ElevatedButton(
-                      onPressed: () {
-                        // Lógica para rechazar la solicitud
+                    SizedBox(height: 16.0),
+                    Text(
+                      'Título del Libro: ${prestamo.libro!.titulo}',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    SizedBox(height: 8.0),
+                    Text(
+                      'Fecha de Solicitud: ${prestamo.fechaFin}',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    SizedBox(height: 8.0),
+                    Text(
+                      'Nombre de la Persona que Entrega: ${personalog.nombres}',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    const SizedBox(height: 16.0),
+                    TypeAheadFormField<Carrera>(
+                      enabled: true,
+                      textFieldConfiguration: TextFieldConfiguration(
+                        decoration: const InputDecoration(
+                          labelText: 'Carrera',
+                          labelStyle: TextStyle(color: Colors.white),
+                          border: OutlineInputBorder(),
+                        ),
+                        style: const TextStyle(color: Colors.black),
+                        controller: _carreracon,
+                      ),
+                      suggestionsCallback: (pattern) async {
+                        return listacarreras
+                            .where((carrera) => carrera.nombre
+                                .toLowerCase()
+                                .contains(pattern.toLowerCase()))
+                            .toList();
                       },
-                      child: Text('Rechazar'),
+                      itemBuilder: (context, Carrera suggestion) {
+                        return ListTile(
+                            title: Text(
+                          suggestion.nombre,
+                        ));
+                      },
+                      onSuggestionSelected: (Carrera suggestion) {
+                        setState(() {
+                          prestamo.carrera = suggestion;
+                          _carreracon.text = suggestion.nombre;
+                        });
+                      },
+                    ),
+                    SizedBox(height: 16.0),
+                    DropdownButtonFormField<int>(
+                      value: prestamo.estadoLibro,
+                      items: const [
+                        DropdownMenuItem<int>(
+                          value: 1,
+                          child: Text('Bueno'),
+                        ),
+                        DropdownMenuItem<int>(
+                          value: 2,
+                          child: Text('Regular'),
+                        ),
+                        DropdownMenuItem<int>(
+                          value: 3,
+                          child: Text('Malo'),
+                        ),
+                      ],
+                      onChanged: (value) {
+                        setState(() {
+                          prestamo.estadoLibro = value!;
+                        });
+                      },
+                      decoration:
+                          InputDecoration(labelText: 'Estado del Libro'),
+                    ),
+                    SizedBox(height: 16.0),
+                    DropdownButtonFormField<int>(
+                      value: prestamo.documentoHabilitante,
+                      items: const [
+                        DropdownMenuItem<int>(
+                          value: 0,
+                          child: Text('Seleccione:'),
+                        ),
+                        DropdownMenuItem<int>(
+                          value: 1,
+                          child: Text('Cédula'),
+                        ),
+                        DropdownMenuItem<int>(
+                          value: 2,
+                          child: Text('Pasaporte'),
+                        ),
+                        DropdownMenuItem<int>(
+                          value: 3,
+                          child: Text('Licencia de Conducir'),
+                        ),
+                      ],
+                      onChanged: (value) {
+                        prestamo.documentoHabilitante = value!;
+                      },
+                      decoration: const InputDecoration(
+                          labelText: 'Documento Habilitante'),
+                    ),
+                    const SizedBox(height: 16.0),
+                    ListTile(
+                      title: const Text('Fecha Maxima de Devolución'),
+                      subtitle: Text(
+                          '${_selectedDate.year}-${_selectedDate.month}-${_selectedDate.day}'),
+                      trailing: const Icon(Icons.calendar_today),
+                      onTap: _selectDate,
+                    ),
+                    const SizedBox(height: 16.0),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            modificarprestamo();
+                          },
+                          child: Text('Aprobar'),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            // Lógica para rechazar la solicitud
+                          },
+                          child: Text('Rechazar'),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
-            ),
-          ),
-        ));
+              ),
+            )));
   }
 }

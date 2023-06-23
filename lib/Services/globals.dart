@@ -15,6 +15,7 @@ String rol = 'BIBLIOTECARIO';
 String correo = 'elbichonoinciosesion@tecazuay.edu.ec';
 String nombre = 'hola';
 String tokenacceso = '';
+int validar = 0;
 late Persona personalog;
 String foto =
     "https://phantom-marca-mx.unidadeditorial.es/887fd9b0e45b9bc9accdd30de6708298/resize/828/f/jpg/mx/assets/multimedia/imagenes/2023/06/05/16859985858899.jpg";

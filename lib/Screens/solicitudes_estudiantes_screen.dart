@@ -123,55 +123,26 @@ class _SolicitudesEstudianteState extends State<SolicitudesEstudiante>
               return Card(
                 child: GestureDetector(
                   onTap: () {
-                    if (filteredSolicitudes[index].estadoPrestamo == 1) {
-                      // Acciones para estadoPrestamo 1 (Solicitadas)
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SolicitarLibroScreen(
-                            libro: filteredSolicitudes[index].libro!,
-                            idsolicitud: filteredSolicitudes[index].id_prestamo,
-                          ),
+                    setState(() {
+                      validar = 1;
+                    });
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SolicitarLibroScreen(
+                          libro: filteredSolicitudes[index].libro!,
+                          idsolicitud: filteredSolicitudes[index].id_prestamo,
                         ),
-                      );
-                    } else if (filteredSolicitudes[index].estadoPrestamo == 2) {
-                      // Acciones para estadoPrestamo 2 (Pendientes)
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SolicitarLibroScreen(
-                            libro: filteredSolicitudes[index].libro!,
-                            idsolicitud: filteredSolicitudes[index].id_prestamo,
-                          ),
-                        ),
-                      );
-                    }
+                      ),
+                    );
                   },
                   child: ListTile(
                     title: Text(filteredSolicitudes[index].libro!.titulo),
                     subtitle: filteredSolicitudes[index].estadoPrestamo == 1
-                        ? null // Si estadoPrestamo es 1, no se muestra el subtitle
+                        ? null
                         : Text(
-                            "Fecha entrega: ${filteredSolicitudes[index].fechaEntrega}\nFecha máxima: ${filteredSolicitudes[index].fechaDevolucion}",
+                            "Fecha entrega: ${filteredSolicitudes[index].fechaEntrega}\nFecha máxima: ${filteredSolicitudes[index].fechaMaxima}",
                           ),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.arrow_forward),
-                          onPressed: () {
-                            if (filteredSolicitudes[index].estadoPrestamo ==
-                                1) {
-                              // Acciones para estadoPrestamo 1 (Solicitadas)
-                            } else if (filteredSolicitudes[index]
-                                    .estadoPrestamo ==
-                                2) {
-                              // Acciones para estadoPrestamo 2 (Pendientes)
-                            }
-                          },
-                        ),
-                      ],
-                    ),
                   ),
                 ),
               );

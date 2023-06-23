@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:proyectoistateca/Screens/lista_libros_screen.dart';
+import 'package:proyectoistateca/Screens/solicitudes_estudiantes_screen.dart';
+import 'package:proyectoistateca/Services/globals.dart';
 import 'package:proyectoistateca/models/libros.dart';
 import 'package:proyectoistateca/widgets/widget_menu_lateral.dart';
 import 'package:custom_qr_generator/custom_qr_generator.dart';
@@ -47,10 +49,17 @@ class _SolicitarLibroScreenState extends State<SolicitarLibroScreen>
   Widget build(BuildContext context) {
     return WillPopScope(
         onWillPop: () async {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => LlibrosScreen()),
-          );
+          if (validar == 2) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => LlibrosScreen()),
+            );
+          } else {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => SolicitudesEstudiante()),
+            );
+          }
 
           return false;
         },

@@ -139,10 +139,15 @@ class _LoginPageState extends State<LoginPage> {
         final authorities = decodedToken['authorities'];
         print("El rol es $authorities");
         if (authorities == 'ROLE_STUD') {
+          setState(() {
+            rol = "ESTUDIANTE";
+          });
           // ignore: use_build_context_synchronously
           Navigator.pushNamed(context, HomeScreen.id);
-        } else if (authorities == 'ROLE_BIBL') {
-          print('TUTOR ESPECIFICO');
+        } else if (authorities == 'ROLE_BLIB') {
+          setState(() {
+            rol = "BIBLIOTECARIO";
+          });
           // ignore: use_build_context_synchronously
           Navigator.pushNamed(context, HomeScreen.id);
         }
