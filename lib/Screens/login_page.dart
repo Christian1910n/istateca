@@ -9,6 +9,7 @@ import 'package:proyectoistateca/Services/globals.dart';
 import 'package:http/http.dart' as http;
 import 'package:proyectoistateca/models/persona.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
 
 class LoginPage extends StatefulWidget {
   static String id = 'login_page';
@@ -22,24 +23,6 @@ class _LoginPageState extends State<LoginPage> {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   bool _loading = false;
   final FirebaseAuth _auth = FirebaseAuth.instance;
-
-  Future<void> _handleSignIn() async {
-    try {
-      var response = await _googleSignIn.signIn();
-      setState(() {
-        correo = response!.email;
-        nombre = response.displayName!;
-        foto = response.photoUrl ??
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTpcPxlFYJ0N5s1l3Lj5u5v2EOumwZjJ37XfTeEoaQ&s";
-      });
-      print(response?.displayName);
-      print(response?.email);
-    } catch (error) {
-      print(error);
-    } finally {
-      verificarCredenciales();
-    }
-  }
 
   Future<User?> signInGoogle() async {
     try {
@@ -57,48 +40,70 @@ class _LoginPageState extends State<LoginPage> {
         user.providerData.forEach((userInfo) {
           print(userInfo);
         });
+        print(user.displayName);
+        setState(() {
+          correo = user.email!;
+          nombre = user.displayName!;
+          foto = user.photoURL ??
+              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTpcPxlFYJ0N5s1l3Lj5u5v2EOumwZjJ37XfTeEoaQ&s";
+        });
       }
       if (user!.uid == _auth.currentUser!.uid) return user;
     } catch (e) {
       print('Error en el el Metodo: ${e.toString()}');
+    } finally {
+      print("hola");
+      verificarCredenciales();
     }
     return null;
   }
 
   Future<void> verificarCredenciales() async {
-    var url = Uri.parse('$baseUrl/credentials');
-    var response = await http.post(
-      url,
-      body: {
-        'email': correo,
-        'nombres': nombre,
-      },
-    );
-
-    if (response.statusCode == 200) {
-      // Persona registrada
-      print('Persona registrada ${response.body}');
-      login();
-    } else if (response.statusCode == 400) {
-      // No estás ligado al ISTA o ya saliste del ISTA
-      print(response.body);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(response.body),
-          duration: const Duration(seconds: 4),
-        ),
+    setState(() {
+      _loading = true;
+    });
+    try {
+      var url = Uri.parse('$baseUrl/credentials');
+      var response = await http.post(
+        url,
+        body: {
+          'email': correo,
+          'nombres': nombre,
+        },
       );
-      signOutGoogle();
-    } else {
-      // Error en la solicitud
-      print('Error en la solicitud');
-      signOutGoogle();
+
+      if (response.statusCode == 200) {
+        // Persona registrada
+        print('Persona registrada ${response.body}');
+        login();
+      } else if (response.statusCode == 400) {
+        // No estás ligado al ISTA o ya saliste del ISTA
+        print(response.body);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("$nombre ${response.body}"),
+            duration: const Duration(seconds: 4),
+          ),
+        );
+        signOutGoogle();
+      } else {
+        // Error en la solicitud
+        print('Error en la solicitud');
+        signOutGoogle();
+      }
+    } catch (error) {
+      print("Error verificando $error");
+    } finally {
+      setState(() {
+        _loading = false;
+      });
     }
   }
 
   Future<void> signOutGoogle() async {
     try {
       await _googleSignIn.signOut();
+      await _auth.signOut();
     } catch (e) {
       print(e.toString());
     }
@@ -148,6 +153,12 @@ class _LoginPageState extends State<LoginPage> {
       print(response.body);
     } catch (error) {
       print('Error Login $error');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("No se pudo iniciar sesion $error"),
+          duration: const Duration(seconds: 4),
+        ),
+      );
     } finally {
       if (mounted) {
         setState(() {
@@ -159,11 +170,60 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    if (_loading) {
+      return animacioncarga();
+    }
     return Scaffold(
-      body: Center(
-        child: ElevatedButton(
-          onPressed: signInGoogle,
-          child: Text('Iniciar sesión con Google'),
+      body: Container(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(
+              flex: 1,
+              child: Center(
+                child: Image.asset('assets/logoista.png', width: 400),
+              ),
+            ),
+            SizedBox(height: 20),
+            Expanded(
+              flex: 2,
+              child: Column(
+                children: [
+                  AnimatedTextKit(
+                    animatedTexts: [
+                      TypewriterAnimatedText(
+                        '¡Bienvenido!',
+                        textStyle: const TextStyle(
+                          fontSize: 45,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        speed: const Duration(milliseconds: 200),
+                      ),
+                    ],
+                    totalRepeatCount: 1,
+                    pause: const Duration(milliseconds: 1000),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    'Inicia sesión con tu cuenta de Google',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 30),
+            ElevatedButton.icon(
+              onPressed: signInGoogle,
+              icon: const Icon(Icons.login),
+              label: const Text('INICIO DE SESIÓN CON GOOGLE',
+                  style: TextStyle(fontSize: 20)),
+            ),
+          ],
         ),
       ),
     );

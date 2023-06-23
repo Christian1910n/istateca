@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:proyectoistateca/Screens/lista_libros_screen.dart';
@@ -16,6 +17,7 @@ class CustomDrawer extends StatefulWidget {
 
 class _CustomDrawerState extends State<CustomDrawer> {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +27,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
   Future<void> signOutGoogle() async {
     try {
       await _googleSignIn.signOut();
+      await _auth.signOut();
     } catch (e) {
       print(e.toString());
     }
