@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:proyectoistateca/Screens/home_screen.dart';
@@ -22,8 +23,13 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   bool _isShowingSplashScreen = true;
 
+  Future<void> inicializarfirebase() async {
+    await Firebase.initializeApp();
+  }
+
   @override
   void initState() {
+    inicializarfirebase();
     super.initState();
     Future.delayed(const Duration(milliseconds: 4000), () {
       setState(() {

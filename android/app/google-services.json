@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1082474020666",
+    "project_id": "tutorial-40961",
+    "storage_bucket": "tutorial-40961.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1082474020666:android:96fdefa20c4e64cf2c5a03",
+        "android_client_info": {
+          "package_name": "com.example.proyectoistateca"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1082474020666-she4jgkcmh4te8nrcbmmgqk1d0ofnmie.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCbfrY9VmsVwjXZxX5OEXeR6sU0Szbsga0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1082474020666-she4jgkcmh4te8nrcbmmgqk1d0ofnmie.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

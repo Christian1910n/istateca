@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:proyectoistateca/Screens/home_screen.dart';
@@ -20,6 +21,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   bool _loading = false;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future<void> _handleSignIn() async {
     try {
@@ -37,6 +39,30 @@ class _LoginPageState extends State<LoginPage> {
     } finally {
       verificarCredenciales();
     }
+  }
+
+  Future<User?> signInGoogle() async {
+    try {
+      final GoogleSignInAccount googleUser = (await _googleSignIn.signIn())!;
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+      final OAuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+      final UserCredential userCredential =
+          await _auth.signInWithCredential(credential);
+      final User? user = userCredential.user;
+      if (user != null) {
+        user.providerData.forEach((userInfo) {
+          print(userInfo);
+        });
+      }
+      if (user!.uid == _auth.currentUser!.uid) return user;
+    } catch (e) {
+      print('Error en el el Metodo: ${e.toString()}');
+    }
+    return null;
   }
 
   Future<void> verificarCredenciales() async {
@@ -136,7 +162,7 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       body: Center(
         child: ElevatedButton(
-          onPressed: _handleSignIn,
+          onPressed: signInGoogle,
           child: Text('Iniciar sesión con Google'),
         ),
       ),

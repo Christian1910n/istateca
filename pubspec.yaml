@@ -52,6 +52,9 @@ dependencies:
   lottie: ^2.4.0
   animated_text_kit: ^4.2.2
   jwt_decoder: ^2.0.1
+  firebase_core: ^2.14.0
+  firebase_auth: ^4.6.3
+
 
 dev_dependencies:
   flutter_test:
