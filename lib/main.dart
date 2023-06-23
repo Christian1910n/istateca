@@ -8,6 +8,7 @@ import 'package:proyectoistateca/Screens/solicitudes_screen.dart';
 import 'package:proyectoistateca/Screens/sugerencias_screen.dart';
 import 'package:proyectoistateca/models/tipos_data.dart';
 import 'package:proyectoistateca/widgets/SplashScreen.dart';
+import 'package:proyectoistateca/Screens/solicitudes_estudiantes_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -50,7 +51,8 @@ class _MyAppState extends State<MyApp> {
           LoginPage.id: (context) => const LoginPage(),
           LlibrosScreen.id: (context) => LlibrosScreen(),
           SolicitudesLibros.id: (context) => SolicitudesLibros(),
-          SugerenciasScreen.id: (context) => SugerenciasScreen()
+          SugerenciasScreen.id: (context) => SugerenciasScreen(),
+          SolicitudesEstudiante.id: (context) => SolicitudesEstudiante(),
         },
       ),
     );

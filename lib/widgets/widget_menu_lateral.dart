@@ -4,6 +4,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:proyectoistateca/Screens/lista_libros_screen.dart';
 import 'package:proyectoistateca/Screens/login_page.dart';
 import 'package:proyectoistateca/Screens/solicitud_libro_screen.dart';
+import 'package:proyectoistateca/Screens/solicitudes_estudiantes_screen.dart';
 import 'package:proyectoistateca/Screens/solicitudes_screen.dart';
 import 'package:proyectoistateca/Screens/sugerencias_screen.dart';
 import 'package:proyectoistateca/Services/globals.dart';
@@ -151,7 +152,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     leading: Icon(Icons.book,
                         color: Color.fromARGB(255, 28, 105, 183)),
                     title: const Text(
-                      'Solicitud',
+                      'Solicitudes',
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 16.0,
@@ -159,7 +160,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     ),
                     onTap: () {
                       setState(() {
-                        Navigator.pushNamed(context, BookRequestView.id);
+                        Navigator.pushNamed(context, SolicitudesEstudiante.id);
                       });
                     },
                   ),
