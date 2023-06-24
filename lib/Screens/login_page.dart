@@ -150,6 +150,12 @@ class _LoginPageState extends State<LoginPage> {
           });
           // ignore: use_build_context_synchronously
           Navigator.pushNamed(context, HomeScreen.id);
+        } else if (authorities == 'ROLE_ADMIN') {
+          setState(() {
+            rol = "ADMIN";
+          });
+          // ignore: use_build_context_synchronously
+          Navigator.pushNamed(context, HomeScreen.id);
         }
       } else {
         print('Error login: ${response.statusCode}');
