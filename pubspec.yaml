@@ -55,6 +55,7 @@ dependencies:
   firebase_core: ^2.14.0
   firebase_auth: ^4.6.3
   flutter_typeahead: ^4.3.8
+  firebase_messaging: ^14.6.3
 
 dev_dependencies:
   flutter_test:

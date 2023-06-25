@@ -9,6 +9,7 @@ import 'package:proyectoistateca/Screens/sugerencias_screen.dart';
 import 'package:proyectoistateca/models/tipos_data.dart';
 import 'package:proyectoistateca/widgets/SplashScreen.dart';
 import 'package:proyectoistateca/Screens/solicitudes_estudiantes_screen.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 void main() {
   runApp(const MyApp());
@@ -25,13 +26,42 @@ class _MyAppState extends State<MyApp> {
   bool _isShowingSplashScreen = true;
 
   Future<void> inicializarfirebase() async {
-    await Firebase.initializeApp();
+    try {
+      await Firebase.initializeApp();
+    } catch (error) {
+      print(error);
+    } finally {
+      notificaciones();
+    }
+  }
+
+  void notificaciones() {
+    // Obtén el token de registro de FCM
+    FirebaseMessaging.instance.getToken().then((token) {
+      print('Token notificaciones: $token');
+    });
+
+    // Maneja la notificación inicial si la aplicación se abrió mediante una notificación
+    FirebaseMessaging.instance.getInitialMessage().then((message) {
+      // ...
+    });
+
+    // Maneja las notificaciones recibidas en primer plano
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      // ...
+    });
+
+    // Maneja las notificaciones cuando la aplicación se abre desde una notificación
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      // ...
+    });
   }
 
   @override
   void initState() {
     inicializarfirebase();
     super.initState();
+
     Future.delayed(const Duration(milliseconds: 4000), () {
       setState(() {
         _isShowingSplashScreen = false;
