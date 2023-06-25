@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:proyectoistateca/Screens/home_screen.dart';
 import 'package:proyectoistateca/Screens/lista_libros_screen.dart';
@@ -42,13 +43,29 @@ class _MyAppState extends State<MyApp> {
     });
 
     // Maneja la notificación inicial si la aplicación se abrió mediante una notificación
-    FirebaseMessaging.instance.getInitialMessage().then((message) {
-      // ...
-    });
+    FirebaseMessaging.instance.getInitialMessage().then((message) {});
 
     // Maneja las notificaciones recibidas en primer plano
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      // ...
+      final notification = message.notification;
+
+      // Obtén los datos personalizados de la notificación
+      final data = message.data;
+
+      print(data);
+
+      String mensaje =
+          notification!.title.toString() + '\n' + notification.body.toString();
+
+      // Muestra una alerta con el contenido de la notificación
+      Fluttertoast.showToast(
+        msg: mensaje,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 4,
+        backgroundColor: Colors.grey[700],
+        textColor: Colors.white,
+      );
     });
 
     // Maneja las notificaciones cuando la aplicación se abre desde una notificación
