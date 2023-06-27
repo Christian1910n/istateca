@@ -8,6 +8,7 @@ import 'package:qrscan/qrscan.dart' as scanner;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:http/http.dart' as http;
 import 'package:lottie/lottie.dart';
+import 'package:proyectoistateca/Screens/devolucion_libro_screen.dart';
 
 import '../widgets/widget_menu_lateral.dart';
 
@@ -279,7 +280,7 @@ class _SolicitudesLibrosState extends State<SolicitudesLibros>
                         context,
                         MaterialPageRoute(
                           builder: (context) =>
-                              BookRequestView(prestamo: solicitudes[index]),
+                              DevolucionLibro(prestamo: solicitudes[index]),
                         ),
                       );
                     }
@@ -315,7 +316,7 @@ class _SolicitudesLibrosState extends State<SolicitudesLibros>
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => BookRequestView(
+                                    builder: (context) => DevolucionLibro(
                                         prestamo: solicitudes[index]),
                                   ),
                                 );
