@@ -28,7 +28,6 @@ class _DevolucionLibroState extends State<DevolucionLibro> {
   @override
   void initState() {
     prestamo = widget.prestamo;
-    _carreraController.text = prestamo.carrera?.nombre ?? '';
     prestamo.fechaDevolucion = DateTime.now().toIso8601String();
     super.initState();
   }
@@ -244,13 +243,14 @@ class _DevolucionLibroState extends State<DevolucionLibro> {
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 ElevatedButton(
                   onPressed: () {
                     modificarprestamo();
                     modificarcalificacion();
                   },
-                  child: const Text('Aprobar'),
+                  child: const Text('Guardar'),
                 ),
               ],
             ),

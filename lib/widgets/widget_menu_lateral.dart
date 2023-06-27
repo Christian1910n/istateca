@@ -89,59 +89,59 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   ),
                 ),
                 const SizedBox(height: 10),
-                //if (rol == "BIBLIOTECARIO" || rol == "ADMIN")
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.black,
-                      width: 3.0,
-                    ),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: ListTile(
-                    leading: Icon(Icons.book,
-                        color: Color.fromARGB(255, 28, 105, 183)),
-                    title: const Text(
-                      'Lista de Solicitudes de libros',
-                      style: TextStyle(
+                if (rol == "BIBLIOTECARIO" || rol == "ADMIN")
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(
                         color: Colors.black,
-                        fontSize: 16.0,
+                        width: 3.0,
                       ),
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                    onTap: () {
-                      setState(() {
-                        Navigator.pushNamed(context, SolicitudesLibros.id);
-                      });
-                    },
+                    child: ListTile(
+                      leading: Icon(Icons.book,
+                          color: Color.fromARGB(255, 28, 105, 183)),
+                      title: const Text(
+                        'Lista de Solicitudes de libros',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16.0,
+                        ),
+                      ),
+                      onTap: () {
+                        setState(() {
+                          Navigator.pushNamed(context, SolicitudesLibros.id);
+                        });
+                      },
+                    ),
                   ),
-                ),
                 const SizedBox(height: 10),
-                //if (rol == "ADMIN")
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.black,
-                      width: 3.0,
-                    ),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: ListTile(
-                    leading: Icon(Icons.book,
-                        color: Color.fromARGB(255, 28, 105, 183)),
-                    title: const Text(
-                      'Registrar Bibliotecario',
-                      style: TextStyle(
+                if (rol == "ADMIN")
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(
                         color: Colors.black,
-                        fontSize: 16.0,
+                        width: 3.0,
                       ),
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                    onTap: () {
-                      setState(() {
-                        Navigator.pushNamed(context, SolicitudesLibros.id);
-                      });
-                    },
+                    child: ListTile(
+                      leading: Icon(Icons.book,
+                          color: Color.fromARGB(255, 28, 105, 183)),
+                      title: const Text(
+                        'Registrar Bibliotecario',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16.0,
+                        ),
+                      ),
+                      onTap: () {
+                        setState(() {
+                          Navigator.pushNamed(context, SolicitudesLibros.id);
+                        });
+                      },
+                    ),
                   ),
-                ),
                 const SizedBox(height: 10),
                 Container(
                   decoration: BoxDecoration(
