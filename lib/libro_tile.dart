@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:proyectoistateca/Screens/detalle_libro_screen.dart';
+import 'package:proyectoistateca/Services/globals.dart';
 import 'package:proyectoistateca/models/libros.dart';
 import 'package:proyectoistateca/models/tipos_data.dart';
 import 'package:http/http.dart' as http;
@@ -13,7 +14,7 @@ class LibrosTile extends StatelessWidget {
 
   Future<ImageProvider> loadImage() async {
     try {
-      final response = await http.get(Uri.parse(libro.urlImagen));
+      final response = await http.get(Uri.parse('$baseUrl${libro.urlImagen}'));
       if (response.statusCode == 200) {
         return MemoryImage(response.bodyBytes);
       } else {
