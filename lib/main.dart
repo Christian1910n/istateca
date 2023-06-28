@@ -4,6 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:proyectoistateca/Screens/home_screen.dart';
 import 'package:proyectoistateca/Screens/lista_libros_screen.dart';
+import 'package:proyectoistateca/Screens/lista_sugerencias.dart';
 import 'package:proyectoistateca/Screens/login_page.dart';
 import 'package:proyectoistateca/Screens/solicitudes_screen.dart';
 import 'package:proyectoistateca/Screens/sugerencias_screen.dart';
@@ -100,6 +101,8 @@ class _MyAppState extends State<MyApp> {
           SolicitudesLibros.id: (context) => SolicitudesLibros(),
           SugerenciasScreen.id: (context) => SugerenciasScreen(),
           SolicitudesEstudiante.id: (context) => SolicitudesEstudiante(),
+          ListasugerenciasScreen.id: ((context) =>
+              const ListasugerenciasScreen())
         },
       ),
     );

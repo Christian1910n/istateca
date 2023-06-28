@@ -179,9 +179,7 @@ class _SolicitudesLibrosState extends State<SolicitudesLibros>
   @override
   void initState() {
     _tabController = TabController(length: 6, vsync: this);
-    _tabController.addListener(() {
-      getsolicitudes(_tabController.index + 1);
-    });
+
     getsolicitudes(1);
     super.initState();
   }

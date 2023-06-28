@@ -1,4 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:proyectoistateca/Services/globals.dart';
+import 'package:http/http.dart' as http;
 
 class SugerenciasScreen extends StatefulWidget {
   static String id = 'sugerencias_screen';
@@ -23,9 +28,59 @@ class _SugerenciasScreenState extends State<SugerenciasScreen> {
   }
 
   void _submitFeedback() {
-    String feedbackText = _feedbackController.text;
-    print('Enviando comentario: $feedbackText');
-    _feedbackController.clear();
+    crearsugerencia();
+  }
+
+  Future<void> crearsugerencia() async {
+    String fecha =
+        DateTime.now().add(const Duration(days: 1)).toIso8601String();
+
+    try {
+      const url = "$baseUrl/sugerencia/crear";
+      print(url);
+      Map data = {
+        "id": 0,
+        "descripcion": _feedbackController.text,
+        "fecha": fecha,
+        "persona": personalog.toJson()
+      };
+      print(data);
+      var body = json.encode(data);
+
+      final response = await http.post(
+        Uri.parse(url),
+        headers: headers,
+        body: body,
+      );
+
+      if (response.statusCode == 201) {
+        print('Sugerencia creada creado ${response.body}');
+        print(response.body);
+        Fluttertoast.showToast(
+          msg: "SUGERENCIA CREADA CON EXITO",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 4,
+          backgroundColor: Colors.grey[700],
+          textColor: Colors.white,
+        );
+      } else {
+        print('Error al crear el sugerencia: ${response.statusCode}');
+        print('ERROR ${response.body}');
+        Fluttertoast.showToast(
+          msg: "Error al crear el sugerencia: ${response.statusCode}",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 4,
+          backgroundColor: Colors.grey[700],
+          textColor: Colors.white,
+        );
+      }
+    } catch (error) {
+      print("Error crear sugerencia $error");
+    } finally {
+      _feedbackController.clear();
+    }
   }
 
   @override
@@ -49,7 +104,7 @@ class _SugerenciasScreenState extends State<SugerenciasScreen> {
             const SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: _submitFeedback,
-              child: Text('Enviar'),
+              child: const Text('Enviar'),
             ),
           ],
         ),
