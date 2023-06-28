@@ -89,7 +89,6 @@ class _BookRequestViewState extends State<BookRequestView> {
     Map data = {
       "estadoPrestamo": 2,
       "idEntrega": {"id": personalog.id_persona},
-      "estadoLibro": prestamo.estadoLibro,
       "documentoHabilitante": prestamo.documentoHabilitante,
       "tipoPrestamo": prestamo.tipoPrestamo,
       "fechaMaxima": prestamo.fechaMaxima,
@@ -240,31 +239,6 @@ class _BookRequestViewState extends State<BookRequestView> {
                     ),
                     SizedBox(height: 16.0),
                     DropdownButtonFormField<int>(
-                      value: prestamo.estadoLibro,
-                      items: const [
-                        DropdownMenuItem<int>(
-                          value: 1,
-                          child: Text('Bueno'),
-                        ),
-                        DropdownMenuItem<int>(
-                          value: 2,
-                          child: Text('Regular'),
-                        ),
-                        DropdownMenuItem<int>(
-                          value: 3,
-                          child: Text('Malo'),
-                        ),
-                      ],
-                      onChanged: (value) {
-                        setState(() {
-                          prestamo.estadoLibro = value!;
-                        });
-                      },
-                      decoration:
-                          InputDecoration(labelText: 'Estado del Libro'),
-                    ),
-                    SizedBox(height: 16.0),
-                    DropdownButtonFormField<int>(
                       value: prestamo.documentoHabilitante,
                       items: const [
                         DropdownMenuItem<int>(
@@ -306,13 +280,7 @@ class _BookRequestViewState extends State<BookRequestView> {
                           onPressed: () {
                             modificarprestamo();
                           },
-                          child: Text('Aprobar'),
-                        ),
-                        ElevatedButton(
-                          onPressed: () {
-                            // Lógica para rechazar la solicitud
-                          },
-                          child: Text('Rechazar'),
+                          child: const Text('Guardar'),
                         ),
                       ],
                     ),

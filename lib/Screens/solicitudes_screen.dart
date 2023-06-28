@@ -91,6 +91,13 @@ class _SolicitudesLibrosState extends State<SolicitudesLibros>
                 builder: (context) => BookRequestView(prestamo: prestamo),
               ),
             );
+          } else if (prestamo.estadoPrestamo == 2) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => DevolucionLibro(prestamo: prestamo),
+              ),
+            );
           } else {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -135,7 +142,7 @@ class _SolicitudesLibrosState extends State<SolicitudesLibros>
     });
     try {
       List<Prestamo> solicitudess = [];
-      var url = Uri.parse('$baseUrl/prestamo/listarxestado?parametro=$estado');
+      var url = Uri.parse('$baseUrl/prestamo/listar');
       final response = await http.get(url, headers: headers);
 
       if (response.statusCode == 200) {
@@ -149,6 +156,10 @@ class _SolicitudesLibrosState extends State<SolicitudesLibros>
             solicitudes = solicitudess;
           });
         }
+        setState(() {
+          solicitudes = solicitudess;
+        });
+      } else if (response.statusCode == 204) {
         setState(() {
           solicitudes = solicitudess;
         });
@@ -224,6 +235,33 @@ class _SolicitudesLibrosState extends State<SolicitudesLibros>
     if (carga) {
       return animacioncarga();
     }
+    List<Prestamo> prestamosFiltrados = [];
+
+    if (tabId == 1) {
+      prestamosFiltrados = solicitudes
+          .where((prestamo) => prestamo.estadoPrestamo == 1)
+          .toList();
+    } else if (tabId == 2) {
+      prestamosFiltrados = solicitudes
+          .where((prestamo) => prestamo.estadoPrestamo == 2)
+          .toList();
+    } else if (tabId == 3) {
+      prestamosFiltrados = solicitudes
+          .where((prestamo) => prestamo.estadoPrestamo == 3)
+          .toList();
+    } else if (tabId == 4) {
+      prestamosFiltrados = solicitudes
+          .where((prestamo) => prestamo.estadoPrestamo == 4)
+          .toList();
+    } else if (tabId == 5) {
+      prestamosFiltrados = solicitudes
+          .where((prestamo) => prestamo.estadoPrestamo == 5)
+          .toList();
+    } else if (tabId == 6) {
+      prestamosFiltrados = solicitudes
+          .where((prestamo) => prestamo.estadoPrestamo == 6)
+          .toList();
+    }
 
     return Column(
       children: [
@@ -260,27 +298,32 @@ class _SolicitudesLibrosState extends State<SolicitudesLibros>
             ],
           ),
         ),
+        if (prestamosFiltrados.isEmpty)
+          const Text(
+            'No hay solicitudes pendientes',
+            style: TextStyle(fontSize: 18),
+          ),
         Expanded(
           child: ListView.builder(
-            itemCount: solicitudes.length,
+            itemCount: prestamosFiltrados.length,
             itemBuilder: (context, index) {
               return Card(
                 child: GestureDetector(
                   onTap: () {
-                    if (solicitudes[index].estadoPrestamo == 1) {
+                    if (prestamosFiltrados[index].estadoPrestamo == 1) {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              BookRequestView(prestamo: solicitudes[index]),
+                          builder: (context) => BookRequestView(
+                              prestamo: prestamosFiltrados[index]),
                         ),
                       );
-                    } else if (solicitudes[index].estadoPrestamo == 2) {
+                    } else if (prestamosFiltrados[index].estadoPrestamo == 2) {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              DevolucionLibro(prestamo: solicitudes[index]),
+                          builder: (context) => DevolucionLibro(
+                              prestamo: prestamosFiltrados[index]),
                         ),
                       );
                     }
@@ -294,7 +337,7 @@ class _SolicitudesLibrosState extends State<SolicitudesLibros>
                       borderRadius: BorderRadius.circular(10), // Radio de borde
                     ),
                     child: ListTile(
-                      title: Text(solicitudes[index].libro!.titulo),
+                      title: Text(prestamosFiltrados[index].libro!.titulo),
                       subtitle: Text(
                           "${solicitudes[index].idSolicitante!.nombres} ${solicitudes[index].idSolicitante!.apellidos}"),
                       trailing: Row(
@@ -303,21 +346,23 @@ class _SolicitudesLibrosState extends State<SolicitudesLibros>
                           IconButton(
                             icon: const Icon(Icons.arrow_forward),
                             onPressed: () {
-                              if (solicitudes[index].estadoPrestamo == 1) {
+                              if (prestamosFiltrados[index].estadoPrestamo ==
+                                  1) {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => BookRequestView(
-                                        prestamo: solicitudes[index]),
+                                        prestamo: prestamosFiltrados[index]),
                                   ),
                                 );
-                              } else if (solicitudes[index].estadoPrestamo ==
+                              } else if (prestamosFiltrados[index]
+                                      .estadoPrestamo ==
                                   2) {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => DevolucionLibro(
-                                        prestamo: solicitudes[index]),
+                                        prestamo: prestamosFiltrados[index]),
                                   ),
                                 );
                               }
