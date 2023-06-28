@@ -22,13 +22,23 @@ class DevolucionLibro extends StatefulWidget {
 }
 
 class _DevolucionLibroState extends State<DevolucionLibro> {
+  int persona = 0;
   late Prestamo prestamo;
   final TextEditingController _carreraController = TextEditingController();
+  int? selectedValue;
 
   @override
   void initState() {
     prestamo = widget.prestamo;
-    prestamo.fechaDevolucion = DateTime.now().toIso8601String();
+    //prestamo.fechaDevolucion = DateTime.now().toIso8601String();
+    persona = widget.prestamo.idSolicitante?.id_persona ?? 0;
+    print("PERSONS ID ");
+    print(persona);
+    if (prestamo.estadoLibro == 0) {
+      selectedValue = 0;
+    }
+    prestamo.fechaDevolucion =
+        DateTime.now().add(const Duration(days: 1)).toString();
     super.initState();
   }
 
@@ -79,39 +89,41 @@ class _DevolucionLibroState extends State<DevolucionLibro> {
   }
 
   Future<void> modificarcalificacion() async {
-    Map data = {
-      "calificacion": personalog.calificacion,
-    };
-    var body = json.encode(data);
-    print("Nuevo Json: $body");
+    if (prestamo.idSolicitante != null) {
+      Map data = {
+        "calificacion": prestamo.idSolicitante?.calificacion,
+      };
+      var body = json.encode(data);
+      print("Nuevo Json: $body");
 
-    try {
-      var url = "$baseUrl/persona/editar/${personalog.id_persona}";
-      print(url);
+      try {
+        var url = "$baseUrl/persona/editar/${persona}";
+        print(url);
 
-      final prestamoJson = jsonEncode(prestamo);
-      print(prestamoJson);
+        final prestamoJson = jsonEncode(prestamo);
+        print(prestamoJson);
 
-      final response = await http.put(
-        Uri.parse(url),
-        headers: headers,
-        body: body,
-      );
-      if (response.statusCode == 200) {
-        print('Calificacion modificado ${response.body}');
-        Map<String, dynamic> jsonResponse = json.decode(response.body);
-        Prestamo prestamo = Prestamo.fromJson(jsonResponse);
-      } else {
-        print('Error al editar la calificacion: ${response.statusCode}');
-        print('ERROR ${response.body}');
+        final response = await http.put(
+          Uri.parse(url),
+          headers: headers,
+          body: body,
+        );
+        if (response.statusCode == 200) {
+          print('Calificacion modificado ${response.body}');
+          Map<String, dynamic> jsonResponse = json.decode(response.body);
+          Prestamo prestamo = Prestamo.fromJson(jsonResponse);
+        } else {
+          print('Error al editar la calificacion: ${response.statusCode}');
+          print('ERROR ${response.body}');
+        }
+      } catch (error) {
+        print("Error editar la calificacion $error");
+      } finally {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => SolicitudesLibros()),
+        );
       }
-    } catch (error) {
-      print("Error editar la calificacion $error");
-    } finally {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => SolicitudesLibros()),
-      );
     }
   }
 
@@ -182,8 +194,12 @@ class _DevolucionLibroState extends State<DevolucionLibro> {
             const SizedBox(height: 8.0),
             const SizedBox(height: 16.0),
             DropdownButtonFormField<int>(
-              value: prestamo.estadoLibro,
+              value: selectedValue,
               items: const [
+                DropdownMenuItem<int>(
+                  value: null,
+                  child: Text('Seleccione'),
+                ),
                 DropdownMenuItem<int>(
                   value: 1,
                   child: Text('Bueno'),
@@ -199,6 +215,7 @@ class _DevolucionLibroState extends State<DevolucionLibro> {
               ],
               onChanged: (value) {
                 setState(() {
+                  selectedValue = value;
                   prestamo.estadoLibro = value!;
                   prestamo.estadoPrestamo = (value == 3) ? 4 : 3;
                 });
@@ -222,7 +239,8 @@ class _DevolucionLibroState extends State<DevolucionLibro> {
                   ),
                   SizedBox(height: 16.0),
                   RatingBar.builder(
-                    initialRating: personalog.calificacion.toDouble(),
+                    initialRating:
+                        prestamo.idSolicitante?.calificacion?.toDouble() ?? 0.0,
                     minRating: 1,
                     direction: Axis.horizontal,
                     allowHalfRating: false,
@@ -234,7 +252,9 @@ class _DevolucionLibroState extends State<DevolucionLibro> {
                     ),
                     onRatingUpdate: (rating) {
                       setState(() {
-                        personalog.calificacion = rating.toInt();
+                        if (prestamo.idSolicitante != null) {
+                          prestamo.idSolicitante!.calificacion = rating.toInt();
+                        }
                       });
                     },
                   ),
@@ -247,8 +267,29 @@ class _DevolucionLibroState extends State<DevolucionLibro> {
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    modificarprestamo();
-                    modificarcalificacion();
+                    if (selectedValue != null && selectedValue != 0) {
+                      modificarprestamo();
+                      modificarcalificacion();
+                    } else {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text('Error'),
+                            content:
+                                Text('Debe seleccionar una opción válida.'),
+                            actions: [
+                              TextButton(
+                                child: Text('OK'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }
                   },
                   child: const Text('Guardar'),
                 ),
