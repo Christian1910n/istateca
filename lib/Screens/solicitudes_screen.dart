@@ -346,7 +346,7 @@ class _SolicitudesLibrosState extends State<SolicitudesLibros>
                     child: ListTile(
                       title: Text(prestamosFiltrados[index].libro!.titulo),
                       subtitle: Text(
-                          "${solicitudes[index].idSolicitante!.nombres} ${solicitudes[index].idSolicitante!.apellidos}"),
+                          "${prestamosFiltrados[index].idSolicitante!.nombres} ${prestamosFiltrados[index].idSolicitante!.apellidos}"),
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [

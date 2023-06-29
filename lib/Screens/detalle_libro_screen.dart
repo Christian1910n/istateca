@@ -1,7 +1,10 @@
 import 'dart:convert';
-import 'dart:math';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:path/path.dart' as paths;
+import 'package:proyectoistateca/Screens/lista_libros_screen.dart';
 import 'package:proyectoistateca/Screens/solicitar_libro_screen.dart';
 import 'package:proyectoistateca/Services/globals.dart';
 import 'package:proyectoistateca/models/carrera.dart';
@@ -10,6 +13,10 @@ import 'package:http/http.dart' as http;
 import 'package:proyectoistateca/models/persona.dart';
 import 'package:proyectoistateca/models/prestamo.dart';
 import 'package:intl/intl.dart';
+import 'package:camera/camera.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:proyectoistateca/widgets/camera_screen.dart';
 
 class DetalleLibroScreen extends StatefulWidget {
   final Libro libro;
@@ -94,6 +101,196 @@ class _DetalleLibroScreenState extends State<DetalleLibroScreen> {
     }
   }
 
+  Future<ImageProvider> loadImage() async {
+    try {
+      final response =
+          await http.get(Uri.parse('$baseUrl${widget.libro.urlImagen}'));
+      if (response.statusCode == 200) {
+        return MemoryImage(response.bodyBytes);
+      } else {
+        return Image.asset('assets/vacio.jpg').image;
+      }
+    } catch (e) {
+      return Image.asset('assets/vacio.jpg').image;
+    }
+  }
+
+  void subirImagen(int id, String imagePath) async {
+    try {
+      String url = '$baseUrl/libro/subirimagen/$id';
+      print(url);
+
+      var request = http.MultipartRequest('POST', Uri.parse(url));
+      request.files.add(
+        await http.MultipartFile.fromPath('imagen', imagePath),
+      );
+      request.headers['Authorization'] = tokenacceso;
+
+      var response = await request.send();
+
+      if (response.statusCode == 200) {
+        print('La imagen se subió exitosamente.');
+        Fluttertoast.showToast(
+          msg: "IMAGEN GUARDADA CON EXITO",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 4,
+          backgroundColor: Colors.grey[700],
+          textColor: Colors.white,
+        );
+        // ignore: use_build_context_synchronously
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => LlibrosScreen()),
+        );
+      } else {
+        print(
+            'Error al subir la imagen. Código de respuesta: ${response.statusCode}');
+        Fluttertoast.showToast(
+          msg:
+              "Error al subir la imagen. Código de respuesta: ${response.statusCode}",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 4,
+          backgroundColor: Colors.grey[700],
+          textColor: Colors.white,
+        );
+      }
+    } catch (error) {
+      print("Error subiendo imagen $error");
+    }
+  }
+
+  void _dialogoimagen() async {
+    FilePickerResult? _imageFile;
+    late Future<void> _initializeControllerFuture;
+    var imagePath;
+
+    final cameras = await availableCameras();
+    final firstCamera = cameras.first;
+
+    // ignore: use_build_context_synchronously
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              content: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    if (widget.libro.urlImagen.isNotEmpty)
+                      if (imagePath == null)
+                        FutureBuilder<ImageProvider>(
+                          future: loadImage(),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<ImageProvider> snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.done) {
+                              if (snapshot.hasError) {
+                                return Image.asset('assets/vacio.jpg');
+                              } else {
+                                return Image(image: snapshot.data!);
+                              }
+                            } else {
+                              return const CircularProgressIndicator();
+                            }
+                          },
+                        ),
+                    if (imagePath != null)
+                      Container(
+                        width: 300,
+                        height: 300,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: FileImage(File(imagePath as String)),
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                      ),
+                    SizedBox(height: 16),
+                    ElevatedButton.icon(
+                      onPressed: () async {
+                        final path = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                CameraScreen(camera: firstCamera),
+                          ),
+                        );
+
+                        if (mounted) {
+                          print("hola $path");
+                          setState(() {
+                            imagePath = path;
+                          });
+                        }
+
+                        print("pathhh $imagePath");
+                      },
+                      icon: Icon(Icons.camera),
+                      label: Text('CAPTURAR NUEVA IMAGEN'),
+                    ),
+                    SizedBox(height: 8),
+                    ElevatedButton.icon(
+                      onPressed: () async {
+                        _imageFile = await FilePicker.platform.pickFiles(
+                          type: FileType.image,
+                        );
+
+                        if (_imageFile != null) {
+                          if (mounted) {
+                            setState(() {
+                              imagePath = _imageFile!.files.single.path;
+                            });
+                          }
+                        }
+                      },
+                      icon: Icon(Icons.photo_library),
+                      label: Text('SELECCIONAR IMAGEN DE GALERÍA'),
+                    ),
+                    SizedBox(height: 8),
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        if (imagePath != null) {
+                          subirImagen(widget.libro.id, imagePath);
+                        } else {
+                          Fluttertoast.showToast(
+                            msg: "AGREGE UNA IMAGEN PARA GUARDAR",
+                            toastLength: Toast.LENGTH_LONG,
+                            gravity: ToastGravity.BOTTOM,
+                            timeInSecForIosWeb: 4,
+                            backgroundColor: Colors.grey[700],
+                            textColor: Colors.white,
+                          );
+                        }
+                      },
+                      icon: Icon(Icons.save),
+                      label: Text('GUARDAR'),
+                    ),
+                    SizedBox(height: 8),
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => LlibrosScreen(),
+                          ),
+                        );
+                      },
+                      icon: Icon(Icons.cancel),
+                      label: Text('CANCELAR'),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -151,7 +348,7 @@ class _DetalleLibroScreenState extends State<DetalleLibroScreen> {
                 primary: Colors.green[400],
               ),
               onPressed: () {
-                //crearPrestamo();
+                _dialogoimagen();
               },
               child: const Text(
                 "Agregar Imagen",

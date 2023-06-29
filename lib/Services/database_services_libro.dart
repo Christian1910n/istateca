@@ -22,19 +22,24 @@ class Database_services_libro {
   }
 
   static Future<List<Libro>> getLibronombre(String titulo) async {
-    var url =
-        Uri.parse(baseUrl + '/libro/buscarxcoincidencia?parametro=$titulo');
-    http.Response response = await http.get(
-      url,
-      headers: headers,
-    );
-    print(response.statusCode);
-    List responseList = jsonDecode(response.body);
-    List<Libro> libros = [];
-    for (var item in responseList) {
-      libros.add(Libro.fromJson(item));
+    try {
+      var url =
+          Uri.parse(baseUrl + '/libro/buscarxcoincidencia?parametro=$titulo');
+      http.Response response = await http.get(
+        url,
+        headers: headers,
+      );
+      print(response.statusCode);
+      List responseList = jsonDecode(response.body);
+      List<Libro> libros = [];
+      for (var item in responseList) {
+        libros.add(Libro.fromJson(item));
+      }
+      return libros;
+    } catch (error) {
+      print("error $error");
     }
-    return libros;
+    return List.empty();
   }
 
   static Future<http.Response> updateLibro(int id) async {
