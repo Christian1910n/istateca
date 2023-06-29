@@ -30,10 +30,7 @@ class _DevolucionLibroState extends State<DevolucionLibro> {
   @override
   void initState() {
     prestamo = widget.prestamo;
-    //prestamo.fechaDevolucion = DateTime.now().toIso8601String();
     persona = widget.prestamo.idSolicitante?.id_persona ?? 0;
-    print("PERSONS ID ");
-    print(persona);
     if (prestamo.estadoLibro == 0) {
       selectedValue = 0;
     }
@@ -277,7 +274,7 @@ class _DevolucionLibroState extends State<DevolucionLibro> {
                           return AlertDialog(
                             title: Text('Error'),
                             content:
-                                Text('Debe seleccionar una opción válida.'),
+                                Text('Debe seleccionar el estado del libro'),
                             actions: [
                               TextButton(
                                 child: Text('OK'),

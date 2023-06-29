@@ -9,6 +9,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:http/http.dart' as http;
 import 'package:lottie/lottie.dart';
 import 'package:proyectoistateca/Screens/devolucion_libro_screen.dart';
+import 'package:proyectoistateca/Screens/restitucion_libro.dart';
 
 import '../widgets/widget_menu_lateral.dart';
 
@@ -324,6 +325,14 @@ class _SolicitudesLibrosState extends State<SolicitudesLibros>
                               prestamo: prestamosFiltrados[index]),
                         ),
                       );
+                    } else if (prestamosFiltrados[index].estadoPrestamo == 4) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => RestitucionLibro(
+                              prestamo: prestamosFiltrados[index]),
+                        ),
+                      );
                     }
                   },
                   child: Container(
@@ -360,6 +369,16 @@ class _SolicitudesLibrosState extends State<SolicitudesLibros>
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => DevolucionLibro(
+                                        prestamo: prestamosFiltrados[index]),
+                                  ),
+                                );
+                              } else if (prestamosFiltrados[index]
+                                      .estadoPrestamo ==
+                                  4) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => RestitucionLibro(
                                         prestamo: prestamosFiltrados[index]),
                                   ),
                                 );
