@@ -4,6 +4,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:proyectoistateca/Screens/lista_libros_screen.dart';
 import 'package:proyectoistateca/Screens/lista_sugerencias.dart';
 import 'package:proyectoistateca/Screens/login_page.dart';
+import 'package:proyectoistateca/Screens/perfil_screen.dart';
 import 'package:proyectoistateca/Screens/solicitud_libro_screen.dart';
 import 'package:proyectoistateca/Screens/solicitudes_estudiantes_screen.dart';
 import 'package:proyectoistateca/Screens/solicitudes_screen.dart';
@@ -73,7 +74,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: ListTile(
-                    leading: Icon(Icons.book,
+                    leading: const Icon(Icons.book,
                         color: Color.fromARGB(255, 28, 105, 183)),
                     title: const Text(
                       'Lista de Libros',
@@ -89,7 +90,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     },
                   ),
                 ),
-                const SizedBox(height: 10),
+                if (rol == "BIBLIOTECARIO" || rol == "ADMIN")
+                  const SizedBox(height: 10),
                 if (rol == "BIBLIOTECARIO" || rol == "ADMIN")
                   Container(
                     decoration: BoxDecoration(
@@ -100,7 +102,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: ListTile(
-                      leading: Icon(Icons.book,
+                      leading: const Icon(Icons.request_quote,
                           color: Color.fromARGB(255, 28, 105, 183)),
                       title: const Text(
                         'Lista de Solicitudes de libros',
@@ -116,35 +118,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       },
                     ),
                   ),
-                const SizedBox(height: 10),
-                if (rol == "BIBLIOTECARIO" || rol == "ADMIN")
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.black,
-                        width: 3.0,
-                      ),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: ListTile(
-                      leading: Icon(Icons.book,
-                          color: Color.fromARGB(255, 28, 105, 183)),
-                      title: const Text(
-                        'Ver Sugerencias',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16.0,
-                        ),
-                      ),
-                      onTap: () {
-                        setState(() {
-                          Navigator.pushNamed(
-                              context, ListasugerenciasScreen.id);
-                        });
-                      },
-                    ),
-                  ),
-                const SizedBox(height: 10),
+                if (rol == "ADMIN") const SizedBox(height: 10),
                 if (rol == "ADMIN")
                   Container(
                     decoration: BoxDecoration(
@@ -155,7 +129,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: ListTile(
-                      leading: Icon(Icons.book,
+                      leading: const Icon(Icons.app_registration,
                           color: Color.fromARGB(255, 28, 105, 183)),
                       title: const Text(
                         'Registrar Bibliotecario',
@@ -181,7 +155,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: ListTile(
-                    leading: Icon(Icons.book,
+                    leading: const Icon(Icons.my_library_books_sharp,
                         color: Color.fromARGB(255, 28, 105, 183)),
                     title: const Text(
                       'Mis Solicitudes',
@@ -197,6 +171,61 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     },
                   ),
                 ),
+                const SizedBox(height: 10),
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.black,
+                      width: 3.0,
+                    ),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: ListTile(
+                    leading: const Icon(Icons.person,
+                        color: Color.fromARGB(255, 28, 105, 183)),
+                    title: const Text(
+                      'Mi Perfil',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16.0,
+                      ),
+                    ),
+                    onTap: () {
+                      setState(() {
+                        Navigator.pushNamed(context, PerfilUsuario.id);
+                      });
+                    },
+                  ),
+                ),
+                if (rol == "BIBLIOTECARIO" || rol == "ADMIN")
+                  const SizedBox(height: 10),
+                if (rol == "BIBLIOTECARIO" || rol == "ADMIN")
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.black,
+                        width: 3.0,
+                      ),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: ListTile(
+                      leading: const Icon(Icons.settings_suggest,
+                          color: Color.fromARGB(255, 28, 105, 183)),
+                      title: const Text(
+                        'Ver Sugerencias',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16.0,
+                        ),
+                      ),
+                      onTap: () {
+                        setState(() {
+                          Navigator.pushNamed(
+                              context, ListasugerenciasScreen.id);
+                        });
+                      },
+                    ),
+                  ),
               ],
             ),
           ),
