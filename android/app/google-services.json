@@ -22,6 +22,14 @@
           }
         },
         {
+          "client_id": "1082474020666-orkj4gr7n44vghtade7sok66mrqnbpv3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.proyectoistateca",
+            "certificate_hash": "96f579c4cdcf5f6129f1d8ab499bf1faecd32614"
+          }
+        },
+        {
           "client_id": "1082474020666-uih9kceakovf7fesvrm2d3potsmdijtq.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
