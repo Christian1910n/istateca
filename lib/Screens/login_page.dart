@@ -181,7 +181,35 @@ class _LoginPageState extends State<LoginPage> {
         setState(() {
           _loading = false;
         });
+        modificardevice();
       }
+    }
+  }
+
+  Future<void> modificardevice() async {
+    Map data = {
+      "device": tokennotificacion,
+    };
+    var body = json.encode(data);
+    print("Nuevo Json: $body");
+
+    try {
+      var url = "$baseUrl/persona/editar/${personalog.id_persona}";
+      print(url);
+
+      final response = await http.put(
+        Uri.parse(url),
+        headers: headers,
+        body: body,
+      );
+      if (response.statusCode == 200) {
+        print('DEVICE AGREGADO ${response.body}');
+      } else {
+        print('Error al agregar device ${response.statusCode}');
+        print('ERROR ${response.body}');
+      }
+    } catch (error) {
+      print("Error device $error");
     }
   }
 

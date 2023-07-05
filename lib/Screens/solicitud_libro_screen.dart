@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:proyectoistateca/Screens/solicitudes_screen.dart';
 import 'package:proyectoistateca/Services/globals.dart';
@@ -317,6 +318,23 @@ class _BookRequestViewState extends State<BookRequestView> {
                           '${_selectedDate.year}-${_selectedDate.month}-${_selectedDate.day}'),
                       trailing: const Icon(Icons.calendar_today),
                       onTap: _selectDate,
+                    ),
+                    const Text(
+                      'Calificación del Usuario:',
+                      style: TextStyle(
+                          fontSize: 18.0, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 8.0),
+                    RatingBarIndicator(
+                      rating: personalog.calificacion.toDouble(),
+                      itemBuilder: (context, _) => const Icon(
+                        Icons.star,
+                        color: Colors.amber,
+                      ),
+                      itemCount: 5,
+                      itemSize: 40.0,
+                      unratedColor: Colors.grey,
+                      direction: Axis.horizontal,
                     ),
                     const SizedBox(height: 16.0),
                     Row(

@@ -9,6 +9,7 @@ import 'package:proyectoistateca/Screens/login_page.dart';
 import 'package:proyectoistateca/Screens/perfil_screen.dart';
 import 'package:proyectoistateca/Screens/solicitudes_screen.dart';
 import 'package:proyectoistateca/Screens/sugerencias_screen.dart';
+import 'package:proyectoistateca/Services/globals.dart';
 import 'package:proyectoistateca/models/tipos_data.dart';
 import 'package:proyectoistateca/widgets/SplashScreen.dart';
 import 'package:proyectoistateca/Screens/solicitudes_estudiantes_screen.dart';
@@ -44,6 +45,9 @@ class _MyAppState extends State<MyApp> {
     // Obtén el token de registro de FCM
     FirebaseMessaging.instance.getToken().then((token) {
       print('Token notificaciones: $token');
+      setState(() {
+        tokennotificacion = token!;
+      });
     });
 
     // Maneja la notificación inicial si la aplicación se abrió mediante una notificación
@@ -102,7 +106,7 @@ class _MyAppState extends State<MyApp> {
           LoginPage.id: (context) => const LoginPage(),
           LlibrosScreen.id: (context) => LlibrosScreen(),
           SolicitudesLibros.id: (context) => SolicitudesLibros(),
-          Regisbibliotecario.id: (context) =>  Regisbibliotecario(),
+          Regisbibliotecario.id: (context) => Regisbibliotecario(),
           SugerenciasScreen.id: (context) => SugerenciasScreen(),
           SolicitudesEstudiante.id: (context) => SolicitudesEstudiante(),
           ListasugerenciasScreen.id: ((context) =>

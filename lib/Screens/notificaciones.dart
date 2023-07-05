@@ -2,6 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:proyectoistateca/Screens/lista_libros_screen.dart';
+import 'package:proyectoistateca/Screens/solicitud_libro_screen.dart';
+import 'package:proyectoistateca/Screens/solicitudes_screen.dart';
 import 'package:proyectoistateca/Services/globals.dart';
 import 'package:proyectoistateca/models/notificacion.dart';
 
@@ -147,6 +150,21 @@ class _NotificacionesPageState extends State<NotificacionesPage> {
               onTap: () {
                 if (notificacion.visto == false) {
                   marcarleido(notificacion.id);
+                }
+
+                if (notificacion.mensaje == 1 &&
+                    notificacion.prestamo.estadoPrestamo == 1) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          BookRequestView(prestamo: notificacion.prestamo),
+                    ),
+                  );
+                } else if (notificacion.mensaje == 1) {
+                  Navigator.pushNamed(context, SolicitudesLibros.id);
+                } else {
+                  Navigator.pushNamed(context, LlibrosScreen.id);
                 }
               },
             );

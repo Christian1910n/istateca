@@ -15,6 +15,7 @@ String rol = 'BIBLIOTECARIO';
 String correo = 'elbichonoinciosesion@tecazuay.edu.ec';
 String nombre = 'hola';
 String tokenacceso = '';
+String tokennotificacion = '';
 int validar = 0;
 late Persona personalog;
 String foto =
