@@ -3,12 +3,13 @@ import 'dart:convert';
 import 'package:proyectoistateca/models/authorities.dart';
 
 class Persona {
-  int id_persona;
+  int? id_persona;
   int fenixId;
   String cedula;
   String correo;
   String nombres;
   String apellidos;
+  String direccion;
   int tipo;
   String celular;
   int calificacion;
@@ -21,6 +22,7 @@ class Persona {
     required this.correo,
     required this.nombres,
     required this.apellidos,
+    required this.direccion,
     required this.tipo,
     required this.celular,
     required this.calificacion,
@@ -35,6 +37,7 @@ class Persona {
       correo: utf8.decode(json['correo'].toString().codeUnits) ?? '',
       nombres: utf8.decode(json['nombres'].toString().codeUnits) ?? '',
       apellidos: utf8.decode(json['apellidos'].toString().codeUnits) ?? '',
+      direccion: utf8.decode(json['direccion'].toString().codeUnits) ?? '',
       tipo: json['tipo'] as int? ?? 0,
       celular: utf8.decode(json['celular'].toString().codeUnits) ?? '',
       calificacion: json['calificacion'] as int? ?? 0,
@@ -50,6 +53,7 @@ class Persona {
       'correo': correo,
       'nombres': nombres,
       'apellidos': apellidos,
+      'direccion': direccion,
       'tipo': tipo,
       'celular': celular,
       'calificacion': calificacion,

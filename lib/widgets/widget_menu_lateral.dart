@@ -6,6 +6,7 @@ import 'package:proyectoistateca/Screens/lista_sugerencias.dart';
 import 'package:proyectoistateca/Screens/login_page.dart';
 import 'package:proyectoistateca/Screens/notificaciones.dart';
 import 'package:proyectoistateca/Screens/perfil_screen.dart';
+import 'package:proyectoistateca/Screens/regis_bibliotecario.dart';
 import 'package:proyectoistateca/Screens/solicitud_libro_screen.dart';
 import 'package:proyectoistateca/Screens/solicitudes_estudiantes_screen.dart';
 import 'package:proyectoistateca/Screens/solicitudes_screen.dart';
@@ -173,7 +174,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       ),
                       onTap: () {
                         setState(() {
-                          Navigator.pushNamed(context, SolicitudesLibros.id);
+                          Navigator.pushNamed(context, Regisbibliotecario.id);
                         });
                       },
                     ),

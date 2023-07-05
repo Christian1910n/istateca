@@ -14,6 +14,8 @@ import 'package:proyectoistateca/widgets/SplashScreen.dart';
 import 'package:proyectoistateca/Screens/solicitudes_estudiantes_screen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
+import 'Screens/regis_bibliotecario.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -100,6 +102,7 @@ class _MyAppState extends State<MyApp> {
           LoginPage.id: (context) => const LoginPage(),
           LlibrosScreen.id: (context) => LlibrosScreen(),
           SolicitudesLibros.id: (context) => SolicitudesLibros(),
+          Regisbibliotecario.id: (context) =>  Regisbibliotecario(),
           SugerenciasScreen.id: (context) => SugerenciasScreen(),
           SolicitudesEstudiante.id: (context) => SolicitudesEstudiante(),
           ListasugerenciasScreen.id: ((context) =>
