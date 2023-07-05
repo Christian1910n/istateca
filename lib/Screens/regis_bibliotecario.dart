@@ -84,55 +84,49 @@ class _RegisbibliotecarioState extends State<Regisbibliotecario> {
 
   void registrarComoBibliotecario() async {
     if (persona != null) {
-      try {
-        final response = await http.post(
-          Uri.parse('$baseUrl/persona/registrardocenteadmin?rol=ROLE_BLIB'),
-          headers: headers,
-          body: json.encode(persona),
-        );
+      final response = await http.post(
+        Uri.parse('$baseUrl/persona/registrardocenteadmin?rol=ROLE_BLIB'),
+        headers: headers,
+        body: json.encode(persona),
+      );
 
-        if (response.statusCode == 200) {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: const Text('Registro exitoso'),
-                content: Text(
-                    'Registro exitoso para ${persona!.cedula} como bibliotecario.'),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Text('Cerrar'),
-                  ),
-                ],
-              );
-            },
-          );
-        } else {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: const Text('Error'),
-                content:
-                    const Text('Ocurrió un error al realizar el registro.'),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Text('Cerrar'),
-                  ),
-                ],
-              );
-            },
-          );
-        }
-      } catch (e) {
-        // Capturar y manejar la excepción aquí
-        print('Error al registrar como bibliotecario: $e');
+      if (response.statusCode == 200) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Registro exitoso'),
+              content: Text(
+                  'Registro exitoso para ${persona!.cedula} como bibliotecario.'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Cerrar'),
+                ),
+              ],
+            );
+          },
+        );
+      } else {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Error'),
+              content: const Text('Ocurrió un error al realizar el registro.'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Cerrar'),
+                ),
+              ],
+            );
+          },
+        );
       }
     }
   }
@@ -143,7 +137,6 @@ class _RegisbibliotecarioState extends State<Regisbibliotecario> {
     void Function(String) onChanged,
   ) {
     bool isEditable = title != 'Cédula';
-    TextEditingController controller = TextEditingController(text: value);
 
     return ListTile(
       title: Text(title),
@@ -151,11 +144,8 @@ class _RegisbibliotecarioState extends State<Regisbibliotecario> {
         width: 250.0,
         child: isEditable
             ? TextFormField(
-                controller: controller,
+                initialValue: value,
                 onChanged: onChanged,
-                onEditingComplete: () {
-                  onChanged(controller.text);
-                },
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
                 ),
