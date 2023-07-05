@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -137,6 +138,26 @@ class _RegisbibliotecarioState extends State<Regisbibliotecario> {
     void Function(String) onChanged,
   ) {
     bool isEditable = title != 'Cédula';
+    TextInputType keyboardType;
+    List<TextInputFormatter> inputFormatters;
+
+    if (isEditable) {
+      if (title == 'Correo') {
+        keyboardType = TextInputType.emailAddress;
+        inputFormatters = [];
+      } else if (title == 'Celular') {
+        keyboardType = TextInputType.phone;
+        inputFormatters = [
+          FilteringTextInputFormatter.digitsOnly,
+        ];
+      } else {
+        keyboardType = TextInputType.text;
+        inputFormatters = [];
+      }
+    } else {
+      keyboardType = TextInputType.text;
+      inputFormatters = [];
+    }
 
     return ListTile(
       title: Text(title),
@@ -146,6 +167,8 @@ class _RegisbibliotecarioState extends State<Regisbibliotecario> {
             ? TextFormField(
                 initialValue: value,
                 onChanged: onChanged,
+                keyboardType: keyboardType,
+                inputFormatters: inputFormatters,
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
                 ),
@@ -180,6 +203,7 @@ class _RegisbibliotecarioState extends State<Regisbibliotecario> {
                     decoration: const InputDecoration(
                       labelText: 'Ingrese la Cédula del docente',
                     ),
+                    keyboardType: TextInputType.number,
                     onChanged: (value) {
                       setState(() {
                         _searchTerm = value;
