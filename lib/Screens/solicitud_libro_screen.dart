@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:proyectoistateca/Screens/solicitudes_screen.dart';
 import 'package:proyectoistateca/Services/globals.dart';
 import 'package:proyectoistateca/models/carrera.dart';
@@ -113,6 +114,51 @@ class _BookRequestViewState extends State<BookRequestView> {
         print('Prestamo modificado ${response.body}');
         Map<String, dynamic> jsonResponse = json.decode(response.body);
         Prestamo prestamo = Prestamo.fromJson(jsonResponse);
+      } else {
+        print('Error al editar el prestamo: ${response.statusCode}');
+        print('ERROR ${response.body}');
+      }
+    } catch (error) {
+      print("Error editar prestamo $error");
+    } finally {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => SolicitudesLibros()),
+      );
+    }
+  }
+
+  Future<void> rechazarprestamo() async {
+    Map data = {
+      "estadoPrestamo": 7,
+    };
+    var body = json.encode(data);
+    print("Nuevo Json: $body");
+
+    try {
+      var url = "$baseUrl/prestamo/editar/${widget.prestamo.id_prestamo}";
+      print(url);
+
+      final prestamoJson = jsonEncode(prestamo);
+      print(prestamoJson);
+
+      final response = await http.put(
+        Uri.parse(url),
+        headers: headers,
+        body: body,
+      );
+      if (response.statusCode == 200) {
+        print('Prestamo modificado ${response.body}');
+        Map<String, dynamic> jsonResponse = json.decode(response.body);
+        Prestamo prestamo = Prestamo.fromJson(jsonResponse);
+        Fluttertoast.showToast(
+          msg: "PRESTAMO RECHAZADO",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 4,
+          backgroundColor: Colors.grey[700],
+          textColor: Colors.white,
+        );
       } else {
         print('Error al editar el prestamo: ${response.statusCode}');
         print('ERROR ${response.body}');
@@ -281,6 +327,12 @@ class _BookRequestViewState extends State<BookRequestView> {
                             modificarprestamo();
                           },
                           child: const Text('Guardar'),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            rechazarprestamo();
+                          },
+                          child: const Text('Rechazar'),
                         ),
                       ],
                     ),

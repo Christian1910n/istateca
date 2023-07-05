@@ -143,25 +143,25 @@ class _LoginPageState extends State<LoginPage> {
             rol = "ESTUDIANTE";
           });
           // ignore: use_build_context_synchronously
-          Navigator.pushNamed(context, HomeScreen.id);
+          Navigator.pushNamed(context, LlibrosScreen.id);
         } else if (authorities == 'ROLE_BLIB') {
           setState(() {
             rol = "BIBLIOTECARIO";
           });
           // ignore: use_build_context_synchronously
-          Navigator.pushNamed(context, HomeScreen.id);
+          Navigator.pushNamed(context, LlibrosScreen.id);
         } else if (authorities == 'ROLE_ADMIN') {
           setState(() {
             rol = "ADMIN";
           });
           // ignore: use_build_context_synchronously
-          Navigator.pushNamed(context, HomeScreen.id);
+          Navigator.pushNamed(context, LlibrosScreen.id);
         } else if (authorities == 'ROLE_DOCEN') {
           setState(() {
             rol = "DOCENTE";
           });
           // ignore: use_build_context_synchronously
-          Navigator.pushNamed(context, HomeScreen.id);
+          Navigator.pushNamed(context, LlibrosScreen.id);
         }
       } else {
         print('Error login: ${response.statusCode}');

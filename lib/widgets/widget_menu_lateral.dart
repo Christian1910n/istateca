@@ -4,6 +4,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:proyectoistateca/Screens/lista_libros_screen.dart';
 import 'package:proyectoistateca/Screens/lista_sugerencias.dart';
 import 'package:proyectoistateca/Screens/login_page.dart';
+import 'package:proyectoistateca/Screens/notificaciones.dart';
 import 'package:proyectoistateca/Screens/perfil_screen.dart';
 import 'package:proyectoistateca/Screens/solicitud_libro_screen.dart';
 import 'package:proyectoistateca/Screens/solicitudes_estudiantes_screen.dart';
@@ -58,6 +59,38 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   style: const TextStyle(color: Colors.white, fontSize: 13.0),
                 ),
               ],
+            ),
+          ),
+          Align(
+            alignment: Alignment.topRight,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: FloatingActionButton(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text(
+                          'Notificaciones',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        content: NotificacionesPage(),
+                        backgroundColor: Colors.black12,
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: Text('Cerrar'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+                child: Icon(Icons.notifications),
+              ),
             ),
           ),
           Expanded(
