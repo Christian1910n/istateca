@@ -57,25 +57,6 @@ class _RegisbibliotecarioState extends State<Regisbibliotecario> {
           },
         );
       }
-    } else {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Error'),
-            content:
-                const Text('Solo los profesores pueden ser bibliotecarios.'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Text('Cerrar'),
-              ),
-            ],
-          );
-        },
-      );
     }
 
     setState(() {
@@ -102,6 +83,12 @@ class _RegisbibliotecarioState extends State<Regisbibliotecario> {
               actions: [
                 TextButton(
                   onPressed: () {
+                    // Borrar todo el contenido
+                    setState(() {
+                      persona = null;
+                      _searchTerm = '';
+                      _searchController.clear();
+                    });
                     Navigator.pop(context);
                   },
                   child: const Text('Cerrar'),
@@ -214,9 +201,30 @@ class _RegisbibliotecarioState extends State<Regisbibliotecario> {
                 const SizedBox(width: 20.0),
                 ElevatedButton(
                   onPressed: () {
-                    cedula = _searchTerm;
-                    searchPersona();
-                    _searchController.clear();
+                    if (_searchTerm.isEmpty) {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text('Error'),
+                            content:
+                                const Text('Por favor, ingrese una cédula.'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Text('Cerrar'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    } else {
+                      cedula = _searchTerm;
+                      searchPersona();
+                      _searchController.clear();
+                    }
                   },
                   child: const Text('Buscar'),
                 ),
