@@ -14,6 +14,7 @@ import 'package:proyectoistateca/models/tipos_data.dart';
 import 'package:proyectoistateca/widgets/SplashScreen.dart';
 import 'package:proyectoistateca/Screens/solicitudes_estudiantes_screen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import 'Screens/regis_bibliotecario.dart';
 
@@ -30,6 +31,8 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   bool _isShowingSplashScreen = true;
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
 
   Future<void> inicializarfirebase() async {
     try {
@@ -39,6 +42,18 @@ class _MyAppState extends State<MyApp> {
     } finally {
       notificaciones();
     }
+  }
+
+  void initializeNotifications() async {
+    final AndroidInitializationSettings initializationSettingsAndroid =
+        AndroidInitializationSettings('@mipmap/ic_launcher');
+
+    final InitializationSettings initializationSettings =
+        InitializationSettings(
+      android: initializationSettingsAndroid,
+    );
+
+    await flutterLocalNotificationsPlugin.initialize(initializationSettings);
   }
 
   void notificaciones() {
@@ -65,15 +80,11 @@ class _MyAppState extends State<MyApp> {
       String mensaje =
           notification!.title.toString() + '\n' + notification.body.toString();
 
-      // Muestra una alerta con el contenido de la notificación
-      Fluttertoast.showToast(
-        msg: mensaje,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 4,
-        backgroundColor: Colors.grey[700],
-        textColor: Colors.white,
-      );
+      showNotification(
+          notification.title.toString(), notification.body.toString());
+
+      ///
+      ///
     });
 
     // Maneja las notificaciones cuando la aplicación se abre desde una notificación
@@ -82,9 +93,27 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  Future<void> showNotification(String title, String body) async {
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails('your channel id', 'your channel name',
+            importance: Importance.max,
+            priority: Priority.high,
+            showWhen: false);
+    const NotificationDetails platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
+    await flutterLocalNotificationsPlugin.show(
+      0,
+      title,
+      body,
+      platformChannelSpecifics,
+      payload: 'item x',
+    );
+  }
+
   @override
   void initState() {
     inicializarfirebase();
+    initializeNotifications();
     super.initState();
 
     Future.delayed(const Duration(milliseconds: 4000), () {
