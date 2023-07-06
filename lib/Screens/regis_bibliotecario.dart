@@ -72,6 +72,10 @@ class _RegisbibliotecarioState extends State<Regisbibliotecario> {
         body: json.encode(persona),
       );
 
+      setState(() {
+        isLoading = false;
+      });
+
       if (response.statusCode == 200) {
         showDialog(
           context: context,
@@ -79,7 +83,8 @@ class _RegisbibliotecarioState extends State<Regisbibliotecario> {
             return AlertDialog(
               title: const Text('Registro exitoso'),
               content: Text(
-                  'Registro exitoso para ${persona!.cedula} como bibliotecario.'),
+                'Registro exitoso para ${persona!.cedula} como bibliotecario.',
+              ),
               actions: [
                 TextButton(
                   onPressed: () {
