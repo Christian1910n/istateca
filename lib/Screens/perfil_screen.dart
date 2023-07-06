@@ -44,7 +44,7 @@ class _PerfilUsuarioState extends State<PerfilUsuario> {
               style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
             ),
             Text(
-              nombre,
+              '${personalog.nombres} ${personalog.apellidos}',
               style: const TextStyle(fontSize: 18.0),
             ),
             const SizedBox(height: 20.0),
@@ -62,7 +62,16 @@ class _PerfilUsuarioState extends State<PerfilUsuario> {
               style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
             ),
             Text(
-              correo,
+              personalog.correo,
+              style: const TextStyle(fontSize: 18.0),
+            ),
+            const SizedBox(height: 20.0),
+            const Text(
+              'Dirección:',
+              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+            ),
+            Text(
+              personalog.direccion,
               style: const TextStyle(fontSize: 18.0),
             ),
             const SizedBox(height: 20.0),
