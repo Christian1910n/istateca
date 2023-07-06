@@ -86,14 +86,36 @@ class _BookRequestViewState extends State<BookRequestView> {
     }
   }
 
+  DateTime getFutureDateWithoutWeekends(int days) {
+    final DateTime currentDate = DateTime.now();
+    int count = 0;
+    DateTime futureDate = currentDate;
+
+    while (count < days) {
+      futureDate = futureDate.add(const Duration(days: 1));
+
+      // Si es sábado o domingo, no se cuenta como día adicional
+      if (futureDate.weekday == DateTime.saturday ||
+          futureDate.weekday == DateTime.sunday) {
+        continue;
+      }
+
+      count++;
+    }
+
+    return futureDate;
+  }
+
   DateTime _selectedDate = DateTime.now();
+
   Future<void> modificarprestamo() async {
     Map data = {
       "estadoPrestamo": 2,
       "idEntrega": {"id": personalog.id_persona},
       "documentoHabilitante": prestamo.documentoHabilitante,
       "tipoPrestamo": prestamo.tipoPrestamo,
-      "fechaMaxima": prestamo.fechaMaxima,
+      "fechaMaxima":
+          _selectedDate.add(const Duration(days: 1)).toIso8601String(),
       "carrera": {"id": prestamo.carrera!.id_carrera}
     };
     var body = json.encode(data);
@@ -174,21 +196,6 @@ class _BookRequestViewState extends State<BookRequestView> {
     }
   }
 
-  void _selectDate() async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: _selectedDate,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
-    );
-    if (picked != null && picked != _selectedDate) {
-      setState(() {
-        _selectedDate = picked;
-        prestamo.fechaMaxima = picked.add(const Duration(days: 1)).toString();
-      });
-    }
-  }
-
   @override
   void initState() {
     if (widget.prestamo.tipoPrestamo == 1) {
@@ -198,6 +205,7 @@ class _BookRequestViewState extends State<BookRequestView> {
     }
     setState(() {
       prestamo = widget.prestamo;
+      _selectedDate = getFutureDateWithoutWeekends(5);
     });
 
     print(widget.prestamo.libro!.titulo);
@@ -312,13 +320,16 @@ class _BookRequestViewState extends State<BookRequestView> {
                           labelText: 'Documento Habilitante'),
                     ),
                     const SizedBox(height: 16.0),
-                    ListTile(
-                      title: const Text('Fecha Maxima de Devolución'),
-                      subtitle: Text(
-                          '${_selectedDate.year}-${_selectedDate.month}-${_selectedDate.day}'),
-                      trailing: const Icon(Icons.calendar_today),
-                      onTap: _selectDate,
+                    const Text(
+                      'Fecha Limite de Devolucion:',
+                      style: TextStyle(
+                          fontSize: 18.0, fontWeight: FontWeight.bold),
                     ),
+                    Text(
+                      '${_selectedDate.year}-${_selectedDate.month}-${_selectedDate.day}',
+                      style: const TextStyle(fontSize: 18.0),
+                    ),
+                    const SizedBox(height: 16.0),
                     const Text(
                       'Calificación del Usuario:',
                       style: TextStyle(
@@ -326,7 +337,8 @@ class _BookRequestViewState extends State<BookRequestView> {
                     ),
                     const SizedBox(height: 8.0),
                     RatingBarIndicator(
-                      rating: personalog.calificacion.toDouble(),
+                      rating: widget.prestamo.idSolicitante!.calificacion
+                          .toDouble(),
                       itemBuilder: (context, _) => const Icon(
                         Icons.star,
                         color: Colors.amber,

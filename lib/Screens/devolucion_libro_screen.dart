@@ -207,7 +207,7 @@ class _DevolucionLibroState extends State<DevolucionLibro> {
                 ),
                 DropdownMenuItem<int>(
                   value: 3,
-                  child: Text('Malo'),
+                  child: Text('Malo o Perdida'),
                 ),
               ],
               onChanged: (value) {

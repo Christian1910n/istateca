@@ -14,20 +14,21 @@ class Persona {
   String celular;
   int calificacion;
   bool activo;
+  String device;
 
-  Persona({
-    required this.id_persona,
-    required this.fenixId,
-    required this.cedula,
-    required this.correo,
-    required this.nombres,
-    required this.apellidos,
-    required this.direccion,
-    required this.tipo,
-    required this.celular,
-    required this.calificacion,
-    required this.activo,
-  });
+  Persona(
+      {required this.id_persona,
+      required this.fenixId,
+      required this.cedula,
+      required this.correo,
+      required this.nombres,
+      required this.apellidos,
+      required this.direccion,
+      required this.tipo,
+      required this.celular,
+      required this.calificacion,
+      required this.activo,
+      required this.device});
 
   factory Persona.fromJson(Map<String, dynamic> json) {
     return Persona(
@@ -42,6 +43,7 @@ class Persona {
       celular: utf8.decode(json['celular'].toString().codeUnits) ?? '',
       calificacion: json['calificacion'] as int? ?? 0,
       activo: json['activo'] as bool? ?? false,
+      device: utf8.decode(json['device'].toString().codeUnits) ?? '',
     );
   }
 
@@ -58,6 +60,7 @@ class Persona {
       'celular': celular,
       'calificacion': calificacion,
       'activo': activo,
+      'device': device
     };
   }
 
