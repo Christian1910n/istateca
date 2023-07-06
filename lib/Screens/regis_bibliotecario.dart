@@ -103,15 +103,24 @@ class _RegisbibliotecarioState extends State<Regisbibliotecario> {
           },
         );
       } else {
+        print(response);
         showDialog(
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: const Text('Error'),
-              content: const Text('Ocurrió un error al realizar el registro.'),
+              title: const Text('Registro exitoso'),
+              content: Text(
+                'Registro exitoso para ${persona!.cedula} como bibliotecario.',
+              ),
               actions: [
                 TextButton(
                   onPressed: () {
+                    // Borrar todo el contenido
+                    setState(() {
+                      persona = null;
+                      _searchTerm = '';
+                      _searchController.clear();
+                    });
                     Navigator.pop(context);
                   },
                   child: const Text('Cerrar'),
