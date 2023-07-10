@@ -2,8 +2,9 @@ import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:proyectoistateca/Screens/home_screen.dart';
+import 'package:proyectoistateca/Screens/editar_usuario.dart';
 import 'package:proyectoistateca/Screens/lista_libros_screen.dart';
 import 'package:proyectoistateca/Services/globals.dart';
 import 'package:http/http.dart' as http;
@@ -52,7 +53,6 @@ class _LoginPageState extends State<LoginPage> {
     } catch (e) {
       print('Error en el el Metodo: ${e.toString()}');
     } finally {
-      print("hola");
       verificarCredenciales();
     }
     return null;
@@ -93,6 +93,14 @@ class _LoginPageState extends State<LoginPage> {
       }
     } catch (error) {
       print("Error verificando $error");
+      Fluttertoast.showToast(
+        msg: "OCURRIO UN ERROR INESPERADO: $error",
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 4,
+        backgroundColor: Colors.grey[700],
+        textColor: Colors.white,
+      );
     } finally {
       setState(() {
         _loading = false;
@@ -138,30 +146,62 @@ class _LoginPageState extends State<LoginPage> {
         final decodedToken = JwtDecoder.decode(token);
         final authorities = decodedToken['authorities'];
         print("El rol es $authorities");
-        if (authorities == 'ROLE_STUD') {
-          setState(() {
-            rol = "ESTUDIANTE";
-          });
+        final Persona p = Persona.fromJson(jsons);
+
+        print(p.celular);
+        print(p.direccion);
+        // ignore: use_build_context_synchronously
+        if ((p.celular == "null" ||
+            p.direccion == "null" ||
+            p.celular.isEmpty ||
+            p.direccion.isEmpty)) {
+          // Es necesario completar los datos antes de iniciar sesión
           // ignore: use_build_context_synchronously
-          Navigator.pushNamed(context, LlibrosScreen.id);
-        } else if (authorities == 'ROLE_BLIB') {
-          setState(() {
-            rol = "BIBLIOTECARIO";
-          });
-          // ignore: use_build_context_synchronously
-          Navigator.pushNamed(context, LlibrosScreen.id);
-        } else if (authorities == 'ROLE_ADMIN') {
-          setState(() {
-            rol = "ADMIN";
-          });
-          // ignore: use_build_context_synchronously
-          Navigator.pushNamed(context, LlibrosScreen.id);
-        } else if (authorities == 'ROLE_DOCEN') {
-          setState(() {
-            rol = "DOCENTE";
-          });
-          // ignore: use_build_context_synchronously
-          Navigator.pushNamed(context, LlibrosScreen.id);
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                content: const Text(
+                    'Es necesario completar unos datos antes de iniciar sesión'),
+                actions: [
+                  TextButton(
+                    child: const Text('Aceptar'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      Navigator.pushNamed(context, EditarUsuarioScreen.id);
+                    },
+                  ),
+                ],
+              );
+            },
+          );
+        } else {
+          // Los datos están completos, procede con la navegación según el rol
+          if (authorities == 'ROLE_STUD') {
+            setState(() {
+              rol = "ESTUDIANTE";
+            });
+            // ignore: use_build_context_synchronously
+            Navigator.pushNamed(context, LlibrosScreen.id);
+          } else if (authorities == 'ROLE_BLIB') {
+            setState(() {
+              rol = "BIBLIOTECARIO";
+            });
+            // ignore: use_build_context_synchronously
+            Navigator.pushNamed(context, LlibrosScreen.id);
+          } else if (authorities == 'ROLE_ADMIN') {
+            setState(() {
+              rol = "ADMIN";
+            });
+            // ignore: use_build_context_synchronously
+            Navigator.pushNamed(context, LlibrosScreen.id);
+          } else if (authorities == 'ROLE_DOCEN') {
+            setState(() {
+              rol = "DOCENTE";
+            });
+            // ignore: use_build_context_synchronously
+            Navigator.pushNamed(context, LlibrosScreen.id);
+          }
         }
       } else {
         print('Error login: ${response.statusCode}');

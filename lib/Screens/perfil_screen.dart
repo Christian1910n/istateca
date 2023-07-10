@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:proyectoistateca/Screens/editar_usuario.dart';
 import 'package:proyectoistateca/Services/globals.dart';
 
 class PerfilUsuario extends StatefulWidget {
@@ -67,6 +68,15 @@ class _PerfilUsuarioState extends State<PerfilUsuario> {
             ),
             const SizedBox(height: 20.0),
             const Text(
+              'Celular:',
+              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+            ),
+            Text(
+              personalog.celular,
+              style: const TextStyle(fontSize: 18.0),
+            ),
+            const SizedBox(height: 20.0),
+            const Text(
               'Dirección:',
               style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
             ),
@@ -90,6 +100,12 @@ class _PerfilUsuarioState extends State<PerfilUsuario> {
               itemSize: 24.0,
               unratedColor: Colors.grey,
               direction: Axis.horizontal,
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, EditarUsuarioScreen.id);
+              },
+              child: const Text('EDITAR'),
             ),
           ],
         ),

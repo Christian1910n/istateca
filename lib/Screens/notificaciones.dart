@@ -120,9 +120,12 @@ class _NotificacionesPageState extends State<NotificacionesPage> {
             } else if (notificacion.mensaje == 5) {
               mensaje =
                   'Su prestamo del libro ${notificacion.prestamo.libro!.titulo} a superado la fecha de devolución ${notificacion.prestamo.fechaMaxima}';
-            } else {
+            } else if (notificacion.mensaje == 6) {
               mensaje =
                   'La devolución del libro ${notificacion.prestamo.libro!.titulo} a sido registrado exitosamente';
+            } else {
+              mensaje =
+                  'Recuerda que tienes hasta ${notificacion.prestamo.fechaMaxima} para devolver el libro ${notificacion.prestamo.libro!.titulo}';
             }
 
             final bool leido = notificacion.visto;

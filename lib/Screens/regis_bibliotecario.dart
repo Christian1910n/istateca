@@ -38,6 +38,7 @@ class _RegisbibliotecarioState extends State<Regisbibliotecario> {
           persona = Persona.fromJson(data);
         });
       } else {
+        // ignore: use_build_context_synchronously
         showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -77,6 +78,7 @@ class _RegisbibliotecarioState extends State<Regisbibliotecario> {
       });
 
       if (response.statusCode == 200) {
+        // ignore: use_build_context_synchronously
         showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -104,18 +106,18 @@ class _RegisbibliotecarioState extends State<Regisbibliotecario> {
         );
       } else {
         print(response);
+        // ignore: use_build_context_synchronously
         showDialog(
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
               title: const Text('Registro exitoso'),
               content: Text(
-                'Registro exitoso para ${persona!.cedula} como bibliotecario.',
+                'Registro exitoso para ${persona!.nombres} ${persona!.apellidos} como bibliotecario.',
               ),
               actions: [
                 TextButton(
                   onPressed: () {
-                    // Borrar todo el contenido
                     setState(() {
                       persona = null;
                       _searchTerm = '';
@@ -170,8 +172,8 @@ class _RegisbibliotecarioState extends State<Regisbibliotecario> {
                 onChanged: onChanged,
                 keyboardType: keyboardType,
                 inputFormatters: inputFormatters,
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
                 ),
               )
             : Text(

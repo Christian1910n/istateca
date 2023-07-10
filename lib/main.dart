@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+import 'package:proyectoistateca/Screens/editar_usuario.dart';
 import 'package:proyectoistateca/Screens/home_screen.dart';
 import 'package:proyectoistateca/Screens/lista_libros_screen.dart';
 import 'package:proyectoistateca/Screens/lista_sugerencias.dart';
@@ -77,11 +77,8 @@ class _MyAppState extends State<MyApp> {
 
       print(data);
 
-      String mensaje =
-          notification!.title.toString() + '\n' + notification.body.toString();
-
       showNotification(
-          notification.title.toString(), notification.body.toString());
+          notification!.title.toString(), notification.body.toString());
 
       ///
       ///
@@ -141,6 +138,7 @@ class _MyAppState extends State<MyApp> {
           ListasugerenciasScreen.id: ((context) =>
               const ListasugerenciasScreen()),
           PerfilUsuario.id: (context) => const PerfilUsuario(),
+          EditarUsuarioScreen.id: (context) => const EditarUsuarioScreen()
         },
       ),
     );

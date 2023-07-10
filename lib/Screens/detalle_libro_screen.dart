@@ -3,19 +3,15 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:path/path.dart' as paths;
 import 'package:proyectoistateca/Screens/lista_libros_screen.dart';
 import 'package:proyectoistateca/Screens/solicitar_libro_screen.dart';
 import 'package:proyectoistateca/Services/globals.dart';
 import 'package:proyectoistateca/models/carrera.dart';
 import 'package:proyectoistateca/models/libros.dart';
 import 'package:http/http.dart' as http;
-import 'package:proyectoistateca/models/persona.dart';
 import 'package:proyectoistateca/models/prestamo.dart';
-import 'package:intl/intl.dart';
 import 'package:camera/camera.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:proyectoistateca/widgets/camera_screen.dart';
 
 class DetalleLibroScreen extends StatefulWidget {
@@ -75,7 +71,7 @@ class _DetalleLibroScreenState extends State<DetalleLibroScreen> {
         body: prestamoJson,
       );
 
-      if (response.statusCode == 201) {
+      if (response.statusCode == 201 || response.statusCode == 200) {
         print('Prestamo creado ${response.body}');
         Map<String, dynamic> jsonResponse = json.decode(response.body);
         Prestamo prestamo = Prestamo.fromJson(jsonResponse);
@@ -89,15 +85,27 @@ class _DetalleLibroScreenState extends State<DetalleLibroScreen> {
     } catch (error) {
       print("Error crear prestamo $error");
     } finally {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>
-                SolicitarLibroScreen(libro: widget.libro, idsolicitud: idsoli)),
-      );
-      setState(() {
-        validar = 2;
-      });
+      if (idsoli != 0) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => SolicitarLibroScreen(
+                  libro: widget.libro, idsolicitud: idsoli)),
+        );
+        setState(() {
+          validar = 2;
+        });
+      } else {
+        Fluttertoast.showToast(
+          msg:
+              "OCURRIO UN ERROR AL SOLICITAR EL LIBRO POR FAVOR VUELVA A INTENTARLO",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 4,
+          backgroundColor: Colors.grey[700],
+          textColor: Colors.white,
+        );
+      }
     }
   }
 
@@ -163,7 +171,6 @@ class _DetalleLibroScreenState extends State<DetalleLibroScreen> {
 
   void _dialogoimagen() async {
     FilePickerResult? _imageFile;
-    late Future<void> _initializeControllerFuture;
     var imagePath;
 
     final cameras = await availableCameras();
@@ -342,7 +349,7 @@ class _DetalleLibroScreenState extends State<DetalleLibroScreen> {
             ),
           ),
           const SizedBox(height: 20),
-          if (rol == 'BIBLIOTECARIO')
+          if (rol == 'BIBLIOTECARIO' || rol == 'ADMIN')
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 primary: Colors.green[400],
