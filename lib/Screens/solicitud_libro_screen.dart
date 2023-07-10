@@ -279,12 +279,20 @@ class _BookRequestViewState extends State<BookRequestView> {
       getcarreras();
     }
     setState(() {
-      prestamo = widget.prestamo;
-      _selectedDate = getFutureDateWithoutWeekends(5);
+      setState(() {
+        prestamo = widget.prestamo;
+        _selectedDate = getFutureDateWithoutWeekends(5);
+        prestamo.carrera =
+            null; // Establecer el valor predeterminado de la carrera como null
+      });
     });
 
     print(widget.prestamo.libro!.titulo);
-    print(prestamo.carrera!.nombre);
+    if (prestamo.carrera != null) {
+      print(prestamo.carrera!.nombre);
+    } else {
+      print('Carrera no seleccionada');
+    }
     super.initState();
   }
 
