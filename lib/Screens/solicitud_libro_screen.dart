@@ -15,7 +15,7 @@ class BookRequestView extends StatefulWidget {
   final Prestamo prestamo;
   static String id = 'book_screen';
 
-  const BookRequestView({super.key, required this.prestamo});
+  const BookRequestView({Key? key, required this.prestamo}) : super(key: key);
 
   @override
   _BookRequestViewState createState() => _BookRequestViewState();
@@ -53,7 +53,7 @@ class _BookRequestViewState extends State<BookRequestView> {
             'Error en la solicitud GET lista carreras: ${response.statusCode}');
       }
     } catch (error) {
-      print("Error get carreras $error");
+      print('Error get carreras $error');
     }
   }
 
@@ -82,7 +82,7 @@ class _BookRequestViewState extends State<BookRequestView> {
             'Error en la solicitud GET lista carreras: ${response.statusCode}');
       }
     } catch (error) {
-      print("Error get carreras $error");
+      print('Error get carreras $error');
     }
   }
 
@@ -109,6 +109,27 @@ class _BookRequestViewState extends State<BookRequestView> {
   DateTime _selectedDate = DateTime.now();
 
   Future<void> modificarprestamo() async {
+    if (prestamo.documentoHabilitante == 0 || prestamo.carrera == null) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Error'),
+            content: Text('Por favor, complete todos los campos requeridos.'),
+            actions: [
+              TextButton(
+                child: Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+      return; // Devuelve la función sin guardar los cambios
+    }
+
     Map data = {
       "estadoPrestamo": 2,
       "idEntrega": {"id": personalog.id_persona},
@@ -196,6 +217,60 @@ class _BookRequestViewState extends State<BookRequestView> {
     }
   }
 
+  void showConfirmationDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirmación'),
+          content: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('N° Solicitud: ${prestamo.id_prestamo}'),
+              Text(
+                  'Nombre Solicitante: ${prestamo.idSolicitante!.nombres} ${prestamo.idSolicitante!.apellidos}'),
+              Text('Título del Libro: ${prestamo.libro!.titulo}'),
+              Text('Carrera: ${prestamo.carrera!.nombre}'),
+              Text(
+                  'Documento Habilitante: ${getDocumentName(prestamo.documentoHabilitante)}'),
+              Text(
+                  'Fecha Máxima de Devolución: ${_selectedDate.toIso8601String().substring(0, 10)}'),
+            ],
+          ),
+          actions: [
+            TextButton(
+              child: Text('Cancelar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Guardar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                modificarprestamo();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  String getDocumentName(int? documentType) {
+    switch (documentType) {
+      case 1:
+        return 'Cédula';
+      case 2:
+        return 'Pasaporte';
+      case 3:
+        return 'Licencia de Conducir';
+      default:
+        return 'Desconocido';
+    }
+  }
+
   @override
   void initState() {
     if (widget.prestamo.tipoPrestamo == 1) {
@@ -216,159 +291,218 @@ class _BookRequestViewState extends State<BookRequestView> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-        onWillPop: () async {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => SolicitudesLibros()),
-          );
+      onWillPop: () async {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => SolicitudesLibros()),
+        );
 
-          return false;
-        },
-        child: Scaffold(
-            appBar: AppBar(
-              title: const Text(
-                'Formulario de Solicitudes',
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              ),
-              backgroundColor: Color.fromRGBO(24, 98, 173, 1.0),
+        return false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text(
+            'Formulario de Solicitudes',
+            style: TextStyle(
+              color: Colors.white,
             ),
-            body: SingleChildScrollView(
-              child: Container(
-                padding: EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+          ),
+          backgroundColor: Color.fromRGBO(24, 98, 173, 1.0),
+        ),
+        body: SingleChildScrollView(
+          child: Container(
+            padding: EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Nombre Solicitante: ${prestamo.idSolicitante!.nombres} ${prestamo.idSolicitante!.apellidos}',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 16.0),
+                Text(
+                  'Título del Libro: ${prestamo.libro!.titulo}',
+                  style: TextStyle(fontSize: 16),
+                ),
+                SizedBox(height: 8.0),
+                Text(
+                  'Fecha de Solicitud: ${prestamo.fechaFin}',
+                  style: TextStyle(fontSize: 16),
+                ),
+                SizedBox(height: 8.0),
+                Text(
+                  'Nombre de la Persona que Entrega: ${personalog.nombres}',
+                  style: TextStyle(fontSize: 16),
+                ),
+                const SizedBox(height: 16.0),
+                TypeAheadFormField<Carrera>(
+                  enabled: true,
+                  textFieldConfiguration: TextFieldConfiguration(
+                    decoration: const InputDecoration(
+                      labelText: 'Carrera',
+                      labelStyle: TextStyle(color: Colors.white),
+                      border: OutlineInputBorder(),
+                    ),
+                    style: const TextStyle(color: Colors.black),
+                    controller: _carreracon,
+                  ),
+                  suggestionsCallback: (pattern) async {
+                    return listacarreras
+                        .where((carrera) => carrera.nombre
+                            .toLowerCase()
+                            .contains(pattern.toLowerCase()))
+                        .toList();
+                  },
+                  itemBuilder: (context, Carrera suggestion) {
+                    return ListTile(
+                      title: Text(suggestion.nombre),
+                    );
+                  },
+                  onSuggestionSelected: (Carrera suggestion) {
+                    setState(() {
+                      prestamo.carrera = suggestion;
+                      _carreracon.text = suggestion.nombre;
+                    });
+                  },
+                  validator: (value) {
+                    if (value == null) {
+                      return 'Seleccione una carrera';
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: 16.0),
+                DropdownButtonFormField<int>(
+                  value: prestamo.documentoHabilitante,
+                  items: const [
+                    DropdownMenuItem<int>(
+                      value: 0,
+                      child: Text('Seleccione:'),
+                    ),
+                    DropdownMenuItem<int>(
+                      value: 1,
+                      child: Text('Cédula'),
+                    ),
+                    DropdownMenuItem<int>(
+                      value: 2,
+                      child: Text('Pasaporte'),
+                    ),
+                    DropdownMenuItem<int>(
+                      value: 3,
+                      child: Text('Licencia de Conducir'),
+                    ),
+                  ],
+                  onChanged: (value) {
+                    setState(() {
+                      prestamo.documentoHabilitante = value!;
+                    });
+                  },
+                  decoration: const InputDecoration(
+                    labelText: 'Documento Habilitante',
+                  ),
+                  validator: (value) {
+                    if (value == null || value == 0) {
+                      return 'Seleccione un documento';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 16.0),
+                const Text(
+                  'Fecha Limite de Devolucion:',
+                  style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  '${_selectedDate.year}-${_selectedDate.month}-${_selectedDate.day}',
+                  style: const TextStyle(fontSize: 18.0),
+                ),
+                const SizedBox(height: 16.0),
+                const Text(
+                  'Calificación del Usuario:',
+                  style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 8.0),
+                RatingBarIndicator(
+                  rating:
+                      widget.prestamo.idSolicitante!.calificacion.toDouble(),
+                  itemBuilder: (context, _) => const Icon(
+                    Icons.star,
+                    color: Colors.amber,
+                  ),
+                  itemCount: 5,
+                  itemSize: 40.0,
+                  unratedColor: Colors.grey,
+                  direction: Axis.horizontal,
+                ),
+                const SizedBox(height: 16.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      'Nombre Solicitante: ${prestamo.idSolicitante!.nombres} ${prestamo.idSolicitante!.apellidos}',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(height: 16.0),
-                    Text(
-                      'Título del Libro: ${prestamo.libro!.titulo}',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    SizedBox(height: 8.0),
-                    Text(
-                      'Fecha de Solicitud: ${prestamo.fechaFin}',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    SizedBox(height: 8.0),
-                    Text(
-                      'Nombre de la Persona que Entrega: ${personalog.nombres}',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    const SizedBox(height: 16.0),
-                    TypeAheadFormField<Carrera>(
-                      enabled: true,
-                      textFieldConfiguration: TextFieldConfiguration(
-                        decoration: const InputDecoration(
-                          labelText: 'Carrera',
-                          labelStyle: TextStyle(color: Colors.white),
-                          border: OutlineInputBorder(),
-                        ),
-                        style: const TextStyle(color: Colors.black),
-                        controller: _carreracon,
-                      ),
-                      suggestionsCallback: (pattern) async {
-                        return listacarreras
-                            .where((carrera) => carrera.nombre
-                                .toLowerCase()
-                                .contains(pattern.toLowerCase()))
-                            .toList();
+                    ElevatedButton(
+                      onPressed: () {
+                        if (prestamo.documentoHabilitante != 0 &&
+                            prestamo.carrera != null) {
+                          showConfirmationDialog();
+                        } else {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text('Error'),
+                                content: Text(
+                                    'Por favor, complete todos los campos requeridos.'),
+                                actions: [
+                                  TextButton(
+                                    child: Text('OK'),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        }
                       },
-                      itemBuilder: (context, Carrera suggestion) {
-                        return ListTile(
-                            title: Text(
-                          suggestion.nombre,
-                        ));
-                      },
-                      onSuggestionSelected: (Carrera suggestion) {
-                        setState(() {
-                          prestamo.carrera = suggestion;
-                          _carreracon.text = suggestion.nombre;
-                        });
-                      },
+                      child: const Text('Guardar'),
                     ),
-                    SizedBox(height: 16.0),
-                    DropdownButtonFormField<int>(
-                      value: prestamo.documentoHabilitante,
-                      items: const [
-                        DropdownMenuItem<int>(
-                          value: 0,
-                          child: Text('Seleccione:'),
-                        ),
-                        DropdownMenuItem<int>(
-                          value: 1,
-                          child: Text('Cédula'),
-                        ),
-                        DropdownMenuItem<int>(
-                          value: 2,
-                          child: Text('Pasaporte'),
-                        ),
-                        DropdownMenuItem<int>(
-                          value: 3,
-                          child: Text('Licencia de Conducir'),
-                        ),
-                      ],
-                      onChanged: (value) {
-                        prestamo.documentoHabilitante = value!;
-                      },
-                      decoration: const InputDecoration(
-                          labelText: 'Documento Habilitante'),
-                    ),
-                    const SizedBox(height: 16.0),
-                    const Text(
-                      'Fecha Limite de Devolucion:',
-                      style: TextStyle(
-                          fontSize: 18.0, fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      '${_selectedDate.year}-${_selectedDate.month}-${_selectedDate.day}',
-                      style: const TextStyle(fontSize: 18.0),
-                    ),
-                    const SizedBox(height: 16.0),
-                    const Text(
-                      'Calificación del Usuario:',
-                      style: TextStyle(
-                          fontSize: 18.0, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 8.0),
-                    RatingBarIndicator(
-                      rating: widget.prestamo.idSolicitante!.calificacion
-                          .toDouble(),
-                      itemBuilder: (context, _) => const Icon(
-                        Icons.star,
-                        color: Colors.amber,
-                      ),
-                      itemCount: 5,
-                      itemSize: 40.0,
-                      unratedColor: Colors.grey,
-                      direction: Axis.horizontal,
-                    ),
-                    const SizedBox(height: 16.0),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        ElevatedButton(
-                          onPressed: () {
-                            modificarprestamo();
+                    ElevatedButton(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text('Confirmación'),
+                              content: Text(
+                                  '¿Estás seguro de que deseas rechazar el préstamo?'),
+                              actions: [
+                                TextButton(
+                                  child: Text('Cancelar'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                                TextButton(
+                                  child: Text('Aceptar'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                    rechazarprestamo();
+                                  },
+                                ),
+                              ],
+                            );
                           },
-                          child: const Text('Guardar'),
-                        ),
-                        ElevatedButton(
-                          onPressed: () {
-                            rechazarprestamo();
-                          },
-                          child: const Text('Rechazar'),
-                        ),
-                      ],
+                        );
+                      },
+                      child: const Text('Rechazar'),
                     ),
                   ],
                 ),
-              ),
-            )));
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

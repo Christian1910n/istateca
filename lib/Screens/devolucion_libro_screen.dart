@@ -3,10 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:proyectoistateca/Screens/solicitudes_screen.dart';
 import 'package:proyectoistateca/Services/globals.dart';
-import 'package:proyectoistateca/models/carrera.dart';
-import 'package:proyectoistateca/models/persona.dart';
 import 'package:proyectoistateca/models/prestamo.dart';
-import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -124,6 +121,67 @@ class _DevolucionLibroState extends State<DevolucionLibro> {
     }
   }
 
+  void showConfirmationDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirmación'),
+          content: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('N° Solicitud: ${prestamo.id_prestamo}'),
+              Text(
+                  'Nombre Solicitante: ${prestamo.idSolicitante?.nombres ?? ''} ${prestamo.idSolicitante?.apellidos ?? ''}'),
+              Text('Título del Libro: ${prestamo.libro?.titulo ?? ''}'),
+              Text(
+                  'Estado del Libro: ${selectedValue != null ? getStatusText(selectedValue) : 'No seleccionado'}'),
+              Text(
+                  'Calificación del estudiante: ${prestamo.idSolicitante?.calificacion != null ? prestamo.idSolicitante?.calificacion.toString() : 'No calificado'}'),
+            ],
+          ),
+          actions: [
+            TextButton(
+              child: Text('Cancelar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Guardar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                if (selectedValue != null && selectedValue != 0) {
+                  modificarprestamo();
+                  modificarcalificacion();
+                } else {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text('Error'),
+                        content: Text('Debe seleccionar el estado del libro'),
+                        actions: [
+                          TextButton(
+                            child: Text('OK'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -213,8 +271,9 @@ class _DevolucionLibroState extends State<DevolucionLibro> {
               onChanged: (value) {
                 setState(() {
                   selectedValue = value;
-                  prestamo.estadoLibro = value!;
-                  prestamo.estadoPrestamo = (value == 3) ? 4 : 3;
+                  prestamo.estadoLibro = value ?? 0;
+                  prestamo.estadoPrestamo =
+                      (prestamo.idSolicitante != null && value == 3) ? 4 : 3;
                 });
               },
               decoration: const InputDecoration(labelText: 'Estado del Libro'),
@@ -238,7 +297,7 @@ class _DevolucionLibroState extends State<DevolucionLibro> {
                   RatingBar.builder(
                     initialRating:
                         prestamo.idSolicitante?.calificacion?.toDouble() ?? 0.0,
-                    minRating: 1,
+                    minRating: 0,
                     direction: Axis.horizontal,
                     allowHalfRating: false,
                     itemCount: 5,
@@ -265,8 +324,7 @@ class _DevolucionLibroState extends State<DevolucionLibro> {
                 ElevatedButton(
                   onPressed: () {
                     if (selectedValue != null && selectedValue != 0) {
-                      modificarprestamo();
-                      modificarcalificacion();
+                      showConfirmationDialog();
                     } else {
                       showDialog(
                         context: context,
@@ -296,5 +354,17 @@ class _DevolucionLibroState extends State<DevolucionLibro> {
         ),
       ),
     );
+  }
+
+  String getStatusText(int? value) {
+    if (value == 1) {
+      return 'Bueno';
+    } else if (value == 2) {
+      return 'Regular';
+    } else if (value == 3) {
+      return 'Malo o Perdido';
+    } else {
+      return 'Desconocido';
+    }
   }
 }
