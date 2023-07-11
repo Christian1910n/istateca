@@ -40,6 +40,7 @@ class _SolicitudesEstudianteState extends State<SolicitudesEstudiante>
           Prestamo prestamo = Prestamo.fromJson(prestamoJson);
           solicitudess.add(prestamo);
         }
+        solicitudess.sort((a, b) => b.id_prestamo.compareTo(a.id_prestamo));
         setState(() {
           solicitudes = solicitudess;
         });
@@ -59,7 +60,7 @@ class _SolicitudesEstudianteState extends State<SolicitudesEstudiante>
   void initState() {
     super.initState();
 
-    _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
     _tabController.addListener(() {
       getsolicitudes(personalog.cedula);
     });
@@ -89,6 +90,7 @@ class _SolicitudesEstudianteState extends State<SolicitudesEstudiante>
           tabs: const [
             Tab(text: 'Solicitadas'),
             Tab(text: 'Pendientes'),
+            Tab(text: 'Histórico'),
           ],
         ),
       ),
@@ -98,6 +100,7 @@ class _SolicitudesEstudianteState extends State<SolicitudesEstudiante>
         children: [
           buildListView(1),
           buildListView(2),
+          buildListView(3),
         ],
       ),
     );
@@ -110,9 +113,25 @@ class _SolicitudesEstudianteState extends State<SolicitudesEstudiante>
       );
     }
 
-    List<Prestamo> filteredSolicitudes = solicitudes
-        .where((prestamo) => prestamo.estadoPrestamo == tabId)
-        .toList();
+    List<Prestamo> filteredSolicitudes = [];
+
+    if (tabId == 1) {
+      filteredSolicitudes = solicitudes
+          .where((prestamo) => prestamo.estadoPrestamo == 1)
+          .toList();
+    } else if (tabId == 2) {
+      filteredSolicitudes = solicitudes
+          .where((prestamo) => prestamo.estadoPrestamo == 2)
+          .toList();
+    } else if (tabId == 3) {
+      filteredSolicitudes = solicitudes
+          .where((prestamo) =>
+              prestamo.estadoPrestamo == 3 ||
+              prestamo.estadoPrestamo == 4 ||
+              prestamo.estadoPrestamo == 5 ||
+              prestamo.estadoPrestamo == 6)
+          .toList();
+    }
 
     if (filteredSolicitudes.isEmpty) {
       return Center(
@@ -127,6 +146,8 @@ class _SolicitudesEstudianteState extends State<SolicitudesEstudiante>
       children: [
         Expanded(
           child: ListView.builder(
+            reverse:
+                true, // Mostrar las solicitudes desde el último hasta el primero
             itemCount: filteredSolicitudes.length,
             itemBuilder: (context, index) {
               return Card(

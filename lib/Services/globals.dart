@@ -5,7 +5,7 @@ import 'package:lottie/lottie.dart';
 import 'package:proyectoistateca/models/persona.dart';
 
 //const String baseUrl = "http://192.168.18.24:8080";//anthony
-const String baseUrl = "http://192.168.68.110:8080";
+const String baseUrl = "http://192.168.18.24:8080";
 Map<String, String> headers = {
   "Content-Type": "application/json",
   "Authorization": tokenacceso
