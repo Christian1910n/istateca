@@ -153,33 +153,53 @@ class _EditarUsuarioScreenState extends State<EditarUsuarioScreen> {
             const SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: Text('Confirmación'),
-                      content: Text('¿Estás seguro de guardar los datos?'),
-                      actions: [
-                        TextButton(
-                          child: Text('Cancelar'),
-                          onPressed: () {
-                            Navigator.of(context)
-                                .pop(); // Cierra el cuadro de diálogo
-                          },
-                        ),
-                        TextButton(
-                          child: Text('Aceptar'),
-                          onPressed: () {
-                            Navigator.of(context)
-                                .pop(); // Cierra el cuadro de diálogo
-                            editarpersona(); // Ejecuta la acción de guardar los datos
-                          },
-                        ),
-                      ],
-                    );
-                  },
-                );
-                ;
+                if (_celularController.text.length == 10 &&
+                    _direccionController.text != "") {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text('Confirmación'),
+                        content:
+                            const Text('¿Estás seguro de guardar los datos?'),
+                        actions: [
+                          TextButton(
+                            child: Text('Cancelar'),
+                            onPressed: () {
+                              Navigator.of(context)
+                                  .pop(); // Cierra el cuadro de diálogo
+                            },
+                          ),
+                          TextButton(
+                            child: Text('Aceptar'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                              editarpersona();
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                } else {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text('Error'),
+                        content: const Text('DATOS INVALIDOS'),
+                        actions: [
+                          TextButton(
+                            child: const Text('OK'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                }
               },
               child: const Text('Guardar'),
             ),

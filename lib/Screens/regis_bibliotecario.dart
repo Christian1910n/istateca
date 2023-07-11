@@ -32,7 +32,7 @@ class _RegisbibliotecarioState extends State<Regisbibliotecario> {
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
-
+      print("Persona nueva ${data}");
       if (data != null) {
         setState(() {
           persona = Persona.fromJson(data);
@@ -67,45 +67,39 @@ class _RegisbibliotecarioState extends State<Regisbibliotecario> {
 
   void registrarComoBibliotecario() async {
     if (persona != null) {
+      Map data = {
+        "fenixId": persona?.fenixId,
+        "cedula": persona?.cedula,
+        "correo": persona?.correo,
+        "nombres": persona?.nombres,
+        "apellidos": persona?.apellidos,
+        "direccion": persona?.direccion,
+        "tipo": 3,
+        "celular": persona?.celular,
+        "calificacion": persona?.calificacion,
+        "activo": persona?.activo,
+        "device": persona?.device
+      };
+      var body;
+      if (persona?.id_persona == 0) {
+        body = json.encode(data);
+      } else {
+        body = json.encode(persona);
+      }
+
       final response = await http.post(
         Uri.parse('$baseUrl/persona/registrardocenteadmin?rol=ROLE_BLIB'),
         headers: headers,
-        body: json.encode(persona),
+        body: body,
       );
+
+      print("nuevo json $body");
 
       setState(() {
         isLoading = false;
       });
 
       if (response.statusCode == 200) {
-        // ignore: use_build_context_synchronously
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: const Text('Registro exitoso'),
-              content: Text(
-                'Registro exitoso para ${persona!.cedula} como bibliotecario.',
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    // Borrar todo el contenido
-                    setState(() {
-                      persona = null;
-                      _searchTerm = '';
-                      _searchController.clear();
-                    });
-                    Navigator.pop(context);
-                  },
-                  child: const Text('Cerrar'),
-                ),
-              ],
-            );
-          },
-        );
-      } else {
-        print(response);
         // ignore: use_build_context_synchronously
         showDialog(
           context: context,
@@ -131,6 +125,33 @@ class _RegisbibliotecarioState extends State<Regisbibliotecario> {
             );
           },
         );
+      } else {
+        print("Error registro bibliotecario ${response.statusCode}");
+        // ignore: use_build_context_synchronously
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Registro Error'),
+              content: Text(
+                'Ocurrio un error para registro como bibliotecario. ${response.statusCode}',
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      persona = null;
+                      _searchTerm = '';
+                      _searchController.clear();
+                    });
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Cerrar'),
+                ),
+              ],
+            );
+          },
+        );
       }
     }
   }
@@ -139,52 +160,23 @@ class _RegisbibliotecarioState extends State<Regisbibliotecario> {
     String title,
     String value,
     void Function(String) onChanged,
+    bool isEditable,
   ) {
-    bool isEditable = title != 'Cédula';
-    TextInputType keyboardType;
-    List<TextInputFormatter> inputFormatters;
-
-    if (isEditable) {
-      if (title == 'Correo') {
-        keyboardType = TextInputType.emailAddress;
-        inputFormatters = [];
-      } else if (title == 'Celular') {
-        keyboardType = TextInputType.phone;
-        inputFormatters = [
-          FilteringTextInputFormatter.digitsOnly,
-        ];
-      } else {
-        keyboardType = TextInputType.text;
-        inputFormatters = [];
-      }
-    } else {
-      keyboardType = TextInputType.text;
-      inputFormatters = [];
-    }
-
     return ListTile(
-      title: Text(title),
       trailing: SizedBox(
-        width: 250.0,
-        child: isEditable
-            ? TextFormField(
+          child: Container(
+              constraints: BoxConstraints(maxWidth: 315.0),
+              child: TextFormField(
                 initialValue: value,
                 onChanged: onChanged,
-                keyboardType: keyboardType,
-                inputFormatters: inputFormatters,
-                decoration: const InputDecoration(
+                keyboardType: TextInputType.text,
+                textAlign: TextAlign.left,
+                readOnly: isEditable,
+                decoration: InputDecoration(
+                  labelText: title,
                   border: OutlineInputBorder(),
                 ),
-              )
-            : Text(
-                value,
-                textAlign: TextAlign.right,
-                style: const TextStyle(
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-      ),
+              ))),
     );
   }
 
@@ -194,64 +186,66 @@ class _RegisbibliotecarioState extends State<Regisbibliotecario> {
       appBar: AppBar(
         title: const Text('Registro de bibliotecario'),
       ),
-      body: Container(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _searchController,
-                    decoration: const InputDecoration(
-                      labelText: 'Ingrese la Cédula del docente',
+      body: SingleChildScrollView(
+        // Envolver con SingleChildScrollView
+        child: Container(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _searchController,
+                      decoration: const InputDecoration(
+                        labelText: 'Ingrese la Cédula del docente',
+                      ),
+                      keyboardType: TextInputType.number,
+                      onChanged: (value) {
+                        setState(() {
+                          _searchTerm = value;
+                        });
+                      },
                     ),
-                    keyboardType: TextInputType.number,
-                    onChanged: (value) {
-                      setState(() {
-                        _searchTerm = value;
-                      });
-                    },
                   ),
-                ),
-                const SizedBox(width: 20.0),
-                ElevatedButton(
-                  onPressed: () {
-                    if (_searchTerm.isEmpty) {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: const Text('Error'),
-                            content:
-                                const Text('Por favor, ingrese una cédula.'),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: const Text('Cerrar'),
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    } else {
-                      cedula = _searchTerm;
-                      searchPersona();
-                      _searchController.clear();
-                    }
-                  },
-                  child: const Text('Buscar'),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20.0),
-            if (isLoading)
-              const CircularProgressIndicator()
-            else if (persona != null)
-              Expanded(
-                child: ListView(
+                  const SizedBox(width: 20.0),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (_searchTerm.isEmpty) {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text('Error'),
+                              content:
+                                  const Text('Por favor, ingrese una cédula.'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text('Cerrar'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      } else {
+                        cedula = _searchTerm;
+                        searchPersona();
+                        _searchController.clear();
+                      }
+                    },
+                    child: const Text('Buscar'),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20.0),
+              if (isLoading)
+                const CircularProgressIndicator()
+              else if (persona != null)
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     ListTile(
                       title: const Align(
@@ -263,64 +257,109 @@ class _RegisbibliotecarioState extends State<Regisbibliotecario> {
                         child: Text(persona!.cedula),
                       ),
                     ),
-                    buildEditableTile(
-                      'Nombres',
-                      persona!.nombres,
-                      (value) {
-                        setState(() {
-                          persona!.nombres = value;
-                        });
-                      },
-                    ),
-                    buildEditableTile(
-                      'Apellidos',
-                      persona!.apellidos,
-                      (value) {
-                        setState(() {
-                          persona!.apellidos = value;
-                        });
-                      },
-                    ),
+                    const SizedBox(height: 10),
+                    buildEditableTile('Nombres', persona!.nombres, (value) {
+                      setState(() {
+                        persona!.nombres = value;
+                      });
+                    }, true),
+                    const SizedBox(height: 10),
+                    buildEditableTile('Apellidos', persona!.apellidos, (value) {
+                      setState(() {
+                        persona!.apellidos = value;
+                      });
+                    }, true),
+                    const SizedBox(height: 10),
                     buildEditableTile(
                       'Correo',
-                      persona!.correo,
+                      persona!.correo == "null" ? "" : persona!.correo,
                       (value) {
                         setState(() {
                           persona!.correo = value;
                         });
                       },
+                      false,
                     ),
+                    const SizedBox(height: 10),
                     buildEditableTile(
                       'Dirección',
-                      persona!.direccion,
+                      persona!.direccion == "null" ? "" : persona!.direccion,
                       (value) {
                         setState(() {
                           persona!.direccion = value;
                         });
                       },
+                      false,
                     ),
+                    const SizedBox(height: 10),
                     buildEditableTile(
                       'Celular',
-                      persona!.celular,
+                      persona!.celular == "null" ? "" : persona!.celular,
                       (value) {
                         setState(() {
                           persona!.celular = value;
                         });
                       },
+                      false,
                     ),
+                    const SizedBox(height: 20),
+                    if (persona!.id_persona != null && persona!.tipo == 3)
+                      const Text("Persona ya registrada como bibliotecario"),
+                    if (persona!.tipo != 3)
+                      ElevatedButton(
+                        onPressed: () {
+                          if (persona!.celular.length == 10 &&
+                              persona!.direccion != "") {
+                            if (persona!.correo.endsWith("@tecazuay.edu.ec")) {
+                              registrarComoBibliotecario();
+                            } else {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: const Text('Error'),
+                                    content: const Text(
+                                        'CORREO NO PERTENECE AL ISTA'),
+                                    actions: [
+                                      TextButton(
+                                        child: const Text('OK'),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            }
+                          } else {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text('Error'),
+                                  content: const Text('DATOS INVALIDOS'),
+                                  actions: [
+                                    TextButton(
+                                      child: const Text('OK'),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          }
+                        },
+                        child: const Text('Registrar como bibliotecario'),
+                      ),
                   ],
-                ),
-              )
-            else
-              const Text('Cédula no encontrada'),
-            if (persona != null)
-              ElevatedButton(
-                onPressed: () {
-                  registrarComoBibliotecario();
-                },
-                child: const Text('Registrar como bibliotecario'),
-              ),
-          ],
+                )
+              else
+                const Text('Cédula no encontrada'),
+            ],
+          ),
         ),
       ),
     );
