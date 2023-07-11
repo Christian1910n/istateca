@@ -114,6 +114,15 @@ class _SolicitudesEstudianteState extends State<SolicitudesEstudiante>
         .where((prestamo) => prestamo.estadoPrestamo == tabId)
         .toList();
 
+    if (filteredSolicitudes.isEmpty) {
+      return Center(
+        child: const Text(
+          'No hay solicitudes pendientes',
+          style: TextStyle(fontSize: 18),
+        ),
+      );
+    }
+
     return Column(
       children: [
         Expanded(
