@@ -1,17 +1,15 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:proyectoistateca/Screens/devolucion_libro_screen.dart';
+import 'package:proyectoistateca/Screens/restitucion_libro.dart';
 import 'package:proyectoistateca/Screens/solicitud_libro_screen.dart';
 import 'package:proyectoistateca/Services/globals.dart';
 import 'package:proyectoistateca/models/prestamo.dart';
+import 'package:proyectoistateca/widgets/widget_menu_lateral.dart';
+import 'package:lottie/lottie.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
 import 'package:permission_handler/permission_handler.dart';
-import 'package:http/http.dart' as http;
-import 'package:lottie/lottie.dart';
-import 'package:proyectoistateca/Screens/devolucion_libro_screen.dart';
-import 'package:proyectoistateca/Screens/restitucion_libro.dart';
-
-import '../widgets/widget_menu_lateral.dart';
 
 class SolicitudesLibros extends StatefulWidget {
   static String id = 'solicitudes_screen';
@@ -56,11 +54,10 @@ class _SolicitudesLibrosState extends State<SolicitudesLibros>
           qrValor = cameraScanResult!;
         });
       } else {
-        print("no hay permiso f");
+        print("No se concedió el permiso de la cámara");
       }
-      /* */
     } catch (error) {
-      print('Error al leer el QR Error: $error');
+      print('Error al leer el QR: $error');
     } finally {
       try {
         List<Prestamo> solicitudess = [];
@@ -79,7 +76,7 @@ class _SolicitudesLibrosState extends State<SolicitudesLibros>
           print('Error en la solicitud GET id: ${response.statusCode}');
         }
       } catch (error) {
-        print("Error get solicitudes por id: $error");
+        print("Error al obtener las solicitudes por ID: $error");
       } finally {
         setState(() {
           carga = false;
@@ -103,7 +100,7 @@ class _SolicitudesLibrosState extends State<SolicitudesLibros>
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content:
-                    Text('No se encontro una solicitud con el id $qrValor'),
+                    Text('No se encontró una solicitud con el ID $qrValor'),
                 duration: const Duration(seconds: 4),
               ),
             );
@@ -133,7 +130,7 @@ class _SolicitudesLibrosState extends State<SolicitudesLibros>
         print('Error en la solicitud GET id: ${response.statusCode}');
       }
     } catch (error) {
-      print("Error get solicitudes por id: $error");
+      print("Error al obtener las solicitudes por ID: $error");
     }
   }
 
@@ -153,9 +150,6 @@ class _SolicitudesLibrosState extends State<SolicitudesLibros>
           Prestamo prestamo = Prestamo.fromJson(prestamoJson);
 
           solicitudess.add(prestamo);
-          setState(() {
-            solicitudes = solicitudess;
-          });
         }
         setState(() {
           solicitudes = solicitudess;
@@ -169,7 +163,7 @@ class _SolicitudesLibrosState extends State<SolicitudesLibros>
             'Error en la solicitud GET lista solicitudes: ${response.statusCode}');
       }
     } catch (error) {
-      print("Error get solicitudes $error");
+      print("Error al obtener las solicitudes: $error");
     } finally {
       setState(() {
         carga = false;
@@ -234,6 +228,7 @@ class _SolicitudesLibrosState extends State<SolicitudesLibros>
     if (carga) {
       return animacioncarga();
     }
+
     List<Prestamo> prestamosFiltrados = [];
 
     if (tabId == 1) {
@@ -261,6 +256,8 @@ class _SolicitudesLibrosState extends State<SolicitudesLibros>
           .where((prestamo) => prestamo.estadoPrestamo == 6)
           .toList();
     }
+
+    prestamosFiltrados.sort((a, b) => b.id_prestamo.compareTo(a.id_prestamo));
 
     return Column(
       children: [
@@ -341,7 +338,7 @@ class _SolicitudesLibrosState extends State<SolicitudesLibros>
                         color: Color.fromRGBO(24, 98, 173, 1.0),
                         width: 2.0,
                       ),
-                      borderRadius: BorderRadius.circular(10), // Radio de borde
+                      borderRadius: BorderRadius.circular(10),
                     ),
                     child: ListTile(
                       title: Text(prestamosFiltrados[index].libro!.titulo),

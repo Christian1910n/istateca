@@ -146,10 +146,12 @@ class _SolicitudesEstudianteState extends State<SolicitudesEstudiante>
       children: [
         Expanded(
           child: ListView.builder(
-            reverse:
-                true, // Mostrar las solicitudes desde el último hasta el primero
             itemCount: filteredSolicitudes.length,
             itemBuilder: (context, index) {
+              Prestamo prestamo = filteredSolicitudes[index];
+              String fechaSolicitud =
+                  prestamo.fechaEntrega; // Obtener la fecha de solicitud
+
               return Card(
                 child: GestureDetector(
                   onTap: () {
@@ -160,18 +162,20 @@ class _SolicitudesEstudianteState extends State<SolicitudesEstudiante>
                       context,
                       MaterialPageRoute(
                         builder: (context) => SolicitarLibroScreen(
-                          libro: filteredSolicitudes[index].libro!,
-                          idsolicitud: filteredSolicitudes[index].id_prestamo,
+                          libro: prestamo.libro!,
+                          idsolicitud: prestamo.id_prestamo,
                         ),
                       ),
                     );
                   },
                   child: ListTile(
-                    title: Text(filteredSolicitudes[index].libro!.titulo),
-                    subtitle: filteredSolicitudes[index].estadoPrestamo == 1
-                        ? null
+                    title: Text(prestamo.libro!.titulo),
+                    subtitle: prestamo.estadoPrestamo == 1
+                        ? Text(
+                            "Fecha de solicitud: $fechaSolicitud",
+                          )
                         : Text(
-                            "Fecha entrega: ${filteredSolicitudes[index].fechaEntrega}\nFecha máxima: ${filteredSolicitudes[index].fechaMaxima}",
+                            "Fecha entrega: ${prestamo.fechaEntrega}\nFecha máxima: ${prestamo.fechaMaxima}",
                           ),
                   ),
                 ),
