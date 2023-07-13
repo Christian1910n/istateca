@@ -303,31 +303,36 @@ class _SolicitudesLibrosState extends State<SolicitudesLibros>
           child: ListView.builder(
             itemCount: prestamosFiltrados.length,
             itemBuilder: (context, index) {
+              Prestamo prestamo = prestamosFiltrados[index];
+              String fechaSolicitud = prestamo.fechaEntrega;
               return Card(
                 child: GestureDetector(
                   onTap: () {
-                    if (prestamosFiltrados[index].estadoPrestamo == 1) {
+                    if (prestamo.estadoPrestamo == 1) {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => BookRequestView(
-                              prestamo: prestamosFiltrados[index]),
+                            prestamo: prestamo,
+                          ),
                         ),
                       );
-                    } else if (prestamosFiltrados[index].estadoPrestamo == 2) {
+                    } else if (prestamo.estadoPrestamo == 2) {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => DevolucionLibro(
-                              prestamo: prestamosFiltrados[index]),
+                            prestamo: prestamo,
+                          ),
                         ),
                       );
-                    } else if (prestamosFiltrados[index].estadoPrestamo == 4) {
+                    } else if (prestamo.estadoPrestamo == 4) {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => RestitucionLibro(
-                              prestamo: prestamosFiltrados[index]),
+                            prestamo: prestamo,
+                          ),
                         ),
                       );
                     }
@@ -341,42 +346,49 @@ class _SolicitudesLibrosState extends State<SolicitudesLibros>
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: ListTile(
-                      title: Text(prestamosFiltrados[index].libro!.titulo),
-                      subtitle: Text(
-                          "${prestamosFiltrados[index].idSolicitante!.nombres} ${prestamosFiltrados[index].idSolicitante!.apellidos}"),
+                      title: Text(prestamo.libro!.titulo),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "${prestamo.idSolicitante!.nombres} ${prestamo.idSolicitante!.apellidos}",
+                          ),
+                          Text(
+                            "Fecha de solicitud: $fechaSolicitud",
+                          ),
+                        ],
+                      ),
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           IconButton(
                             icon: const Icon(Icons.arrow_forward),
                             onPressed: () {
-                              if (prestamosFiltrados[index].estadoPrestamo ==
-                                  1) {
+                              if (prestamo.estadoPrestamo == 1) {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => BookRequestView(
-                                        prestamo: prestamosFiltrados[index]),
+                                      prestamo: prestamo,
+                                    ),
                                   ),
                                 );
-                              } else if (prestamosFiltrados[index]
-                                      .estadoPrestamo ==
-                                  2) {
+                              } else if (prestamo.estadoPrestamo == 2) {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => DevolucionLibro(
-                                        prestamo: prestamosFiltrados[index]),
+                                      prestamo: prestamo,
+                                    ),
                                   ),
                                 );
-                              } else if (prestamosFiltrados[index]
-                                      .estadoPrestamo ==
-                                  4) {
+                              } else if (prestamo.estadoPrestamo == 4) {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => RestitucionLibro(
-                                        prestamo: prestamosFiltrados[index]),
+                                      prestamo: prestamo,
+                                    ),
                                   ),
                                 );
                               }
