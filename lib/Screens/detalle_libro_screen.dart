@@ -382,19 +382,23 @@ class _DetalleLibroScreenState extends State<DetalleLibroScreen> {
               ),
             ),
           if (habilitar == false && mensajes.isNotEmpty)
-            Container(
+            SizedBox(
               height: 150,
               child: ListView.builder(
                 itemCount: mensajes.length,
                 itemBuilder: (context, index) {
-                  return ListTile(
-                    contentPadding: const EdgeInsets.symmetric(vertical: 0.01),
-                    leading: const Icon(Icons.error),
-                    title: Text(
-                      mensajes[index],
-                      style: const TextStyle(fontSize: 18),
-                    ),
-                  );
+                  final m = mensajes[index];
+                  if (m.isNotEmpty) {
+                    return ListTile(
+                      contentPadding:
+                          const EdgeInsets.symmetric(vertical: 0.01),
+                      leading: const Icon(Icons.error, color: Colors.red),
+                      title: Text(
+                        m,
+                        style: const TextStyle(fontSize: 18),
+                      ),
+                    );
+                  }
                 },
               ),
             ),
