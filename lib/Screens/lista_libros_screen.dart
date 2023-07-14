@@ -143,9 +143,9 @@ class _LlibrosScreenState extends State<LlibrosScreen>
 
     return GridView.builder(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2, // Número de columnas en la cuadrícula
-        crossAxisSpacing: 8, // Espaciado horizontal entre las celdas
-        mainAxisSpacing: 8, // Espaciado vertical entre las celdas
+        crossAxisCount: 2,
+        crossAxisSpacing: 8,
+        mainAxisSpacing: 8,
       ),
       itemCount: librosFiltrados.length,
       itemBuilder: (context, index) {

@@ -29,8 +29,34 @@ class _DetalleLibroScreenState extends State<DetalleLibroScreen> {
 
   int idsoli = 0;
 
+  bool habilitar = false;
+
+  List<String> mensajes = [];
+
   Carrera carrera =
       Carrera(id_carrera: 2, idFenix: 0, nombre: "nombre", activo: true);
+
+  Future<void> habilitado() async {
+    final url = Uri.parse(
+        '$baseUrl/prestamo/habilitado?personaId=${personalog.id_persona}&libroId=${widget.libro.id}');
+
+    final response = await http.get(url, headers: headers);
+
+    if (response.statusCode == 200) {
+      if (response.body == "Habilitado") {
+        setState(() {
+          habilitar = true;
+        });
+      } else {
+        setState(() {
+          habilitar = false;
+          mensajes = response.body.split(";");
+        });
+      }
+    } else {
+      print('Error en la solicitud habilitacion: ${response.statusCode}');
+    }
+  }
 
   Future<void> crearPrestamo() async {
     if (rol == "ESTUDIANTE") {
@@ -299,6 +325,12 @@ class _DetalleLibroScreenState extends State<DetalleLibroScreen> {
   }
 
   @override
+  void initState() {
+    habilitado();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(20),
@@ -332,23 +364,41 @@ class _DetalleLibroScreenState extends State<DetalleLibroScreen> {
           _buildRow("Código Dewey:", widget.libro.codigoDewey, Colors.blue,
               Colors.black),
           const SizedBox(height: 20),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              primary: widget.libro.disponibilidad == false
-                  ? Colors.grey
-                  : Colors.green[400],
+          if (habilitar)
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: widget.libro.disponibilidad == false
+                    ? Colors.grey
+                    : Colors.green[400],
+              ),
+              onPressed: widget.libro.disponibilidad == false
+                  ? null
+                  : () {
+                      crearPrestamo();
+                    },
+              child: const Text(
+                "Solicitar Libro",
+                style: TextStyle(fontSize: 18),
+              ),
             ),
-            onPressed: widget.libro.disponibilidad == false
-                ? null
-                : () {
-                    crearPrestamo();
-                  },
-            child: const Text(
-              "Solicitar Libro",
-              style: TextStyle(fontSize: 18),
+          if (habilitar == false && mensajes.isNotEmpty)
+            Container(
+              height: 150,
+              child: ListView.builder(
+                itemCount: mensajes.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    contentPadding: const EdgeInsets.symmetric(vertical: 0.01),
+                    leading: const Icon(Icons.error),
+                    title: Text(
+                      mensajes[index],
+                      style: const TextStyle(fontSize: 18),
+                    ),
+                  );
+                },
+              ),
             ),
-          ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 10),
           if (rol == 'BIBLIOTECARIO' || rol == 'ADMIN')
             ElevatedButton(
               style: ElevatedButton.styleFrom(

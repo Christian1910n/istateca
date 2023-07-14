@@ -80,8 +80,13 @@ class LibrosTile extends StatelessWidget {
         onTap: () {
           showModalBottomSheet(
             context: context,
+            isScrollControlled:
+                true, // Permite que la ventana sea más alta que la pantalla
             builder: (context) {
-              return DetalleLibroScreen(libro: libro);
+              return FractionallySizedBox(
+                heightFactor: 0.7,
+                child: DetalleLibroScreen(libro: libro),
+              );
             },
           );
         },
