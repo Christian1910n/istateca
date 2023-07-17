@@ -25,6 +25,13 @@ class _LoginPageState extends State<LoginPage> {
   bool _loading = false;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
+  /*Realiza la autenticación del usuario utilizando Google Sign-In y Firebase Authentication. 
+  Se obtienen las credenciales de autenticación de Google 
+  y se utilizan para realizar la autenticación con Firebase. 
+  Si la autenticación es exitosa, 
+  se obtiene información del usuario como el nombre, correo electrónico y foto de perfil. 
+  Al finalizar, se devuelve el objeto User si la autenticación es exitosa, 
+  y se llama a un método para verificar las credenciales.*/
   Future<User?> signInGoogle() async {
     try {
       final GoogleSignInAccount googleUser = (await _googleSignIn.signIn())!;
@@ -58,6 +65,11 @@ class _LoginPageState extends State<LoginPage> {
     return null;
   }
 
+  /*Se envía una solicitud HTTP POST con el correo electrónico y nombre del usuario. 
+  Si la respuesta es exitosa, se muestra un mensaje indicando que el usuario está registrado 
+  y se llama a un método de inicio de sesión. 
+  Si la respuesta indica que el usuario no está ligado o ya salió del ISTA (código de estado 400), 
+  se muestra un mensaje y se cierra la sesión del Google Sign-In*/
   Future<void> verificarCredenciales() async {
     setState(() {
       _loading = true;
@@ -77,7 +89,6 @@ class _LoginPageState extends State<LoginPage> {
         print('Persona registrada ${response.body}');
         login();
       } else if (response.statusCode == 400) {
-        // No estás ligado al ISTA o ya saliste del ISTA
         print(response.body);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -87,7 +98,6 @@ class _LoginPageState extends State<LoginPage> {
         );
         signOutGoogle();
       } else {
-        // Error en la solicitud
         print('Error en la solicitud');
         signOutGoogle();
       }
@@ -108,6 +118,7 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+  /*cierra la sesión del usuario en Google Sign-In y Firebase Authentication*/
   Future<void> signOutGoogle() async {
     try {
       await _googleSignIn.signOut();
@@ -117,6 +128,10 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+  /* realiza el inicio de sesión del usuario. 
+  Se envía una solicitud con las credenciales del usuario y se obtiene un token de acceso. 
+  Se verifica el rol del usuario y se redirige a una pantalla correspondiente. 
+  Si faltan datos en el perfil del usuario, se muestra un cuadro de diálogo para completarlos.*/
   Future<void> login() async {
     setState(() {
       _loading = true;
@@ -155,7 +170,6 @@ class _LoginPageState extends State<LoginPage> {
             p.direccion == "null" ||
             p.celular.isEmpty ||
             p.direccion.isEmpty)) {
-          // Es necesario completar los datos antes de iniciar sesión
           // ignore: use_build_context_synchronously
           showDialog(
             context: context,
@@ -176,7 +190,6 @@ class _LoginPageState extends State<LoginPage> {
             },
           );
         } else {
-          // Los datos están completos, procede con la navegación según el rol
           if (authorities == 'ROLE_STUD') {
             setState(() {
               rol = "ESTUDIANTE";
@@ -226,6 +239,8 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+  /*realiza una modificación en el dispositivo asociado al usuario. 
+  Este codigo serivirá posteriormente para recibir notificaciones push*/
   Future<void> modificardevice() async {
     Map data = {
       "device": tokennotificacion,

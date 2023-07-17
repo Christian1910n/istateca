@@ -34,6 +34,7 @@ class _MyAppState extends State<MyApp> {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
+  //inicializa Firebase en la aplicación
   Future<void> inicializarfirebase() async {
     try {
       await Firebase.initializeApp();
@@ -44,6 +45,7 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
+  //inicializa las notificaciones locales en la aplicación.
   void initializeNotifications() async {
     final AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -56,6 +58,7 @@ class _MyAppState extends State<MyApp> {
     await flutterLocalNotificationsPlugin.initialize(initializationSettings);
   }
 
+  //configura y maneja las notificaciones push en la aplicación
   void notificaciones() {
     // Obtén el token de registro de FCM
     FirebaseMessaging.instance.getToken().then((token) {
@@ -64,32 +67,22 @@ class _MyAppState extends State<MyApp> {
         tokennotificacion = token!;
       });
     });
-
-    // Maneja la notificación inicial si la aplicación se abrió mediante una notificación
     FirebaseMessaging.instance.getInitialMessage().then((message) {});
 
-    // Maneja las notificaciones recibidas en primer plano
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       final notification = message.notification;
-
-      // Obtén los datos personalizados de la notificación
       final data = message.data;
 
       print(data);
 
       showNotification(
           notification!.title.toString(), notification.body.toString());
-
-      ///
-      ///
     });
 
-    // Maneja las notificaciones cuando la aplicación se abre desde una notificación
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      // ...
-    });
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {});
   }
 
+  // muestra una notificación local en el dispositivo
   Future<void> showNotification(String title, String body) async {
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails('your channel id', 'your channel name',

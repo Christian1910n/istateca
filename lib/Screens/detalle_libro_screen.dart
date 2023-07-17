@@ -36,6 +36,11 @@ class _DetalleLibroScreenState extends State<DetalleLibroScreen> {
   Carrera carrera =
       Carrera(id_carrera: 2, idFenix: 0, nombre: "nombre", activo: true);
 
+  /* realiza una solicitud para saber si una persona puede realizat un prestamo 
+  y actualiza las variables de estado según la respuesta obtenida. 
+  Si la respuesta indica que algo está "habilitado", 
+  se establece una variable como verdadero; 
+  de lo contrario, se establece como falso y se guardan los mensajes de la respuesta.*/
   Future<void> habilitado() async {
     final url = Uri.parse(
         '$baseUrl/prestamo/habilitado?personaId=${personalog.id_persona}&libroId=${widget.libro.id}');
@@ -58,6 +63,11 @@ class _DetalleLibroScreenState extends State<DetalleLibroScreen> {
     }
   }
 
+/*crea un nuevo préstamo, se determina el tipo de préstamo según el rol del usuario 
+  y se obtiene la fecha actual. 
+  Se realiza una solicitud para crear el préstamo y se manejan las respuestas.
+  Si el préstamo se crea exitosamente, se obtiene el ID del préstamo
+  y se redirige a una pantalla de solicitud de libro.*/
   Future<void> crearPrestamo() async {
     if (rol == "ESTUDIANTE") {
       tipoPrestamo = 1;
@@ -135,6 +145,7 @@ class _DetalleLibroScreenState extends State<DetalleLibroScreen> {
     }
   }
 
+  //carga la imagen del libro
   Future<ImageProvider> loadImage() async {
     try {
       final response =
@@ -149,6 +160,8 @@ class _DetalleLibroScreenState extends State<DetalleLibroScreen> {
     }
   }
 
+  /*sube una imagen para el libro. 
+  Se realiza una solicitud adjuntando la imagen en el cuerpo de la solicitud. */
   void subirImagen(int id, String imagePath) async {
     try {
       String url = '$baseUrl/libro/subirimagen/$id';
@@ -195,6 +208,11 @@ class _DetalleLibroScreenState extends State<DetalleLibroScreen> {
     }
   }
 
+  /*muestra un diálogo que permite al usuario capturar o seleccionar una imagen para asociarla a un libro. 
+  Se proporcionan opciones para capturar una nueva imagen, 
+  seleccionar una imagen de la galería, guardar la imagen o cancelar el proceso. 
+  Al seleccionar una imagen y guardarla, se llama al método subirImagen() para subirla al servidor. 
+  Al cancelar, se redirige a la pantalla de libros.*/
   void _dialogoimagen() async {
     FilePickerResult? _imageFile;
     var imagePath;
@@ -399,6 +417,7 @@ class _DetalleLibroScreenState extends State<DetalleLibroScreen> {
                       ),
                     );
                   }
+                  return null;
                 },
               ),
             ),

@@ -16,6 +16,9 @@ class NotificacionesPage extends StatefulWidget {
 class _NotificacionesPageState extends State<NotificacionesPage> {
   List<Notificacion> notificaciones = [];
 
+  /*obtiene la lista de notificaciones asociadas a una persona específica. 
+  Realiza una solicitud y decodifica la respuesta en formato JSON 
+  para obtener una lista de objetos Notificacion.*/
   Future<void> listanotificacionpersona() async {
     final String url =
         '$baseUrl/notificacion/notificacionesxpersona?idsolicitante=${personalog.id_persona}';
@@ -37,6 +40,7 @@ class _NotificacionesPageState extends State<NotificacionesPage> {
     }
   }
 
+  // obtiene la lista de notificaciones para los bibliotecarios.
   Future<void> listanotificacionesbibliotecario() async {
     const String url = '$baseUrl/notificacion/notificacionesbibliotecarios';
     final response = await http.get(Uri.parse(url), headers: headers);
@@ -56,6 +60,7 @@ class _NotificacionesPageState extends State<NotificacionesPage> {
     }
   }
 
+  //Cambiar el estado de las notificaciones a leido
   Future<void> marcarleido(int id) async {
     Map data = {
       "visto": true,
