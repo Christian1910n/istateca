@@ -14,8 +14,10 @@ class Database_services_libro {
     List responseList = jsonDecode(response.body);
     List<Libro> libros = [];
 
-    for (var item in responseList) {
-      libros.add(Libro.fromJson(item));
+    if (response.statusCode == 200) {
+      for (var item in responseList) {
+        libros.add(Libro.fromJson(item));
+      }
     }
 
     return libros;

@@ -44,6 +44,7 @@ class _SolicitudesEstudianteState extends State<SolicitudesEstudiante>
         setState(() {
           solicitudes = solicitudess;
         });
+        //print("solicitudes ${solicitudess.length}");
       } else {
         print('Error en la solicitud GET: ${response.statusCode}');
       }
@@ -129,7 +130,8 @@ class _SolicitudesEstudianteState extends State<SolicitudesEstudiante>
               prestamo.estadoPrestamo == 3 ||
               prestamo.estadoPrestamo == 4 ||
               prestamo.estadoPrestamo == 5 ||
-              prestamo.estadoPrestamo == 6)
+              prestamo.estadoPrestamo == 6 ||
+              prestamo.estadoPrestamo == 7)
           .toList();
     }
 

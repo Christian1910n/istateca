@@ -61,7 +61,7 @@ class _DetalleLibroScreenState extends State<DetalleLibroScreen> {
   Future<void> crearPrestamo() async {
     if (rol == "ESTUDIANTE") {
       tipoPrestamo = 1;
-    } else if (rol == "BIBLIOTECARIO" || rol == "DOCENTE") {
+    } else if (rol == "BIBLIOTECARIO" || rol == "DOCENTE" || rol == "ADMIN") {
       tipoPrestamo = 2;
     } else {
       tipoPrestamo = 3;
