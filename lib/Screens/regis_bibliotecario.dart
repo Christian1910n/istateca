@@ -20,6 +20,9 @@ class _RegisbibliotecarioState extends State<Regisbibliotecario> {
   Persona? persona;
   bool isLoading = false;
 
+  /*busca información de un docente en la base del fenix,
+  Si la búsqueda es exitosa, se asignan los datos de la persona encontrada a una variable, 
+  y si no se encuentra ninguna persona, se muestra un mensaje*/
   Future<void> searchPersona() async {
     setState(() {
       isLoading = true;
@@ -65,6 +68,9 @@ class _RegisbibliotecarioState extends State<Regisbibliotecario> {
     });
   }
 
+  /* realiza una solicitud para registrar a una persona como bibliotecario. 
+  Primero, verifica si la variable persona no es nula.
+  Luego, construye un mapa con los datos de la persona y lo convierte a formato JSON. */
   void registrarComoBibliotecario() async {
     if (persona != null) {
       Map data = {
