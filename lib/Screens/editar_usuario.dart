@@ -23,6 +23,9 @@ class _EditarUsuarioScreenState extends State<EditarUsuarioScreen> {
   TextEditingController _celularController = TextEditingController();
   TextEditingController _direccionController = TextEditingController();
 
+  /* Permite al usuario editar su información personal (dirección y celular) y guardar los cambios en la base de datos. 
+  Si los campos no están vacíos, se envían los datos actualizados a través de una solicitud PUT. 
+  Después de completar la edición, se muestra un mensaje de éxito o error y se navega a otra pantalla.*/
   Future<void> editarpersona() async {
     if (_direccionController.text != "" && _celularController.text != "") {
       Map data = {

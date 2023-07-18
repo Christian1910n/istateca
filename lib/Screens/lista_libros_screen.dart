@@ -19,6 +19,8 @@ class _LlibrosScreenState extends State<LlibrosScreen>
   late TabController _tabController;
   List<Tab>? _tabs;
 
+/* Obtiene una lista de libros desde una base de datos 
+y actualiza la interfaz con las pestañas correspondientes para filtrar los libros por tipo.*/
   getLibros() async {
     libros = await Database_services_libro.getLibro();
     Provider.of<TiposData>(context, listen: false).libros = libros!;
@@ -34,6 +36,8 @@ class _LlibrosScreenState extends State<LlibrosScreen>
     setState(() {});
   }
 
+  /*Obtiene una lista de libros con un título específico desde la base de datos 
+  y actualiza la interfaz. */
   getLibrosnombre(String titulo) async {
     libros = await Database_services_libro.getLibronombre(titulo);
     Provider.of<TiposData>(context, listen: false).libros = libros!;

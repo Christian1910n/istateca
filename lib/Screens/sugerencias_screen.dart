@@ -31,6 +31,11 @@ class _SugerenciasScreenState extends State<SugerenciasScreen> {
     crearsugerencia();
   }
 
+  /*Crear una nueva sugerencia y enviarla a la base de datos mediante una solicitud POST. 
+  Obtiene la descripción y fecha actual, 
+  crea un mapa con los datos de la sugerencia y lo convierte a formato JSON. 
+  Luego, realiza la solicitud POST y muestra un mensaje de éxito o error según el resultado. 
+  Finalmente, limpia el campo de descripción para futuras sugerencias. */
   Future<void> crearsugerencia() async {
     String fecha =
         DateTime.now().add(const Duration(days: 1)).toIso8601String();

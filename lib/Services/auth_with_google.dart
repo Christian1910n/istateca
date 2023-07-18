@@ -9,6 +9,8 @@ class AuthServiceGoogle {
     return _auth.currentUser;
   }
 
+  /* Inicia sesión con una cuenta de Google. Obtiene la información de autenticación y crea una credencial. 
+  Luego, inicia sesión con la credencial y devuelve el usuario autenticado.*/
   Future<User?> signInGoogle() async {
     try {
       final GoogleSignInAccount googleUser = (await _googleSignIn.signIn())!;
@@ -33,6 +35,7 @@ class AuthServiceGoogle {
     return null;
   }
 
+  /* Cierra la sesión de Google y también en el servicio de autenticación de la aplicación. */
   Future<void> signOutGoogle() async {
     try {
       await _googleSignIn.signOut();

@@ -26,6 +26,10 @@ class _BookRequestViewState extends State<BookRequestView> {
   List<Carrera> listacarreras = [];
   final TextEditingController _carreracon = TextEditingController();
 
+  /*Busca las carreras asociadas a una cédula de un solicitante de préstamo 
+  si esta tiene la función de docente  en la base de datos, se muestra todos las carreras que existen,
+  pero si en la busqueda la cedula pertenece a un estudiante solo se mostrara la carrera con la que esta asociada.
+  Los datos de las carreras, se almacenan en una lista llamada listacarreras.*/
   Future<void> getcarrerascedula() async {
     try {
       List<Carrera> carreras = [];
@@ -57,6 +61,8 @@ class _BookRequestViewState extends State<BookRequestView> {
     }
   }
 
+  /*Busca y obtiene una lista de todas las carreras disponibles en la base de datos. 
+  Los datos de las carreras se almacenan en la lista listacarreras */
   Future<void> getcarreras() async {
     try {
       List<Carrera> carreras = [];
@@ -86,6 +92,8 @@ class _BookRequestViewState extends State<BookRequestView> {
     }
   }
 
+  /* Calcula una fecha futura, sin incluir los fines de semana, a partir de la fecha actual 
+  y un número de días proporcionado como parámetro.*/
   DateTime getFutureDateWithoutWeekends(int days) {
     final DateTime currentDate = DateTime.now();
     int count = 0;
@@ -108,6 +116,10 @@ class _BookRequestViewState extends State<BookRequestView> {
 
   DateTime _selectedDate = DateTime.now();
 
+  /*Modifica un préstamo existente. 
+  Se crea un mapa con los datos actualizados del préstamo y se convierte a formato JSON. 
+  Luego, se realiza una solicitud PUT a la base de datos con los datos actualizados. 
+  Si la solicitud es exitosa, se muestra un mensaje de éxito y se navega a otra página */
   Future<void> modificarprestamo() async {
     if (prestamo.documentoHabilitante == 0 || prestamo.carrera == null) {
       showDialog(
@@ -172,6 +184,11 @@ class _BookRequestViewState extends State<BookRequestView> {
     }
   }
 
+  /* Rechaza un préstamo existente. 
+  Se crea un mapa con el estado de préstamo actualizado con el id del prestamo que seria 7
+  se convierte a formato JSON. 
+  Luego, se realiza una solicitud PUT a la base de datos para actualizar el estado del préstamo. 
+  Si la solicitud es exitosa, se muestra un mensaje de éxito mediante un toast y se navega a otra página*/
   Future<void> rechazarprestamo() async {
     Map data = {
       "estadoPrestamo": 7,
