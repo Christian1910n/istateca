@@ -23,7 +23,10 @@ class _ListasugerenciasScreenState extends State<ListasugerenciasScreen> {
     getsugerencias();
     super.initState();
   }
-
+/*Este método obtiene la lista de sugerencias de la base de datos utilizando 
+una solicitud HTTP GET a la API. Luego, decodifica la respuesta JSON y crea 
+una lista de objetos Sugerencias. Finalmente, actualiza el estado de 
+listasugerencias con la lista obtenida.*/
   Future<void> getsugerencias() async {
     List<Sugerencias> sugerencias = [];
     var url = Uri.parse('$baseUrl/sugerencia/listar');

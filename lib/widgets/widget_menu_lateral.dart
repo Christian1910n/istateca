@@ -32,7 +32,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
   Widget build(BuildContext context) {
     return Drawer(child: _buildDrawer(context));
   }
-
+/*Este método se encarga de cerrar sesión con la cuenta de Google y Firebase 
+Authentication. Utilizando las clases GoogleSignIn y FirebaseAuth para realizar
+el proceso.*/
   Future<void> signOutGoogle() async {
     try {
       await _googleSignIn.signOut();
@@ -43,7 +45,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
   }
 
   int numNoVistos = 0;
-
+/*Este método realiza una solicitud HTTP a la API para obtener las notificaciones 
+específicas del usuario actual (rol: ESTUDIANTE o DOCENTE). 
+Decodifica la respuesta JSON y actualiza el número de notificaciones no vistas 
+en la variable numNoVistos.*/
   Future<void> listanotificacionpersona() async {
     final String url =
         '$baseUrl/notificacion/notificacionesxpersona?idsolicitante=${personalog.id_persona}';
@@ -69,7 +74,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
       print('Error notificaciones personas: ${response.statusCode}');
     }
   }
-
+/*Este método hace una solicitud HTTP a una API para obtener las notificaciones
+para los usuarios con rol ADMIN o BIBLIOTECARIO. Al igual que 
+listanotificacionpersona(), decodifica la respuesta JSON y actualiza el número
+de notificaciones no vistas en numNoVistos.*/
   Future<void> listanotificacionesbibliotecario() async {
     const String url = '$baseUrl/notificacion/notificacionesbibliotecarios';
     final response = await http.get(Uri.parse(url), headers: headers);

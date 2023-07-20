@@ -35,7 +35,10 @@ class _RestitucionLibroState extends State<RestitucionLibro> {
     _carreraController.dispose();
     super.dispose();
   }
-
+/*Este método se ejecuta cuando el usuario presiona el botón "Restitucion del 
+libro". Envía una solicitud HTTP PUT a la API para modificar el estado del 
+préstamo actual a 6 (estado de devolución). Luego, actualiza el estado local
+del préstamo con los nuevos datos y navega a la pantalla SolicitudesLibros.*/
   Future<void> modificarprestamo() async {
     Map data = {
       "estadoPrestamo": 6,

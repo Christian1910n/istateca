@@ -18,6 +18,9 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   List<Tipo>? tipos;
 
+/*Este método obtiene la lista de tipos de la base de datos utilizando el servicio
+DatabaseServices y actualiza la lista de tipos en Provider.of<TiposData>(context, listen: false).tipos. 
+Luego, llama a setState()para actualizar la interfaz de usuario con los nuevos datos.*/
   getTipos() async {
     tipos = await DatabaseServices.getTipo();
     Provider.of<TiposData>(context, listen: false).tipos = tipos!;
