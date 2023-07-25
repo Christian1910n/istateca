@@ -128,7 +128,7 @@ y actualiza la interfaz con las pestañas correspondientes para filtrar los libr
         crossAxisSpacing: 8,
         mainAxisSpacing: 8,
       ),
-      itemCount: Provider.of<TiposData>(context)?.libros.length ?? 0,
+      itemCount: Provider.of<TiposData>(context).libros.length,
       itemBuilder: (context, index) {
         Libro libro = Provider.of<TiposData>(context).libros[index];
         return LibrosTile(

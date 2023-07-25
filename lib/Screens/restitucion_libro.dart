@@ -3,13 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:proyectoistateca/Screens/solicitudes_screen.dart';
 import 'package:proyectoistateca/Services/globals.dart';
-import 'package:proyectoistateca/models/carrera.dart';
-import 'package:proyectoistateca/models/persona.dart';
 import 'package:proyectoistateca/models/prestamo.dart';
-import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class RestitucionLibro extends StatefulWidget {
   final Prestamo prestamo;
@@ -29,6 +25,7 @@ class _RestitucionLibroState extends State<RestitucionLibro> {
   @override
   void initState() {
     prestamo = widget.prestamo;
+    super.initState();
   }
 
   @override
@@ -59,8 +56,6 @@ class _RestitucionLibroState extends State<RestitucionLibro> {
       );
       if (response.statusCode == 200) {
         print('Prestamo modificado ${response.body}');
-        Map<String, dynamic> jsonResponse = json.decode(response.body);
-        Prestamo prestamo = Prestamo.fromJson(jsonResponse);
       } else {
         print('Error al editar el prestamo: ${response.statusCode}');
         print('ERROR ${response.body}');
@@ -81,23 +76,23 @@ class _RestitucionLibroState extends State<RestitucionLibro> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Confirmación de Restitución'),
-          content: SingleChildScrollView(
+          title: const Text('Confirmación de Restitución'),
+          content: const SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text('¿Estás seguro que quieres restituir este libro?'),
+                Text('¿El libro a sido restituido?'),
               ],
             ),
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('Cancelar'),
+              child: const Text('Cancelar'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: Text('Aceptar'),
+              child: const Text('Aceptar'),
               onPressed: () {
                 Navigator.of(context).pop();
                 modificarprestamo();

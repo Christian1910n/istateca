@@ -6,7 +6,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:proyectoistateca/Screens/solicitudes_screen.dart';
 import 'package:proyectoistateca/Services/globals.dart';
 import 'package:proyectoistateca/models/carrera.dart';
-import 'package:proyectoistateca/models/persona.dart';
 import 'package:proyectoistateca/models/prestamo.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:http/http.dart' as http;
@@ -168,8 +167,6 @@ class _BookRequestViewState extends State<BookRequestView> {
       );
       if (response.statusCode == 200) {
         print('Prestamo modificado ${response.body}');
-        Map<String, dynamic> jsonResponse = json.decode(response.body);
-        Prestamo prestamo = Prestamo.fromJson(jsonResponse);
       } else {
         print('Error al editar el prestamo: ${response.statusCode}');
         print('ERROR ${response.body}');
@@ -210,8 +207,6 @@ class _BookRequestViewState extends State<BookRequestView> {
       );
       if (response.statusCode == 200) {
         print('Prestamo modificado ${response.body}');
-        Map<String, dynamic> jsonResponse = json.decode(response.body);
-        Prestamo prestamo = Prestamo.fromJson(jsonResponse);
         Fluttertoast.showToast(
           msg: "PRESTAMO RECHAZADO",
           toastLength: Toast.LENGTH_SHORT,
@@ -356,8 +351,8 @@ class _BookRequestViewState extends State<BookRequestView> {
                 ),
                 SizedBox(height: 8.0),
                 Text(
-                  'Nombre de la Persona que Entrega: ${personalog.nombres}',
-                  style: TextStyle(fontSize: 16),
+                  'Nombre de la Persona que Entrega: ${personalog.nombres} ${personalog.apellidos}',
+                  style: const TextStyle(fontSize: 16),
                 ),
                 const SizedBox(height: 16.0),
                 TypeAheadFormField<Carrera>(

@@ -161,29 +161,56 @@ class _SolicitudesEstudianteState extends State<SolicitudesEstudiante>
               return Card(
                 child: GestureDetector(
                   onTap: () {
-                    setState(() {
-                      validar = 1;
-                    });
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => SolicitarLibroScreen(
-                          libro: prestamo.libro!,
-                          idsolicitud: prestamo.id_prestamo,
+                    if (prestamo.estadoPrestamo == 1 ||
+                        prestamo.estadoPrestamo == 2) {
+                      setState(() {
+                        validar = 1;
+                      });
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SolicitarLibroScreen(
+                            libro: prestamo.libro!,
+                            idsolicitud: prestamo.id_prestamo,
+                          ),
                         ),
-                      ),
-                    );
+                      );
+                    }
                   },
                   child: ListTile(
-                    title: Text(prestamo.libro!.titulo),
-                    subtitle: prestamo.estadoPrestamo == 1
-                        ? Text(
-                            "Fecha de solicitud: $fechaSolicitud",
-                          )
-                        : Text(
-                            "Fecha entrega: ${prestamo.fechaEntrega}\nFecha máxima: ${prestamo.fechaMaxima}",
-                          ),
-                  ),
+                      title: Text(prestamo.libro!.titulo),
+                      subtitle: prestamo.estadoPrestamo == 1
+                          ? Text(
+                              "Fecha de solicitud: $fechaSolicitud",
+                            )
+                          : prestamo.estadoPrestamo == 2
+                              ? Text(
+                                  "Fecha entrega: ${prestamo.fechaEntrega}\nFecha máxima: ${prestamo.fechaMaxima}",
+                                )
+                              : prestamo.estadoPrestamo == 3
+                                  ? Text(
+                                      "Devuelto: ${prestamo.fechaDevolucion}",
+                                    )
+                                  : prestamo.estadoPrestamo == 4
+                                      ? const Text(
+                                          "DESTRUIDO",
+                                        )
+                                      : prestamo.estadoPrestamo == 5
+                                          ? const Text(
+                                              "NO DEVUELTO",
+                                            )
+                                          : prestamo.estadoPrestamo == 6
+                                              ? const Text(
+                                                  "RESTITUIDO",
+                                                )
+                                              : prestamo.estadoPrestamo == 7
+                                                  ? const Text(
+                                                      "RECHAZADO",
+                                                    )
+                                                  : const Text(
+                                                      "OTRO",
+                                                    )),
                 ),
               );
             },
