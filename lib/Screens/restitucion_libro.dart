@@ -23,6 +23,7 @@ class RestitucionLibro extends StatefulWidget {
 
 class _RestitucionLibroState extends State<RestitucionLibro> {
   late Prestamo prestamo;
+  String fechaActual = DateFormat('yyyy-MM-dd').format(DateTime.now());
   final TextEditingController _carreraController = TextEditingController();
 
   @override
@@ -35,13 +36,11 @@ class _RestitucionLibroState extends State<RestitucionLibro> {
     _carreraController.dispose();
     super.dispose();
   }
-/*Este método se ejecuta cuando el usuario presiona el botón "Restitucion del 
-libro". Envía una solicitud HTTP PUT a la API para modificar el estado del 
-préstamo actual a 6 (estado de devolución). Luego, actualiza el estado local
-del préstamo con los nuevos datos y navega a la pantalla SolicitudesLibros.*/
+
   Future<void> modificarprestamo() async {
     Map data = {
       "estadoPrestamo": 6,
+      "fechaDevolucion": fechaActual,
     };
     var body = json.encode(data);
     print("Nuevo Json: $body");
@@ -76,12 +75,46 @@ del préstamo con los nuevos datos y navega a la pantalla SolicitudesLibros.*/
     }
   }
 
+  Future<void> confirmarRestitucion(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirmación de Restitución'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('¿Estás seguro que quieres restituir este libro?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Cancelar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Aceptar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                modificarprestamo();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Formulario de Devolución',
+          'Restitucion de Libro',
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: const Color.fromRGBO(24, 98, 173, 1.0),
@@ -148,9 +181,9 @@ del préstamo con los nuevos datos y navega a la pantalla SolicitudesLibros.*/
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    modificarprestamo();
+                    confirmarRestitucion(context);
                   },
-                  child: const Text('Restitucion del libro'),
+                  child: const Text('Restituir libro'),
                 ),
               ],
             ),
