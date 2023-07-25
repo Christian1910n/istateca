@@ -365,7 +365,7 @@ class _BookRequestViewState extends State<BookRequestView> {
                   textFieldConfiguration: TextFieldConfiguration(
                     decoration: const InputDecoration(
                       labelText: 'Carrera',
-                      labelStyle: TextStyle(color: Colors.white),
+                      labelStyle: TextStyle(color: Colors.black),
                       border: OutlineInputBorder(),
                     ),
                     style: const TextStyle(color: Colors.black),

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:proyectoistateca/Services/globals.dart';
 import 'package:proyectoistateca/models/carrera.dart';
@@ -17,30 +18,18 @@ class SugerenciasScreen extends StatefulWidget {
 class _SugerenciasScreenState extends State<SugerenciasScreen> {
   TextEditingController _feedbackController = TextEditingController();
   List<Carrera> listacarreras = [];
-  late Sugerencias sugerencias;
   TextEditingController _carreracon = TextEditingController();
+  Carrera? carrerita;
 
   @override
   void initState() {
     super.initState();
     _feedbackController = TextEditingController();
 
-    sugerencias = Sugerencias(
-      id: 0,
-      descripcion: '',
-      fecha: DateTime.now(),
-      persona:
-          Persona(), // Asegúrate de que esta sea una inicialización adecuada para tu clase Persona
-      carrera:
-          Carrera(), // Asegúrate de que esta sea una inicialización adecuada para tu clase Carrera
-    );
-
-    // Determine user role and call appropriate function
-    String rol = 'Estudiante'; // Set role based on user
-    if (rol == 'Docente') {
-      getcarreras();
-    } else if (rol == 'Estudiante') {
+    if (rol == 'ESTUDIANTE') {
       getcarrerascedula();
+    } else {
+      getcarreras();
     }
   }
 
@@ -52,7 +41,18 @@ class _SugerenciasScreenState extends State<SugerenciasScreen> {
   }
 
   void _submitFeedback() {
-    crearsugerencia();
+    if (_feedbackController.text.isNotEmpty || _carreracon.text.isNotEmpty) {
+      crearsugerencia();
+    } else {
+      Fluttertoast.showToast(
+        msg: "Complete todos los campos",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 4,
+        backgroundColor: Colors.grey[700],
+        textColor: Colors.white,
+      );
+    }
   }
 
 /*Busca las carreras asociadas a una cédula de un solicitante de préstamo 
@@ -74,7 +74,7 @@ class _SugerenciasScreenState extends State<SugerenciasScreen> {
         setState(() {
           listacarreras = carreras;
           _carreracon.text = carrera.nombre;
-          sugerencias.carrera = carrera;
+          carrerita = carrera;
         });
 
         setState(() {
@@ -116,7 +116,7 @@ class _SugerenciasScreenState extends State<SugerenciasScreen> {
             'Error en la solicitud GET lista carreras: ${response.statusCode}');
       }
     } catch (error) {
-      print('Error get carreras $error');
+      print('Error get carreras ,,$error');
     }
   }
 
@@ -136,7 +136,9 @@ class _SugerenciasScreenState extends State<SugerenciasScreen> {
         "id": 0,
         "descripcion": _feedbackController.text,
         "fecha": fecha,
-        "persona": personalog.toJson()
+        "persona": personalog.toJson(),
+        "carrera": carrerita?.toJson(),
+        "estado": true
       };
       print(data);
       var body = json.encode(data);
@@ -173,6 +175,7 @@ class _SugerenciasScreenState extends State<SugerenciasScreen> {
     } catch (error) {
       print("Error crear sugerencia $error");
     } finally {
+      _carreracon.clear();
       _feedbackController.clear();
     }
   }
@@ -187,6 +190,43 @@ class _SugerenciasScreenState extends State<SugerenciasScreen> {
         padding: EdgeInsets.all(16.0),
         child: Column(
           children: <Widget>[
+            TypeAheadFormField<Carrera>(
+              enabled: true,
+              textFieldConfiguration: TextFieldConfiguration(
+                decoration: const InputDecoration(
+                  labelText: 'Carrera',
+                  labelStyle: TextStyle(color: Colors.black),
+                  border: OutlineInputBorder(),
+                ),
+                style: const TextStyle(color: Colors.black),
+                controller: _carreracon,
+              ),
+              suggestionsCallback: (pattern) async {
+                return listacarreras
+                    .where((carrera) => carrera.nombre
+                        .toLowerCase()
+                        .contains(pattern.toLowerCase()))
+                    .toList();
+              },
+              itemBuilder: (context, Carrera suggestion) {
+                return ListTile(
+                  title: Text(suggestion.nombre),
+                );
+              },
+              onSuggestionSelected: (Carrera suggestion) {
+                setState(() {
+                  carrerita = suggestion;
+                  _carreracon.text = suggestion.nombre;
+                });
+              },
+              validator: (value) {
+                if (value == null) {
+                  return 'Seleccione una carrera';
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: 16.0),
             TextField(
               controller: _feedbackController,
               maxLines: 5,
@@ -195,25 +235,6 @@ class _SugerenciasScreenState extends State<SugerenciasScreen> {
                 border: OutlineInputBorder(),
               ),
             ),
-            const SizedBox(height: 16.0),
-            // DropdownButton added here
-            listacarreras.isNotEmpty
-                ? DropdownButton<Carrera>(
-                    value: sugerencias.carrera,
-                    onChanged: (Carrera? newValue) {
-                      setState(() {
-                        sugerencias.carrera = newValue!;
-                      });
-                    },
-                    items: listacarreras
-                        .map<DropdownMenuItem<Carrera>>((Carrera carrera) {
-                      return DropdownMenuItem<Carrera>(
-                        value: carrera,
-                        child: Text(carrera.nombre),
-                      );
-                    }).toList(),
-                  )
-                : Container(), // Display empty container if listacarreras is empty
             const SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: _submitFeedback,

@@ -23,6 +23,7 @@ class _ListasugerenciasScreenState extends State<ListasugerenciasScreen> {
     getsugerencias();
     super.initState();
   }
+
 /*Este método obtiene la lista de sugerencias de la base de datos utilizando 
 una solicitud HTTP GET a la API. Luego, decodifica la respuesta JSON y crea 
 una lista de objetos Sugerencias. Finalmente, actualiza el estado de 
@@ -78,6 +79,7 @@ listasugerencias con la lista obtenida.*/
             String fecha = DateFormat('dd MMM yyyy').format(sugerencia.fecha);
             String nombrePersona =
                 "${sugerencia.persona.apellidos} ${sugerencia.persona.nombres}";
+
             return ListTile(
               title: Text(
                 sugerencia.descripcion,
@@ -98,6 +100,13 @@ listasugerencias con la lista obtenida.*/
                     nombrePersona,
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    sugerencia
+                        .carrera.nombre, // Mostrar la sugerencia de carrera
+                    style: const TextStyle(
+                      fontStyle: FontStyle.italic,
                     ),
                   ),
                 ],
